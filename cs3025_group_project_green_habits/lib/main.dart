@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+//This marks the entry point in the app - we wil move this 
+//to the login page later
 void main() {
   runApp(const MyApp());
 }
@@ -28,12 +30,19 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: const Color(0xFF68B73A)),
+        colorScheme: .fromSeed(seedColor: const Color.fromARGB(255, 104, 183, 58)),
       ),
+      initialRoute: '/', // The main page
       home: const MyHomePage(title: 'Green Habits'),
     );
   }
 }
+
+class LoginPage {
+  const LoginPage();
+}
+
+
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -111,6 +120,19 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
+      ),
+       bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem( icon: Icon(Icons.account_circle),label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.add_circle), label: 'Log Action'),
+          BottomNavigationBarItem(icon: Icon(Icons.grass), label: 'Garden'),
+          BottomNavigationBarItem(icon: Icon(Icons.leaderboard), label: 'Leaderboard'),
+        ],
+        // currentIndex: _selectedIndex,
+        selectedItemColor: const Color.fromARGB(255, 7, 78, 27),
+        unselectedItemColor: const Color.fromARGB(255, 104, 183, 58),
+        // onTap: _onItemTapped,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
