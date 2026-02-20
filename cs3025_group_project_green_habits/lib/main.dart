@@ -1,7 +1,13 @@
+import 'package:cs3025_group_project_green_habits/leaderboard.dart';
+import 'package:cs3025_group_project_green_habits/widgets/theme.dart';
 import 'package:flutter/material.dart';
-
-//This marks the entry point in the app - we wil move this 
-//to the login page later
+import 'home_page.dart';  
+import 'login.dart';  
+import 'signup.dart';  
+import 'garden.dart';  
+import 'activitylog.dart';
+import 'profile.dart';
+//import 'tips.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -14,34 +20,28 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Green Habits',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: const Color.fromARGB(255, 104, 183, 58)),
-      ),
-      initialRoute: '/', // The main page
-      home: const MyHomePage(title: 'Green Habits'),
+      theme: ColorSchemes.lightTheme,
+      darkTheme: ColorSchemes.darkTheme,
+      themeMode: ThemeMode.system,
+      initialRoute: '/login', // The page loaded 
+      routes: {
+      '/home': (context) => HomePage(),
+      '/login': (context) => LoginPage(),
+      '/signup': (context) => SignUpPage(),
+      '/profile': (context) => ProfilePage(),
+
+      '/garden': (context) => GardenPage(),
+      '/garden-store': (context) => GardenPage(),
+
+      '/actvity-log': (context) => ActivityLogPage(),
+      '/history': (context) => ActivityLogPage(),
+      '/leaderboard': (context) => LeaderboardPage(),
+      '/challenges': (context) => ActivityLogPage(),
+      '/tips': (context) => ActivityLogPage(),
+    },
     );
   }
 }
-
-class LoginPage {
-  const LoginPage();
-}
-
 
 
 class MyHomePage extends StatefulWidget {
@@ -90,6 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
@@ -130,8 +131,8 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.leaderboard), label: 'Leaderboard'),
         ],
         // currentIndex: _selectedIndex,
-        selectedItemColor: const Color.fromARGB(255, 7, 78, 27),
-        unselectedItemColor: const Color.fromARGB(255, 104, 183, 58),
+        selectedItemColor: Theme.of(context).colorScheme.onPrimary,
+        unselectedItemColor: Theme.of(context).colorScheme.onPrimary,
         // onTap: _onItemTapped,
       ),
       floatingActionButton: FloatingActionButton(

@@ -1,5 +1,5 @@
 name: cs3025_group_project_green_habits
-description: "A new Flutter project."
+description: "Green Habits - an eco-friendly app for UNB staff and students."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -30,6 +30,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  #shared_preferences: ^2.2.0 
+  #sqflite: ^2.3.0
+  #path_provider: ^2.1.2
+  #path: ^1.9.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
