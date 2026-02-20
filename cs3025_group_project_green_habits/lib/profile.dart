@@ -18,6 +18,7 @@ class _ProfileState extends State<ProfilePage> {
   
   @override
   Widget build(BuildContext context) {
+    final List<bool> _selectedTheme = <bool>[true, false];
 
     return Scaffold(
       appBar: HeaderBar(
@@ -55,9 +56,26 @@ class _ProfileState extends State<ProfilePage> {
               'Language',
             ),
             ToggleButtons(isSelected: <bool> [true, false],
-                selectedColor:  Theme.of(context).colorScheme.onSecondary, children: <Widget>[
-              Text('Light Mode'),
-              Text('Dark Mode')]), 
+                selectedColor: Theme.of(context).colorScheme.onSecondary, onPressed: (int index) {
+                  setState(() {
+                    // The button that is tapped is set to true, and the others to false.
+                    for (int i = 0; i < _selectedTheme.length; i++) {
+                      _selectedTheme[i] = i == index;
+                    }
+                  });
+                },
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                // selectedBorderColor: Colors.red[700],
+                // fillColor: Colors.red[200],
+                // color: Colors.red[400],
+                constraints: const BoxConstraints(
+                  minHeight: 40.0,
+                  minWidth: 80.0,
+                ),
+                children: <Widget>[
+                  Text('Light Mode'),
+                  Text('Dark Mode')]
+            ), 
             SizedBox(height: 26),
             Text(
               'TextSize',

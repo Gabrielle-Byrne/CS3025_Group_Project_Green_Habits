@@ -65,7 +65,7 @@ class _LoginState extends State<LoginPage> {
                   labelText: 'Password',
                   border: OutlineInputBorder(),
                 ),
-                obscureText: true,
+                obscureText: _passwordVisible,
               ),
               SizedBox(height: 26),
               SizedBox(
@@ -83,8 +83,6 @@ class _LoginState extends State<LoginPage> {
                   child: Text(
                     'Login',
                     style: TextStyle(
-                      //fontSize: 16,
-                      //fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),

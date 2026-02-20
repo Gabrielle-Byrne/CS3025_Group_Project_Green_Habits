@@ -31,7 +31,29 @@ class _GardenState extends State<GardenPage> {
               style: Theme.of(context).textTheme.headlineLarge,
             ),
             // ADD GARDEN HERE
+
+            SizedBox(height: 20),
+            SizedBox(
+                width: double.infinity,
+                height: 30,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, '/garden-store');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    'Go to Store',
+                    style: TextStyle(
+                    ),
+                  ),
+                ),
+              ),
           ],
+          
         ),
       ),
        bottomNavigationBar: BottomNavigation (

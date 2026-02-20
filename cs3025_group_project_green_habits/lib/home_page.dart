@@ -46,8 +46,20 @@ class _HomeState extends State<HomePage> {
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             //TODO: Add garden preview
-            //TODO: Add leaderboard
+            Text(
+              'Virtural Garden',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
             //TODO: Add most recently used actions 
+            Text(
+              'Quick-Action Bar',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            //TODO: Add leaderboard
+            Text(
+              'Leaderboard',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
           ],
         ),
       ),
