@@ -45,7 +45,6 @@ class _SignUpState extends State<SignUpPage> {
                 style: TextStyle(
                   //fontWeight: FontWeight.bold,
                   //fontSize: 26,
-                  //color: Color(0xFF1C1C1C),
                 ),
               ),
               SizedBox(height: 6),
@@ -54,7 +53,6 @@ class _SignUpState extends State<SignUpPage> {
                 style: TextStyle(
                   //fontWeight: FontWeight.normal,
                   //fontSize: 18,
-                  //color: Color(0xFF1C1C1C),
                 ),
               ),
               SizedBox(height: 26),
@@ -83,7 +81,6 @@ class _SignUpState extends State<SignUpPage> {
                     // Handle login
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 59, 255, 65),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -91,7 +88,6 @@ class _SignUpState extends State<SignUpPage> {
                   child: Text(
                     'Login',
                     style: TextStyle(
-                      //color: Colors.white,
                       //fontSize: 16,
                       //fontWeight: FontWeight.bold,
                     ),
@@ -105,7 +101,6 @@ class _SignUpState extends State<SignUpPage> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       //fontSize: 14,
-                      //color: Color(0xFF87879D),
                     ),
                   ),
               ),
@@ -116,7 +111,6 @@ class _SignUpState extends State<SignUpPage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     //fontSize: 14,
-                    //color: Color(0xFF87879D),
                   ),
                 ),
               )

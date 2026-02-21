@@ -16,7 +16,7 @@ class BottomNavigation extends StatelessWidget {
         return 4;
       case '/garden':
         return 3;
-      case '/actvity-log':
+      case '/activity-log':
         return 2;
       case '/profile':
         return 1;
@@ -36,7 +36,7 @@ class BottomNavigation extends StatelessWidget {
         } else if (index == 1) {
           Navigator.pushReplacementNamed(context, '/profile');
         } else if (index == 2) {
-          Navigator.pushReplacementNamed(context, '/actvity-log');
+          Navigator.pushReplacementNamed(context, '/activity-log');
         } else if (index == 3) {
           Navigator.pushReplacementNamed(context, '/garden');
         } else if (index == 4) {
@@ -51,8 +51,8 @@ class BottomNavigation extends StatelessWidget {
         BottomNavigationBarItem(icon: Icon(Icons.leaderboard), label: "Leaderboard"),
       ],
       // backgroundColor: lightMode.surface,
-      // selectedItemColor: lightMode.primary,
-      // unselectedItemColor: lightMode.onSurfaceVariant,
+      selectedItemColor: Color.fromARGB(255, 17, 121, 3),
+      unselectedItemColor: Color.fromARGB(255, 117, 187, 107),
     );
   }
 }

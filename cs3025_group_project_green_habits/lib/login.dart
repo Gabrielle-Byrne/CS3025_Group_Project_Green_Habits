@@ -23,6 +23,12 @@ class _LoginState extends State<LoginPage> {
     super.dispose();
   }
 
+  void _togglePasswordVisibility() {
+    setState(() {
+      _passwordVisible = !_passwordVisible;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +46,7 @@ class _LoginState extends State<LoginPage> {
               Text(
                 'Green Habits',
                 style: TextStyle(
-                  //fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.bold,
                   //fontSize: 26,
                 ),
               ),
@@ -64,8 +70,15 @@ class _LoginState extends State<LoginPage> {
                 decoration: InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                  icon: Icon(
+                    _passwordVisible ? Icons.visibility_off : Icons.visibility,
+                  ),
+                  onPressed: _togglePasswordVisibility,
+                ),
                 ),
                 obscureText: _passwordVisible,
+                
               ),
               SizedBox(height: 26),
               SizedBox(
@@ -103,6 +116,7 @@ class _LoginState extends State<LoginPage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                   ),
+                  
                 ),
               )
             ],

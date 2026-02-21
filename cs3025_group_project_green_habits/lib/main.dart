@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'home_page.dart';  
 import 'login.dart';  
 import 'signup.dart';  
-import 'garden.dart';  
+import 'garden.dart';
+import 'tips.dart';  
 import 'activitylog.dart';
 import 'profile.dart';
 import 'widgets/bottomNavigationBar.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ColorSchemes.lightTheme,
       darkTheme: ColorSchemes.darkTheme,
       themeMode: ThemeMode.system,
-      initialRoute: '/login', // The page loaded 
+      initialRoute: '/home', // The page loaded when app is first opened
       routes: {
       '/home': (context) => HomePage(),
       '/login': (context) => LoginPage(),
@@ -34,11 +35,11 @@ class MyApp extends StatelessWidget {
       '/garden': (context) => GardenPage(),
       '/garden-store': (context) => GardenPage(),
 
-      '/actvity-log': (context) => ActivityLogPage(),
+      '/activity-log': (context) => ActivityLogPage(),
       '/history': (context) => ActivityLogPage(),
       '/leaderboard': (context) => LeaderboardPage(),
       '/challenges': (context) => ActivityLogPage(),
-      '/tips': (context) => ActivityLogPage(),
+      '/tips': (context) => TipsPage(),
     },
     );
   }

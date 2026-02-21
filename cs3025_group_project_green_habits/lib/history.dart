@@ -4,14 +4,14 @@ import 'widgets/bottomNavigationBar.dart';
 import 'widgets/header.dart';
 
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+class HistoryPage extends StatefulWidget {
+  const HistoryPage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfileState();
+  State<HistoryPage> createState() => _HistoryState();
 }
 
-class _ProfileState extends State<ProfilePage> {
+class _HistoryState extends State<HistoryPage> {
   String _username = "Alice Brown"; // TODO: Replace with actual username once database is established
   String _email = "abrown@unb.ca";
   double _textSizeSlider = 20;
@@ -26,8 +26,8 @@ class _ProfileState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: HeaderBar(
-        title: "Profile",
-        helpText: "This is your profile, you can change your preferences or log out ",
+        title: "History",
+        helpText: "This is your history, it details your past actions ",
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -171,7 +171,7 @@ class _ProfileState extends State<ProfilePage> {
       ),
       ),
        bottomNavigationBar: BottomNavigation (
-        currentRoute: "/profile"
+        currentRoute: "/"
       ),
     );
   }
