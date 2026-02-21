@@ -36,12 +36,15 @@
 //             userId INTEGER PRIMARY KEY AUTOINCREMENT,
 //             username STRING NOT NULL,
 //             email STRING NOT NULL,
+//             campus STRING NOT NULL,
 //             textSize INTEGER NOT NULL,
 //             language STRING NOT NULL,
-//             icon STRING NOT NULL,
-//             darkModeEnabled BOOELAN NOT NULL,
+//             icon STRING,
+//             darkModeEnabled BOOELAN,
 //             soundEnabled BOOELAN NOT NULL,
-//             FK_contact_category INT NOT NULL,
+//             point INTEGER NOT NULL,
+//             coins INTEGER NOT NULL,
+//             FK_contact_category INTEGER NOT NULL,
 //             FOREIGN KEY (FK_contact_category) REFERENCES category (categoryId) 
 //           )
 //           ''');
@@ -58,8 +61,9 @@
 //     await db.execute('''
 //           CREATE TABLE UserActions (
 //             userActionId INTEGER PRIMARY KEY AUTOINCREMENT,
-//             FK_user INT NOT NULL,
-//             FK_action_category INT NOT NULL,
+//             challengeMultiplier INTEGER
+//             FK_user INTEGER NOT NULL,
+//             FK_action_category INTEGER NOT NULL,
 //             FOREIGN KEY (FK_user) REFERENCES User (userId)
 //             FOREIGN KEY (FK_action_category) REFERENCES Action (actionId)
 //           )
@@ -69,8 +73,8 @@
 //           CREATE TABLE Plant (
 //             plantId INTEGER PRIMARY KEY AUTOINCREMENT,
 //             name STRING NOT NULL,
-//             FK_user INT NOT NULL,
-//             FK_action_category INT NOT NULL,
+//             FK_user INTEGER NOT NULL,
+//             FK_action_category INTEGER NOT NULL,
 //             FOREIGN KEY (FK_user) REFERENCES User (userId)
 //             FOREIGN KEY (FK_action_category) REFERENCES Action (actionId)
 //           )
@@ -79,11 +83,13 @@
 //     await db.execute('''
 //           CREATE TABLE UserPlant (
 //             userPlantId INTEGER PRIMARY KEY AUTOINCREMENT,
-//             FK_user INT NOT NULL,
-//             FK_plant_category INT NOT NULL,
-//             plant_state INT NOT NULL
+//             FK_user INTEGER NOT NULL,
+//             FK_plant_category INTEGER NOT NULL,
+//             plant_state INTEGER NOT NULL
+//             FOREIGN KEY (FK_user) REFERENCES User (userId)
+//             FOREIGN KEY (FK_plant_id) REFERENCES Plant (plantId)
 //           )
-//           ''');
+//           '''); 
 
 //     await db.execute('''
 //           CREATE TABLE Tips (

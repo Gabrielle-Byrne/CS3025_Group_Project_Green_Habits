@@ -4,14 +4,12 @@ class ColorSchemes {
 
 
 static final ColorScheme lightMode = ColorScheme.fromSeed(
-          seedColor: const Color(0xFF084E18),
-          // You can also specify brightness for light/dark mode
+          seedColor:const Color(0xFF084E18),
           brightness: Brightness.light, 
         );
 
 static final ColorScheme darkMode = ColorScheme.fromSeed(
           seedColor: const Color(0xFFCADCCD),
-          // You can also specify brightness for light/dark mode
           brightness: Brightness.dark, 
         );
 

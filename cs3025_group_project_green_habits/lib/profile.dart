@@ -13,12 +13,13 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfileState extends State<ProfilePage> {
   String _username = "Alice Brown"; // TODO: Replace with actual username once database is established
+  String _email = "abrown@unb.ca";
   double _textSizeSlider = 20;
+  List<bool> _selectedTheme = [true, false];
 
   
   @override
   Widget build(BuildContext context) {
-    final List<bool> _selectedTheme = <bool>[true, false];
 
     return Scaffold(
       appBar: HeaderBar(
@@ -38,6 +39,8 @@ class _ProfileState extends State<ProfilePage> {
               size: 60,
               color: Theme.of(context).colorScheme.onPrimary,
             ),
+            
+            // Langauge
             SizedBox(height: 12),
             Text(
               '$_username',
@@ -51,11 +54,15 @@ class _ProfileState extends State<ProfilePage> {
                 selectedColor:  Theme.of(context).colorScheme.onSecondary, children: <Widget>[
               Text('English'),
               Text('French')]), 
+            
+            //Color Theme
             SizedBox(height: 26),
             Text(
-              'Language',
+              'Color Theme'
             ),
-            ToggleButtons(isSelected: <bool> [true, false],
+            SizedBox(height: 26),
+            ToggleButtons(
+                isSelected: _selectedTheme,
                 selectedColor: Theme.of(context).colorScheme.onSecondary, onPressed: (int index) {
                   setState(() {
                     // The button that is tapped is set to true, and the others to false.
@@ -65,9 +72,9 @@ class _ProfileState extends State<ProfilePage> {
                   });
                 },
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
-                // selectedBorderColor: Colors.red[700],
-                // fillColor: Colors.red[200],
-                // color: Colors.red[400],
+                selectedBorderColor: Colors.red[700],
+                fillColor: Colors.red[200],
+                color: Colors.red[400],
                 constraints: const BoxConstraints(
                   minHeight: 40.0,
                   minWidth: 80.0,
@@ -76,6 +83,8 @@ class _ProfileState extends State<ProfilePage> {
                   Text('Light Mode'),
                   Text('Dark Mode')]
             ), 
+
+            //Text Size Slider
             SizedBox(height: 26),
             Text(
               'TextSize',

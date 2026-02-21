@@ -50,8 +50,9 @@ class BottomNavigation extends StatelessWidget {
         BottomNavigationBarItem(icon: Icon(Icons.grass), label: "Garden"),
         BottomNavigationBarItem(icon: Icon(Icons.leaderboard), label: "Leaderboard"),
       ],
-      // selectedItemColor: Theme.of(context).colorScheme.onPrimary,
-      // unselectedItemColor: Theme.of(context).colorScheme.onSecondary,
+      // backgroundColor: lightMode.surface,
+      // selectedItemColor: lightMode.primary,
+      // unselectedItemColor: lightMode.onSurfaceVariant,
     );
   }
 }

@@ -46,3 +46,13 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     );
   }
 }
+
+
+
+//Future<List<User>> getLeaderboard() async {
+//   final db = await database;
+//   final List<Map<String, dynamic>> maps = 
+//       await db.query('users', orderBy: 'score DESC', limit: 10);
+//   return List.generate(maps.length, (i) => User(
+//       name: maps[i]['name'], campus: maps[i]['campus'], score: maps[i]['score']));
+// }

@@ -7,6 +7,7 @@ import 'signup.dart';
 import 'garden.dart';  
 import 'activitylog.dart';
 import 'profile.dart';
+import 'widgets/bottomNavigationBar.dart';
 //import 'tips.dart';
 void main() {
   runApp(const MyApp());
@@ -122,18 +123,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem( icon: Icon(Icons.account_circle),label: 'Profile'),
-          BottomNavigationBarItem(icon: Icon(Icons.add_circle), label: 'Log Action'),
-          BottomNavigationBarItem(icon: Icon(Icons.grass), label: 'Garden'),
-          BottomNavigationBarItem(icon: Icon(Icons.leaderboard), label: 'Leaderboard'),
-        ],
-        // currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).colorScheme.onPrimary,
-        unselectedItemColor: Theme.of(context).colorScheme.onPrimary,
-        // onTap: _onItemTapped,
+      bottomNavigationBar: BottomNavigation (
+        currentRoute: "/"
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
