@@ -4,23 +4,50 @@ import 'widgets/header.dart';
 import 'widgets/bottomNavigationBar.dart';
 
 
-class GardenPage extends StatefulWidget {
-  const GardenPage({super.key});
+class TipsPage extends StatefulWidget {
+  const TipsPage({super.key});
 
   @override
-  State<GardenPage> createState() => _GardenState();
+  State<TipsPage> createState() => _TipsState();
 }
 
-class _GardenState extends State<GardenPage> {
-  String _title = "Garden"; // TODO: Replace with actual username once database is established
+typedef CategoryEntry = DropdownMenuEntry<IconLabel>;
+
+// DropdownMenuEntry labels and values for the second dropdown menu.
+enum IconLabel {
+  recycing('Recy', Icons.recycing),
+  transit('Sustainable Transit', Icons.direction_bus),
+  energy('Energy', Icons.energy_savings_leaf),
+  energy('Brush', Icons.brush_outlined),
+  energy('Brush', Icons.brush_outlined),
+  general('Other', Icons.globe);
+
+  const IconLabel(this.label, this.icon);
+  final String label;
+  final IconData icon;
+
+  static final List<CategoryEntry> entries = UnmodifiableListView<CategoryEntry>(
+    values.map<CategoryEntry>(
+      (CategoryLabel icon) => CategoryEntry(
+        value: icon,
+        label: icon.label,
+        leadingIcon: Icon(icon.icon),
+      ),
+    ),
+  );
+}
+
+
+class _TipsState extends State<TipsPage> {
+  String _title = "Tips"; // TODO: Replace with actual username once database is established
 
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HeaderBar(
-        title: "Garden",
-        helpText: "This is your garden, you can use points earned from your actions to purchase virtural plants",
+        title: "Tips",
+        helpText: "This is the Tips Page, you can learn facts about plants",
       ),
       body: Center(
         child: Column(
@@ -30,7 +57,7 @@ class _GardenState extends State<GardenPage> {
               '$_title',
               style: Theme.of(context).textTheme.headlineLarge,
             ),
-            // ADD GARDEN HERE
+            // ADD Tips HERE
             //Images 
 
             SizedBox(height: 20),
@@ -39,7 +66,7 @@ class _GardenState extends State<GardenPage> {
                 height: 30,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/garden-store');
+
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -47,7 +74,7 @@ class _GardenState extends State<GardenPage> {
                     ),
                   ),
                   child: Text(
-                    'Go to Store',
+                    'There are...',
                     style: TextStyle(
                     ),
                   ),
@@ -58,7 +85,7 @@ class _GardenState extends State<GardenPage> {
         ),
       ),
        bottomNavigationBar: BottomNavigation (
-        currentRoute: "/garden"
+        currentRoute: "/tips"
       ),
     );
   }
