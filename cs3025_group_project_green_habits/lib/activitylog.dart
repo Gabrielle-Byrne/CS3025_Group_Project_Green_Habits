@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'widgets/theme.dart';
 import 'widgets/bottomNavigationBar.dart';
 import 'widgets/header.dart';
 
@@ -12,8 +11,6 @@ class ActivityLogPage extends StatefulWidget {
 }
 
 class _ActivityLogPageState extends State<ActivityLogPage> {
-  String _username = "Alice Brown"; // TODO: Replace with actual username once database is established
-
   
   @override
   Widget build(BuildContext context) {

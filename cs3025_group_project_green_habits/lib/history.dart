@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'widgets/theme.dart';
 import 'widgets/bottomNavigationBar.dart';
 import 'widgets/header.dart';
 
@@ -13,12 +12,12 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryState extends State<HistoryPage> {
   String _username = "Alice Brown"; // TODO: Replace with actual username once database is established
-  String _email = "abrown@unb.ca";
   double _textSizeSlider = 20;
   final List<bool> _selectedLangauge = [true, false];
   final List<bool> _selectedTheme = [true, false];
   final List<bool> _selectedSound = [true, false];
-
+  String title = "History";
+  String titleFr = "History";
 
   
   @override
@@ -100,7 +99,7 @@ class _HistoryState extends State<HistoryPage> {
                   Text('Light Mode'),
                   Text('Dark Mode')]
             ), 
-             //Color Theme
+            //Sound
             SizedBox(height: 26),
             Text(
               'Sound'
@@ -145,6 +144,7 @@ class _HistoryState extends State<HistoryPage> {
                 });
               },
             ),
+            //Logout
              SizedBox(
                 width: double.infinity,
                 height: 49,

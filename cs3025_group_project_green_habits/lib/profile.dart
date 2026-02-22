@@ -13,12 +13,16 @@ class ProfilePage extends StatefulWidget {
 class _ProfileState extends State<ProfilePage> {
   String _username = "Alice Brown"; // TODO: Replace with actual username once database is established
   String _email = "abrown@unb.ca";
+  final _usernameTextbox = TextEditingController();
+  final _emailTextbox = TextEditingController();
   int _score = 100;
   int _coins = 240;
   double _textSizeSlider = 20;
+  double textSize = 20;
   final List<bool> _selectedLangauge = [true, false];
   final List<bool> _selectedTheme = [true, false];
   final List<bool> _selectedSound = [true, false];
+  
 
 
   
@@ -42,10 +46,14 @@ class _ProfileState extends State<ProfilePage> {
               size: 60,
               color: Theme.of(context).colorScheme.onPrimary,
             ),
-            Row(children: [Text(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [Text(
                   '$_score Points',
                   style: Theme.of(context).textTheme.headlineSmall,
                   ),
+                  SizedBox(width: 20),
                   Text(
                   '$_coins Coins',
                   style: Theme.of(context).textTheme.headlineSmall,
@@ -108,7 +116,7 @@ class _ProfileState extends State<ProfilePage> {
                   Text('Light Mode'),
                   Text('Dark Mode')]
             ), 
-             //Color Theme
+             //Sound
             SizedBox(height: 26),
             Text(
               'Sound'
@@ -136,6 +144,7 @@ class _ProfileState extends State<ProfilePage> {
                   Text('Disabled')]
             ), 
 
+
             //Text Size Slider
             SizedBox(height: 26),
             Text(
@@ -153,6 +162,34 @@ class _ProfileState extends State<ProfilePage> {
                 });
               },
             ),
+            // Username Change
+
+            TextField(
+              controller: _usernameTextbox,
+              decoration: InputDecoration(labelText: "Change Username", hintText: _username),
+            ),
+            SizedBox(width: 10, height: 10),
+            TextField(
+              controller: _emailTextbox,
+              decoration: InputDecoration(labelText: "Change Email", hintText: _email),
+            ),
+            SizedBox(width: 10, height: 10),
+            ElevatedButton(
+              onPressed: () {
+                if(_emailTextbox.text.isNotEmpty){
+                  print("username changed");
+                 _email = _emailTextbox.text;
+                }
+              },
+              child: Text('Save Changes'),
+            ),
+          
+
+
+
+
+            // Log out
+              SizedBox(height: 20),
              SizedBox(
                 width: double.infinity,
                 height: 49,
@@ -172,6 +209,8 @@ class _ProfileState extends State<ProfilePage> {
                   ),
                 ),
               ),
+
+
           ],
 
         ),

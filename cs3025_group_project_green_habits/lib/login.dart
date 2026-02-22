@@ -12,7 +12,7 @@ class _LoginState extends State<LoginPage> {
   final _usernameTextbox = TextEditingController();
   final _passwordTextbox = TextEditingController();
   String username_or_email = '';
-  String _password = '';
+  //String _password = '';
   bool _passwordVisible = false; 
 
   @override
@@ -46,13 +46,15 @@ class _LoginState extends State<LoginPage> {
                 'Green Habits',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  //fontSize: 26,
+                  fontSize: 26,
                 ),
               ),
               SizedBox(height: 6),
               Text(
                 'Login',
                 style: TextStyle(
+                   fontWeight: FontWeight.normal,
+                   fontSize: 18,
                 ),
               ),
               SizedBox(height: 26),
@@ -99,24 +101,26 @@ class _LoginState extends State<LoginPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 26),
+              // SizedBox(height: 26),
+              // Center(
+              //     child: Text(
+              //       'Forgot Password?',
+              //       textAlign: TextAlign.center,
+              //       style: TextStyle(
+              //       ),
+              //     ),
+              // ),
+              SizedBox(height: 20),
               Center(
-                  child: Text(
-                    'Forgot Password?',
+                 child: TextButton(
+                  onPressed: () => {Navigator.pushReplacementNamed(context, '/signup')},
+                  child: const Text(
+                    "Sign Up", 
                     textAlign: TextAlign.center,
                     style: TextStyle(
                     ),
-                  ),
-              ),
-              SizedBox(height: 10),
-              Center(
-                child: Text(
-                  "Sign Up",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                  ),
-                  
-                ),
+                 ),
+                )
               )
             ],
           ),

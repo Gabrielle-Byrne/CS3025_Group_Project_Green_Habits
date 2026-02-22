@@ -22,11 +22,12 @@ class _HomeState extends State<HomePage> {
         helpText: "This is your homepage",
       ),
       body: Center(
+        child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: .center,
           children: [
              Text(
-              'Welcome Back, $_username',
+              'Welcome Back, $_username!',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             //TODO: Add garden preview
@@ -54,12 +55,12 @@ class _HomeState extends State<HomePage> {
               alignment: Alignment.center, 
               margin: EdgeInsets.all(20), 
               padding: EdgeInsets.all(30),
-              child: Row (mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              child: Row (mainAxisAlignment: MainAxisAlignment.spaceEvenly, 
                 children: [SizedBox(
                 height: 30,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/tips');
+                    Navigator.pushReplacementNamed(context, '/activity-log');
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -67,63 +68,111 @@ class _HomeState extends State<HomePage> {
                     ),
                   ),
                   child: Text(
-                    'Learn how to be more eco-friendly',
+                    'Log Activity',
                     style: TextStyle(
                     ),
                   ),
                 ),
               ),],)
             ),
-            //TODO: Add leaderboard
-            Text(
-              'Leaderboard',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              
               children: <Widget>[
-                SizedBox(
-                height: 30,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/tips');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  child: Text(
-                    'Learn how to be more eco-friendly',
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                    ),
+                  margin: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(10),
+                  child: Column(children: [
+                    Text(
+                    "Top 3 this week",
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                        ),
+                      ),
+                    SizedBox(height: 10),
+                    Text(
+                    "1. Billy Green\n2. Alice Brown\n3. Micheal Gray",
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
+                        style: TextStyle(
+                        ),
+                      ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, '/tips');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                          child: Text(
+                            'Learn how to be more eco-friendly',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
+                            style: TextStyle(
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
-              ),
-                SizedBox(
-                height: 30,
-                child: ElevatedButton(
-                  onPressed: () {
-                   Navigator.pushReplacementNamed(context, '/history');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+               Container(
+                  decoration: BoxDecoration(
+                    //color: Colors.greenAccent,
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  child: Text(
-                    'View Past Actions',
-                    style: TextStyle(
-                    ),
+                  margin: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(10),
+                  child: Column(children: [
+                    SizedBox(height: 30),
+                    SizedBox(
+                    width: 200,
+                        child: LinearProgressIndicator(
+                          minHeight: 20,
+                          backgroundColor: Color.fromARGB(255, 225, 255, 255),
+                          value: 0.8,
+                        ),
+                    ), 
+                    SizedBox(height: 10),
+                    Text(
+                    "80% of the way to the next reward!",
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
+                        style: TextStyle(
+                        ),
+                      ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, '/history');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                          child: Text(
+                            'View Your Past Actions',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
+                            style: TextStyle(
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
-              ),
               ],
             ),
           ],
         ),
+      ),
       ),
        bottomNavigationBar: BottomNavigation (
         currentRoute: "/home"

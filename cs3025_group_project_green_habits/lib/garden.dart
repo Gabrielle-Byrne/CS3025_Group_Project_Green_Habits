@@ -11,7 +11,7 @@ class GardenPage extends StatefulWidget {
 }
 
 class _GardenState extends State<GardenPage> {
-  String _title = "Garden"; // TODO: Replace with actual username once database is established
+  String _title = "Garden";
 
   
   @override

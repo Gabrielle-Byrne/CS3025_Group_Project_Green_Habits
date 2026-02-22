@@ -1,3 +1,4 @@
+import 'package:cs3025_group_project_green_habits/history.dart';
 import 'package:cs3025_group_project_green_habits/leaderboard.dart';
 import 'package:cs3025_group_project_green_habits/widgets/theme.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ColorSchemes.lightTheme,
       darkTheme: ColorSchemes.darkTheme,
       themeMode: ThemeMode.system,
-      initialRoute: '/home', // The page loaded when app is first opened
+      initialRoute: '/login', // The page loaded when app is first opened
       routes: {
       '/home': (context) => HomePage(),
       '/login': (context) => LoginPage(),
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
       '/garden-store': (context) => GardenPage(),
 
       '/activity-log': (context) => ActivityLogPage(),
-      '/history': (context) => ActivityLogPage(),
+      '/history': (context) => HistoryPage(),
       '/leaderboard': (context) => LeaderboardPage(),
       '/challenges': (context) => ActivityLogPage(),
       '/tips': (context) => TipsPage(),

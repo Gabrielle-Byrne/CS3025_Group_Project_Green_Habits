@@ -11,8 +11,10 @@ class SignUpPage extends StatefulWidget {
 // _ means this state is private (DO THIS FOR ALL PAGES)
 class _SignUpState extends State<SignUpPage> {
   final _usernameTextbox = TextEditingController();
+  final _emailTextbox = TextEditingController();
   final _passwordTextbox = TextEditingController();
-  String usernameOrEmail = '';
+  String username = '';
+  String email = '';
   String password = '';
   bool _isPasswordVisible = true; 
 
@@ -43,23 +45,31 @@ class _SignUpState extends State<SignUpPage> {
               Text(
                 'Green Habits',
                 style: TextStyle(
-                  //fontWeight: FontWeight.bold,
-                  //fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 26,
                 ),
               ),
               SizedBox(height: 6),
               Text(
                 'Login',
                 style: TextStyle(
-                  //fontWeight: FontWeight.normal,
-                  //fontSize: 18,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 18,
                 ),
               ),
               SizedBox(height: 26),
               TextField(
                 controller: _usernameTextbox,
                 decoration: InputDecoration(
-                  labelText: 'Username or Email',
+                  labelText: 'Username',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: _emailTextbox,
+                decoration: InputDecoration(
+                  labelText: 'Email',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -94,15 +104,17 @@ class _SignUpState extends State<SignUpPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
               Center(
-                child: Text(
-                  "Go back to Login",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    //fontSize: 14,
-                  ),
-                ),
+                 child: TextButton(
+                  onPressed: () => {Navigator.pushReplacementNamed(context, '/login')},
+                  child: const Text(
+                    "Return to Login", 
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                    ),
+                 ),
+                )
               )
             ],
           ),
