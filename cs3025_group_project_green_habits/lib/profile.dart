@@ -13,8 +13,8 @@ class ProfilePage extends StatefulWidget {
 class _ProfileState extends State<ProfilePage> {
   String _username = "Alice Brown"; // TODO: Replace with actual username once database is established
   String _email = "abrown@unb.ca";
-  final _usernameTextbox = TextEditingController();
-  final _emailTextbox = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   int _score = 100;
   int _coins = 240;
   double _textSizeSlider = 20;
@@ -23,6 +23,18 @@ class _ProfileState extends State<ProfilePage> {
   final List<bool> _selectedTheme = [true, false];
   final List<bool> _selectedSound = [true, false];
   
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _usernameController = TextEditingController(text: _username);
+  // }
+
+  // @override
+  // void dispose() {
+  //   _usernameController.dispose();
+  //   super.dispose();
+  // }
 
 
   
@@ -46,6 +58,14 @@ class _ProfileState extends State<ProfilePage> {
               size: 60,
               color: Theme.of(context).colorScheme.onPrimary,
             ),
+            SizedBox(height: 12),
+            // Langauge
+            Text(
+              '$_username ($_email)',
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+            SizedBox(height: 20),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -58,16 +78,11 @@ class _ProfileState extends State<ProfilePage> {
                   '$_coins Coins',
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),],),
-            // Langauge
-            SizedBox(height: 12),
-            Text(
-              '$_username ($_email)',
-              style: Theme.of(context).textTheme.headlineLarge,
-            ),
             SizedBox(height: 26),
             Text(
               'Language',
             ),
+            SizedBox(height: 16),
             ToggleButtons(
                 isSelected: _selectedLangauge,
                 selectedColor: Theme.of(context).colorScheme.onSecondary, onPressed: (int index) {
@@ -94,7 +109,7 @@ class _ProfileState extends State<ProfilePage> {
             Text(
               'Color Theme'
             ),
-            SizedBox(height: 26),
+            SizedBox(height: 16),
             ToggleButtons(
                 isSelected: _selectedTheme,
                 selectedColor: Theme.of(context).colorScheme.onSecondary, onPressed: (int index) {
@@ -119,9 +134,9 @@ class _ProfileState extends State<ProfilePage> {
              //Sound
             SizedBox(height: 26),
             Text(
-              'Sound'
+              'Sound (Currently Inactive)'
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 16),
             ToggleButtons(
                 isSelected: _selectedSound,
                 selectedColor: Theme.of(context).colorScheme.onSecondary, onPressed: (int index) {
@@ -165,20 +180,20 @@ class _ProfileState extends State<ProfilePage> {
             // Username Change
 
             TextField(
-              controller: _usernameTextbox,
+              controller: _usernameController,
               decoration: InputDecoration(labelText: "Change Username", hintText: _username),
             ),
             SizedBox(width: 10, height: 10),
             TextField(
-              controller: _emailTextbox,
+              controller: _emailController,
               decoration: InputDecoration(labelText: "Change Email", hintText: _email),
             ),
             SizedBox(width: 10, height: 10),
             ElevatedButton(
               onPressed: () {
-                if(_emailTextbox.text.isNotEmpty){
+                if(_emailController.text.isNotEmpty){
                   print("username changed");
-                 _email = _emailTextbox.text;
+                 _email = _emailController.text;
                 }
               },
               child: Text('Save Changes'),

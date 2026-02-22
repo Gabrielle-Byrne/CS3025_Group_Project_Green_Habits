@@ -10,9 +10,9 @@ class SignUpPage extends StatefulWidget {
 
 // _ means this state is private (DO THIS FOR ALL PAGES)
 class _SignUpState extends State<SignUpPage> {
-  final _usernameTextbox = TextEditingController();
-  final _emailTextbox = TextEditingController();
-  final _passwordTextbox = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   String username = '';
   String email = '';
   String password = '';
@@ -20,8 +20,8 @@ class _SignUpState extends State<SignUpPage> {
 
   @override
   void dispose() {
-    _usernameTextbox.dispose();
-    _passwordTextbox.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -59,7 +59,7 @@ class _SignUpState extends State<SignUpPage> {
               ),
               SizedBox(height: 26),
               TextField(
-                controller: _usernameTextbox,
+                controller: _usernameController,
                 decoration: InputDecoration(
                   labelText: 'Username',
                   border: OutlineInputBorder(),
@@ -67,7 +67,7 @@ class _SignUpState extends State<SignUpPage> {
               ),
               SizedBox(height: 16),
               TextField(
-                controller: _emailTextbox,
+                controller: _emailController,
                 decoration: InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(),
@@ -75,7 +75,7 @@ class _SignUpState extends State<SignUpPage> {
               ),
               SizedBox(height: 16),
               TextField(
-                controller: _passwordTextbox,
+                controller: _passwordController,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(),

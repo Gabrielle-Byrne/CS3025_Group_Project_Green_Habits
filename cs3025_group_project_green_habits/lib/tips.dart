@@ -42,7 +42,8 @@ enum CategoryLabel {
 
 class _TipsState extends State<TipsPage> {
   String _title = "Tips"; // TODO: Replace with actual username once database is established
-
+  final TextEditingController categoryController = TextEditingController();
+  CategoryLabel? selectedCategory;
   
   @override
   Widget build(BuildContext context) {
@@ -60,7 +61,23 @@ class _TipsState extends State<TipsPage> {
               style: Theme.of(context).textTheme.headlineLarge,
             ),
             // ADD Tips HERE
-            //Images 
+              DropdownMenu<CategoryLabel>(
+                        controller: categoryController,
+                        enableFilter: true,
+                        requestFocusOnTap: true,
+                        leadingIcon: const Icon(Icons.search),
+                        label: const Text('Category'),
+                        inputDecorationTheme: const InputDecorationTheme(
+                          filled: true,
+                          contentPadding: EdgeInsets.symmetric(vertical: 5.0),
+                        ),
+                        onSelected: (CategoryLabel? icon) {
+                          setState(() {
+                            selectedCategory = icon;
+                          });
+                        },
+                        dropdownMenuEntries: CategoryLabel.entries,
+                      ), 
 
             SizedBox(height: 20),
             SizedBox(

@@ -9,16 +9,16 @@ class LoginPage extends StatefulWidget {
 
 // _ means this state is private (DO THIS FOR ALL PAGES)
 class _LoginState extends State<LoginPage> {
-  final _usernameTextbox = TextEditingController();
-  final _passwordTextbox = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
   String username_or_email = '';
   //String _password = '';
   bool _passwordVisible = false; 
 
   @override
   void dispose() {
-    _usernameTextbox.dispose();
-    _passwordTextbox.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -59,7 +59,7 @@ class _LoginState extends State<LoginPage> {
               ),
               SizedBox(height: 26),
               TextField(
-                controller: _usernameTextbox,
+                controller: _usernameController,
                 decoration: InputDecoration(
                   labelText: 'Username or Email',
                   border: OutlineInputBorder(),
@@ -67,7 +67,7 @@ class _LoginState extends State<LoginPage> {
               ),
               SizedBox(height: 16),
               TextField(
-                controller: _passwordTextbox,
+                controller: _passwordController,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(),
