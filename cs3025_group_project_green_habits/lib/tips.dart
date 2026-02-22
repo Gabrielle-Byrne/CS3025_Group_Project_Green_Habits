@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 //import 'widgets/theme.dart';
 import 'widgets/header.dart';
@@ -11,18 +13,18 @@ class TipsPage extends StatefulWidget {
   State<TipsPage> createState() => _TipsState();
 }
 
-typedef CategoryEntry = DropdownMenuEntry<IconLabel>;
+typedef CategoryEntry = DropdownMenuEntry<CategoryLabel>;
 
 // DropdownMenuEntry labels and values for the second dropdown menu.
-enum IconLabel {
-  recycing('Recy', Icons.recycing),
-  transit('Sustainable Transit', Icons.direction_bus),
+enum CategoryLabel {
+  recycing('Recycling', Icons.recycling),
+  transit('Sustainable Transit', Icons.directions_bus),
   energy('Energy', Icons.energy_savings_leaf),
-  energy('Brush', Icons.brush_outlined),
-  energy('Brush', Icons.brush_outlined),
-  general('Other', Icons.globe);
+  // energy('Brush', Icons.brush_outlined),
+  // energy('Brush', Icons.brush_outlined),
+  general('Other', Icons.public);
 
-  const IconLabel(this.label, this.icon);
+  const CategoryLabel(this.label, this.icon);
   final String label;
   final IconData icon;
 

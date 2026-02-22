@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'widgets/theme.dart';
 import 'widgets/bottomNavigationBar.dart';
 import 'widgets/header.dart';
 
@@ -35,10 +34,45 @@ class _HomeState extends State<HomePage> {
               'Virtural Garden',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+            Container(
+              width: 300,
+              height: 100,
+              color: const Color.fromRGBO(117, 228, 119, 1), 
+              alignment: Alignment.center, 
+              margin: EdgeInsets.all(20), 
+              padding: EdgeInsets.all(30), 
+              child: Icon(Icons.forest), 
+            ),
             //TODO: Add most recently used actions 
             Text(
               'Quick-Action Bar',
               style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            Container(
+              height: 100,
+              color: const Color.fromRGBO(117, 228, 119, 1), 
+              alignment: Alignment.center, 
+              margin: EdgeInsets.all(20), 
+              padding: EdgeInsets.all(30),
+              child: Row (mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [SizedBox(
+                height: 30,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, '/tips');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    'Learn how to be more eco-friendly',
+                    style: TextStyle(
+                    ),
+                  ),
+                ),
+              ),],)
             ),
             //TODO: Add leaderboard
             Text(
@@ -53,6 +87,7 @@ class _HomeState extends State<HomePage> {
                 height: 30,
                 child: ElevatedButton(
                   onPressed: () {
+                    Navigator.pushReplacementNamed(context, '/tips');
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -60,7 +95,7 @@ class _HomeState extends State<HomePage> {
                     ),
                   ),
                   child: Text(
-                    'Go to Gallery',
+                    'Learn how to be more eco-friendly',
                     style: TextStyle(
                     ),
                   ),

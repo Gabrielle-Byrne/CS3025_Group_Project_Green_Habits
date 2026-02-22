@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'widgets/theme.dart';
 import 'widgets/bottomNavigationBar.dart';
 import 'widgets/header.dart';
 
@@ -14,6 +13,8 @@ class ProfilePage extends StatefulWidget {
 class _ProfileState extends State<ProfilePage> {
   String _username = "Alice Brown"; // TODO: Replace with actual username once database is established
   String _email = "abrown@unb.ca";
+  int _score = 100;
+  int _coins = 240;
   double _textSizeSlider = 20;
   final List<bool> _selectedLangauge = [true, false];
   final List<bool> _selectedTheme = [true, false];
@@ -41,11 +42,18 @@ class _ProfileState extends State<ProfilePage> {
               size: 60,
               color: Theme.of(context).colorScheme.onPrimary,
             ),
-            
+            Row(children: [Text(
+                  '$_score Points',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  Text(
+                  '$_coins Coins',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),],),
             // Langauge
             SizedBox(height: 12),
             Text(
-              '$_username',
+              '$_username ($_email)',
               style: Theme.of(context).textTheme.headlineLarge,
             ),
             SizedBox(height: 26),
