@@ -1,59 +1,86 @@
 import 'package:flutter/material.dart';
 
-class ColorSchemes {
+class AppTheme {
+  static const Color bg = Color(0xFFFBFFFA);        // app background
+  static const Color navBg = Color(0xFFCCDDCF);     // bottom nav background
+  static const Color ink = Color(0xFF084E18);       // app bar, text, icons
+  static const Color selected = Color(0xFF85A98D);  // selected bottom nav item
 
+  static const ColorScheme lightScheme = ColorScheme(
+    brightness: Brightness.light,
 
-static final ColorScheme lightMode = ColorScheme.fromSeed(
-          seedColor:const Color(0xFF084E18),
-          brightness: Brightness.light, 
-        );
+    primary: ink,
+    onPrimary: bg,
 
-static final ColorScheme darkMode = ColorScheme.fromSeed(
-          seedColor: const Color(0xFFCADCCD),
-          brightness: Brightness.dark, 
-        );
+    secondary: selected,
+    onSecondary: bg,
 
-  // static const ColorScheme lightMode = ColorScheme(
-  //   brightness: Brightness.light, 
-  //   primary: Color.fromARGB(255, 255, 255, 255),
-  //   onPrimary: Color(0xFF084E18), 
-  //   secondary: Color(0xFF084E18), 
-  //   onSecondary: Color.fromARGB(255, 179, 255, 135), 
-  //   error: Color.fromARGB(255, 255, 191, 191), 
-  //   onError: Color.fromARGB(255, 179, 18, 18), 
-  //   surface: Color.fromARGB(255, 104, 183, 58), 
-  //   onSurface: Color.fromARGB(255, 104, 183, 58)
-  // );
+    surface: bg,
+    onSurface: ink,
 
-  //  static const ColorScheme darkMode = ColorScheme(
-  //   brightness: Brightness.dark, 
-  //   primary: Color.fromARGB(255, 255, 255, 255),
-  //   onPrimary: Color.fromARGB(255, 21, 55, 1), 
-  //   secondary: Color.fromARGB(255, 21, 214, 7), 
-  //   onSecondary: Color.fromARGB(255, 179, 255, 135), 
-  //   error: Color.fromARGB(255, 255, 191, 191), 
-  //   onError: Color.fromARGB(255, 179, 18, 18), 
-  //   surface: Color.fromARGB(255, 104, 183, 58), 
-  //   onSurface: Color.fromARGB(255, 104, 183, 58)
-  // );
+    onSurfaceVariant: ink,
 
-  static ThemeData lightTheme = ThemeData(
-    colorScheme: lightMode,
-    useMaterial3: true,
-    scaffoldBackgroundColor: lightMode.inversePrimary,
-    appBarTheme: AppBarTheme(
-      backgroundColor: lightMode.primary,
-      foregroundColor: lightMode.onPrimary,
-    ),
+    error: Color(0xFFB3261E),
+    onError: Colors.white,
+
+    outline: ink,
+    shadow: Colors.black,
+    inverseSurface: ink,
+    onInverseSurface: bg,
+    inversePrimary: selected,
+    scrim: Colors.black,
+
+    primaryContainer: bg,
+    onPrimaryContainer: ink,
+    secondaryContainer: navBg,
+    onSecondaryContainer: ink,
+    tertiary: selected,
+    onTertiary: bg,
+    tertiaryContainer: navBg,
+    onTertiaryContainer: ink,
   );
 
-  static ThemeData darkTheme = ThemeData(
-    colorScheme: darkMode,
-    useMaterial3: true,
-    scaffoldBackgroundColor: darkMode.inversePrimary,
-    appBarTheme: AppBarTheme(
-      backgroundColor: darkMode.primary,
-      foregroundColor: darkMode.onPrimary,
-    ),
-  );
+  static ThemeData light() {
+    final cs = lightScheme;
+
+    return ThemeData(
+      useMaterial3: true,
+      colorScheme: cs,
+
+      scaffoldBackgroundColor: bg,
+
+      appBarTheme: const AppBarTheme(
+        backgroundColor: bg,
+        foregroundColor: ink,
+        iconTheme: IconThemeData(color: ink),
+        titleTextStyle: TextStyle(
+          color: bg,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
+        elevation: 0,
+      ),
+
+      iconTheme: const IconThemeData(color: ink),
+
+      textTheme: Typography.material2021().black.apply(
+        bodyColor: ink,
+        displayColor: ink,
+      ),
+      /*
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: navBg,
+        selectedItemColor: selected,
+        unselectedItemColor: ink,
+        selectedIconTheme: const IconThemeData(color: selected),
+        unselectedIconTheme: const IconThemeData(color: ink),
+        type: BottomNavigationBarType.fixed,
+      ),*/
+
+      navigationBarTheme: NavigationBarThemeData(
+      iconTheme: WidgetStatePropertyAll(IconThemeData(color: cs.onSurface)), // 084E18
+      labelTextStyle: WidgetStatePropertyAll(TextStyle(color: cs.onSurface)),
+      ),
+    );
+  }
 }

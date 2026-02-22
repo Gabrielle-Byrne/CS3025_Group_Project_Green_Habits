@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomeState extends State<HomePage> {
   final String _username = "Alice Brown"; // TODO: Replace with actual username once database is established
 
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

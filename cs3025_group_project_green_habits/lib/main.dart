@@ -21,8 +21,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Green Habits',
-      theme: ColorSchemes.lightTheme,
-      darkTheme: ColorSchemes.darkTheme,
+      theme: AppTheme.light(),
+      //darkTheme: AppTheme.dark(),
       themeMode: ThemeMode.system,
       initialRoute: '/login', // The page loaded 
       routes: {
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       '/garden': (context) => GardenPage(),
       '/garden-store': (context) => GardenPage(),
 
-      '/actvity-log': (context) => ActivityLogPage(),
+      '/activity-log': (context) => ActivityLogPage(),
       '/history': (context) => ActivityLogPage(),
       '/leaderboard': (context) => LeaderboardPage(),
       '/challenges': (context) => ActivityLogPage(),

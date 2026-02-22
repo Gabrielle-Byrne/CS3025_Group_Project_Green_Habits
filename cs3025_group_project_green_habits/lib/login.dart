@@ -27,6 +27,9 @@ class _LoginState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
        appBar: AppBar(
+        backgroundColor: AppTheme.ink,
+        titleTextStyle: TextStyle(color: AppTheme.bg),
+        iconTheme: IconThemeData(color: AppTheme.bg),
         title: const Text('Green Habits'),
         leading: const Icon(Icons.grass),
       ),
@@ -55,7 +58,6 @@ class _LoginState extends State<LoginPage> {
                 controller: _usernameTextbox,
                 decoration: InputDecoration(
                   labelText: 'Username or Email',
-                  border: OutlineInputBorder(),
                 ),
               ),
               SizedBox(height: 16),
@@ -63,7 +65,6 @@ class _LoginState extends State<LoginPage> {
                 controller: _passwordTextbox,
                 decoration: InputDecoration(
                   labelText: 'Password',
-                  border: OutlineInputBorder(),
                 ),
                 obscureText: _passwordVisible,
               ),
@@ -79,6 +80,8 @@ class _LoginState extends State<LoginPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
+                    backgroundColor: AppTheme.ink,
+                    foregroundColor: AppTheme.bg,
                   ),
                   child: Text(
                     'Login',

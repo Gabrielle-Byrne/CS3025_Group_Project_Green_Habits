@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'theme.dart';
 
+
 class BottomNavigation extends StatelessWidget {
   final String  currentRoute;
 
@@ -16,30 +17,30 @@ class BottomNavigation extends StatelessWidget {
         return 4;
       case '/garden':
         return 3;
-      case '/actvity-log':
+      case '/activity-log':
         return 2;
       case '/profile':
         return 1;
-      case '/':
+      case '/home':
       default:
         return 0;
     }
   }
 
-  @override
+  /*@override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       currentIndex: _getIndex(),
-      onTap: (index) {
-        if (index == 0) {
+      onTap: (currentIndex) {
+        if (currentIndex == 0) {
           Navigator.pushReplacementNamed(context, '/home');
-        } else if (index == 1) {
+        } else if (currentIndex == 1) {
           Navigator.pushReplacementNamed(context, '/profile');
-        } else if (index == 2) {
-          Navigator.pushReplacementNamed(context, '/actvity-log');
-        } else if (index == 3) {
+        } else if (currentIndex == 2) {
+          Navigator.pushReplacementNamed(context, '/activity-log');
+        } else if (currentIndex == 3) {
           Navigator.pushReplacementNamed(context, '/garden');
-        } else if (index == 4) {
+        } else if (currentIndex == 4) {
           Navigator.pushReplacementNamed(context, '/leaderboard');
         }
       },
@@ -50,9 +51,31 @@ class BottomNavigation extends StatelessWidget {
         BottomNavigationBarItem(icon: Icon(Icons.grass), label: "Garden"),
         BottomNavigationBarItem(icon: Icon(Icons.leaderboard), label: "Leaderboard"),
       ],
-      // backgroundColor: lightMode.surface,
-      // selectedItemColor: lightMode.primary,
-      // unselectedItemColor: lightMode.onSurfaceVariant,
+    );
+  }*/
+
+  void _go(BuildContext context, int i) {
+    const routes = ['/home', '/profile', '/activity-log', '/garden', '/leaderboard'];
+    Navigator.pushReplacementNamed(context, routes[i]);
+  }
+
+   @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
+    return NavigationBar(
+      selectedIndex: _getIndex(),
+      onDestinationSelected: (i) => _go(context, i),
+      backgroundColor: AppTheme.navBg,
+      indicatorColor: cs.secondary,          
+      indicatorShape: const StadiumBorder(), 
+      destinations: const [
+        NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
+        NavigationDestination(icon: Icon(Icons.person), label: 'Profile'),
+        NavigationDestination(icon: Icon(Icons.add), label: 'Log Action'),
+        NavigationDestination(icon: Icon(Icons.grass), label: 'Garden'),
+        NavigationDestination(icon: Icon(Icons.leaderboard), label: 'Leaderboard'),
+      ],
     );
   }
 }
