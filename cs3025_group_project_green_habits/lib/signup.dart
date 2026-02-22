@@ -86,7 +86,7 @@ class _SignUpState extends State<SignUpPage> {
                     ),
                   ),
                   child: Text(
-                    'Login',
+                    'Sign Up',
                     style: TextStyle(
                       //fontSize: 16,
                       //fontWeight: FontWeight.bold,
@@ -94,20 +94,10 @@ class _SignUpState extends State<SignUpPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 26),
-              Center(
-                  child: Text(
-                    'Forgot Password?',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      //fontSize: 14,
-                    ),
-                  ),
-              ),
               SizedBox(height: 10),
               Center(
                 child: Text(
-                  "Sign Up",
+                  "Go back to Login",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     //fontSize: 14,

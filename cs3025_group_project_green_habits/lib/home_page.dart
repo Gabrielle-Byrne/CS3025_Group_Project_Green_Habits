@@ -96,6 +96,7 @@ class _HomeState extends State<HomePage> {
                   ),
                   child: Text(
                     'Learn how to be more eco-friendly',
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                     ),
                   ),
@@ -105,7 +106,7 @@ class _HomeState extends State<HomePage> {
                 height: 30,
                 child: ElevatedButton(
                   onPressed: () {
-
+                   Navigator.pushReplacementNamed(context, '/history');
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
