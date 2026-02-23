@@ -9,6 +9,7 @@ import 'signup.dart';
 import 'garden.dart';  
 import 'activitylog.dart';
 import 'profile.dart';
+import 'plant_store.dart';
 import 'widgets/bottomNavigationBar.dart';
 //import 'tips.dart';
 void main() {
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
       '/profile': (context) => ProfilePage(),
 
       '/garden': (context) => GardenPage(),
-      '/garden-store': (context) => GardenPage(),
+      '/plant_store': (_) => PlantStorePage(),
 
       '/activity-log': (context) => ActivityLogPage(),
       '/history': (context) => ActivityLogPage(),
