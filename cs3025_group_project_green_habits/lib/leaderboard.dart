@@ -11,6 +11,14 @@ class LeaderboardPage extends StatefulWidget {
   State<LeaderboardPage> createState() => _LeaderboardPageState();
 }
 
+class User {
+  final String username;
+  final int points;
+
+  User(this.username, this.points);
+}
+
+
 class _LeaderboardPageState extends State<LeaderboardPage> {
   LeaderboardScope _scope = LeaderboardScope.faculty;
   ChallengeScope _challengeScope = ChallengeScope.available;

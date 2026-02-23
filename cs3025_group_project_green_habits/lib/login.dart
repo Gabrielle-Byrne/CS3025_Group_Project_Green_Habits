@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'widgets/theme.dart';
 
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -10,17 +11,23 @@ class LoginPage extends StatefulWidget {
 
 // _ means this state is private (DO THIS FOR ALL PAGES)
 class _LoginState extends State<LoginPage> {
-  final _usernameTextbox = TextEditingController();
-  final _passwordTextbox = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
   String username_or_email = '';
-  String _password = '';
+  //String _password = '';
   bool _passwordVisible = false; 
 
   @override
   void dispose() {
-    _usernameTextbox.dispose();
-    _passwordTextbox.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
     super.dispose();
+  }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _passwordVisible = !_passwordVisible;
+    });
   }
 
   @override
@@ -43,30 +50,40 @@ class _LoginState extends State<LoginPage> {
               Text(
                 'Green Habits',
                 style: TextStyle(
-                  //fontWeight: FontWeight.bold,
-                  //fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 26,
                 ),
               ),
               SizedBox(height: 6),
               Text(
                 'Login',
                 style: TextStyle(
+                   fontWeight: FontWeight.normal,
+                   fontSize: 18,
                 ),
               ),
               SizedBox(height: 26),
               TextField(
-                controller: _usernameTextbox,
+                controller: _usernameController,
                 decoration: InputDecoration(
                   labelText: 'Username or Email',
                 ),
               ),
               SizedBox(height: 16),
               TextField(
-                controller: _passwordTextbox,
+                controller: _passwordController,
                 decoration: InputDecoration(
                   labelText: 'Password',
+                 
+                  suffixIcon: IconButton(
+                  icon: Icon(
+                    _passwordVisible ? Icons.visibility_off : Icons.visibility,
+                  ),
+                  onPressed: _togglePasswordVisibility,
+                ),
                 ),
                 obscureText: _passwordVisible,
+                
               ),
               SizedBox(height: 26),
               SizedBox(
@@ -90,23 +107,26 @@ class _LoginState extends State<LoginPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 26),
+              // SizedBox(height: 26),
+              // Center(
+              //     child: Text(
+              //       'Forgot Password?',
+              //       textAlign: TextAlign.center,
+              //       style: TextStyle(
+              //       ),
+              //     ),
+              // ),
+              SizedBox(height: 20),
               Center(
-                  child: Text(
-                    'Forgot Password?',
+                 child: TextButton(
+                  onPressed: () => {Navigator.pushReplacementNamed(context, '/signup')},
+                  child: const Text(
+                    "Sign Up", 
                     textAlign: TextAlign.center,
                     style: TextStyle(
                     ),
-                  ),
-              ),
-              SizedBox(height: 10),
-              Center(
-                child: Text(
-                  "Sign Up",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                  ),
-                ),
+                 ),
+                )
               )
             ],
           ),
