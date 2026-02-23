@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
       '/profile': (context) => ProfilePage(),
 
       '/garden': (context) => GardenPage(),
-      '/garden-store': (context) => GardenPage(),
+      '/plant-store': (context) => GardenPage(),
 
       '/activity-log': (context) => ActivityLogPage(),
       '/history': (context) => ActivityLogPage(),

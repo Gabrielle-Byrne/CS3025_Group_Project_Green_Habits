@@ -31,7 +31,6 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
             //Picture
 
 
-            //
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -104,7 +103,6 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                 ),
               ),
 
-            //Enter
           ],
         ),
       ),
