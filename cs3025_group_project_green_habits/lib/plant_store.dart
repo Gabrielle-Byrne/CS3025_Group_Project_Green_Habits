@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'widgets/header.dart';
+import 'package:provider/provider.dart';
+import 'state/points_store.dart';
 
 class PlantStorePage extends StatelessWidget {
   const PlantStorePage({super.key});
@@ -22,7 +24,6 @@ class PlantStorePage extends StatelessWidget {
         helpText: "Use points to buy plants, seed packs, gifts, and power-ups.",
       ),
 
-      // NO bottomNavigationBar here (as requested)
 
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(12, 10, 12, 18),
@@ -32,8 +33,8 @@ class PlantStorePage extends StatelessWidget {
             // Top row: Plant Store + points
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
+              children: [
+                const Text(
                   "Plant Store",
                   style: TextStyle(
                     fontSize: 16,
@@ -41,8 +42,7 @@ class PlantStorePage extends StatelessWidget {
                     color: kDarkGreen,
                   ),
                 ),
-                _PointsDisplay(points: 350),
-              ],
+                _PointsDisplay(points: context.watch<PointsStore>().points),              ],
             ),
             const SizedBox(height: 10),
 

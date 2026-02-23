@@ -4,7 +4,7 @@ import 'widgets/bottomNavigationBar.dart';
 import 'package:provider/provider.dart';
 import 'state/points_store.dart';
 
-class GardenPage extends StatefulWidget {
+class GardenPage extends StatelessWidget {
   const GardenPage({super.key});
 
   static const Color kBg = Color(0xFFFBFFFA);

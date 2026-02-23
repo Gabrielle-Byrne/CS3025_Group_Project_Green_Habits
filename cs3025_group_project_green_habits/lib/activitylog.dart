@@ -44,7 +44,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
     return Container(
       height: 140,
       decoration: BoxDecoration(
-        color: cs.surfaceVariant.withOpacity(0.65),
+        color: AppTheme.navBg,
         borderRadius: BorderRadius.circular(8),
       ),
       clipBehavior: Clip.antiAlias,
@@ -200,6 +200,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Please select an activity.'),
+                          duration: const Duration(seconds: 1),
                         ),
                       );
                       return;
@@ -214,6 +215,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                         content: Text(
                           '+$earned points! Total: ${store.points}',
                         ),
+                        duration: const Duration(seconds: 1),
                       ),
                     );
                   },
