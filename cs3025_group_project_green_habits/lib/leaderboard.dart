@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'state/challenge_store.dart';
 import 'widgets/bottomNavigationBar.dart';
 import 'widgets/header.dart';
 import 'widgets/theme.dart';
-
 
 class LeaderboardPage extends StatefulWidget {
   const LeaderboardPage({super.key});
@@ -17,7 +18,6 @@ class User {
 
   User(this.username, this.points);
 }
-
 
 class _LeaderboardPageState extends State<LeaderboardPage> {
   LeaderboardScope _scope = LeaderboardScope.faculty;
@@ -93,10 +93,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 enum LeaderboardScope { global, faculty, friends }
 
 class _LeaderboardTab extends StatelessWidget {
-  const _LeaderboardTab({
-    required this.scope,
-    required this.onScopeChanged,
-  });
+  const _LeaderboardTab({required this.scope, required this.onScopeChanged});
 
   final LeaderboardScope scope;
   final ValueChanged<LeaderboardScope> onScopeChanged;
@@ -160,27 +157,15 @@ class _LeaderboardTab extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(
-                child: _PodiumPerson(
-                  name: top2,
-                  rank: 2,
-                  barHeight: 95,
-                ),
+                child: _PodiumPerson(name: top2, rank: 2, barHeight: 95),
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: _PodiumPerson(
-                  name: top1,
-                  rank: 1,
-                  barHeight: 130,
-                ),
+                child: _PodiumPerson(name: top1, rank: 1, barHeight: 130),
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: _PodiumPerson(
-                  name: top3,
-                  rank: 3,
-                  barHeight: 70,
-                ),
+                child: _PodiumPerson(name: top3, rank: 3, barHeight: 70),
               ),
             ],
           ),
@@ -301,10 +286,7 @@ class _ListColumn extends StatelessWidget {
 enum ChallengeScope { available, achievements }
 
 class _ChallengesTab extends StatelessWidget {
-  const _ChallengesTab({
-    required this.scope,
-    required this.onScopeChanged,
-  });
+  const _ChallengesTab({required this.scope, required this.onScopeChanged});
 
   final ChallengeScope scope;
   final ValueChanged<ChallengeScope> onScopeChanged;
@@ -313,53 +295,196 @@ class _ChallengesTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
 
+    final store = context.watch<ChallengeStore>();
+    store.ensureDailyChallenge();
+
+    final daily = store.dailyDef;
+    final dailyProgress = store.dailyProgress;
+    final dailyPct = (daily == null)
+        ? 0.0
+        : (dailyProgress / daily.targetCount).clamp(0.0, 1.0);
+    final joined = store.joined;
+    final available = store.available;
+    final achievements = store.achievements;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Daily challenge card
-          _DailyChallengeCard(
-            title: "DAILY CHALLENGE:",
-            subtitle: "Use a reusable Mug 2 times today",
-            pointsText: "+50 points",
-            progress: 0.5,
-          ),
+          if (daily != null)
+            _DailyChallengeCard(
+              title: "DAILY CHALLENGE:",
+              subtitle: store.dailyDef!.title,
+              pointsText: "+${store.dailyDef!.rewardPoints} points",
+              progress: dailyPct,
+              progressText:
+                  "${store.dailyProgress}/${store.dailyDef!.targetCount} completed",
+            ),
 
           const SizedBox(height: 14),
 
-          // Available / Achievements segmented
           _SegmentedRow<ChallengeScope>(
             value: scope,
             onChanged: onScopeChanged,
             items: const [
               _SegItem(value: ChallengeScope.available, label: "Available"),
-              _SegItem(value: ChallengeScope.achievements, label: "Achievements"),
+              _SegItem(
+                value: ChallengeScope.achievements,
+                label: "Achievements",
+              ),
             ],
           ),
 
           const SizedBox(height: 12),
 
-          // UI-only list
-          _ChallengeTile(
-            title: "Residence Energy Challenge",
-            daysLeftText: "3 days left",
-            progress: 0.85,
+          if (scope == ChallengeScope.available) ...[
+            Text(
+              "Joined",
+              style: TextStyle(color: cs.primary, fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 8),
+
+            if (joined.isEmpty)
+              Text(
+                "No joined challenges yet.",
+                style: TextStyle(color: cs.primary),
+              ),
+            ...joined.map((j) => _JoinedChallengeCard(j)).toList(),
+
+            const SizedBox(height: 14),
+
+            Text(
+              "Available",
+              style: TextStyle(color: cs.primary, fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 8),
+
+            ...available.map((c) => _AvailableChallengeCard(c)).toList(),
+          ] else ...[
+            Text(
+              "Achievements",
+              style: TextStyle(color: cs.primary, fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 8),
+
+            if (achievements.isEmpty)
+              Text("No achievements yet.", style: TextStyle(color: cs.primary)),
+            ...achievements.map((c) => _AchievementCard(c)).toList(),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _JoinedChallengeCard extends StatelessWidget {
+  final JoinedChallenge j;
+  const _JoinedChallengeCard(this.j);
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final pct = (j.progress / j.def.targetCount).clamp(0.0, 1.0);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+      decoration: BoxDecoration(
+        color: AppTheme.navBg,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            j.def.title,
+            style: TextStyle(color: cs.primary, fontWeight: FontWeight.w800),
           ),
-          const SizedBox(height: 10),
-          _ChallengeTile(
-            title: "Meatless Mondays",
-            daysLeftText: "7 days left",
-            progress: 0.65,
+          const SizedBox(height: 6),
+          Text(
+            "${j.def.activityKey}: ${j.progress}/${j.def.targetCount}  •  +${j.def.rewardPoints} pts",
+            style: TextStyle(color: cs.primary),
           ),
-          const SizedBox(height: 10),
-          _ChallengeTile(
-            title: "Academic Bike Challenge",
-            daysLeftText: "14 days left",
-            progress: 0.30,
-            showJoin: true,
+          const SizedBox(height: 8),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: LinearProgressIndicator(
+              value: pct,
+              minHeight: 12,
+              backgroundColor: cs.onSurface.withOpacity(0.18),
+              valueColor: AlwaysStoppedAnimation(cs.primary),
+            ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _AvailableChallengeCard extends StatelessWidget {
+  final ChallengeDefinition def;
+  const _AvailableChallengeCard(this.def);
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+      decoration: BoxDecoration(
+        color: AppTheme.navBg,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              "${def.title}\n${def.activityKey}: 0/${def.targetCount}  •  +${def.rewardPoints} pts",
+              style: TextStyle(color: cs.primary, fontWeight: FontWeight.w700),
+            ),
+          ),
+          const SizedBox(width: 10),
+          SizedBox(
+            height: 28,
+            child: ElevatedButton(
+              onPressed: () =>
+                  context.read<ChallengeStore>().joinChallenge(def),
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                backgroundColor: AppTheme.ink,
+                foregroundColor: AppTheme.bg,
+              ),
+              child: const Text("Join"),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AchievementCard extends StatelessWidget {
+  final ChallengeDefinition def;
+  const _AchievementCard(this.def);
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+      decoration: BoxDecoration(
+        color: AppTheme.navBg,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Text(
+        "${def.title}\nCompleted • +${def.rewardPoints} pts",
+        style: TextStyle(color: cs.primary, fontWeight: FontWeight.w800),
       ),
     );
   }
@@ -371,12 +496,14 @@ class _DailyChallengeCard extends StatelessWidget {
     required this.subtitle,
     required this.pointsText,
     required this.progress,
+    required this.progressText,
   });
 
   final String title;
   final String subtitle;
   final String pointsText;
   final double progress;
+  final String progressText;
 
   @override
   Widget build(BuildContext context) {
@@ -428,7 +555,7 @@ class _DailyChallengeCard extends StatelessWidget {
           const SizedBox(height: 6),
           Center(
             child: Text(
-              "${(progress * 100).round()}% completed",
+              progressText,
               style: TextStyle(
                 color: cs.primary,
                 fontWeight: FontWeight.w700,
@@ -495,12 +622,12 @@ class _ChallengeTile extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        backgroundColor: AppTheme.ink,
-                        foregroundColor: AppTheme.bg,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
+                      backgroundColor: AppTheme.ink,
+                      foregroundColor: AppTheme.bg,
+                    ),
                     child: const Text("Join"),
                   ),
                 ),
@@ -519,6 +646,42 @@ class _ChallengeTile extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class ChallengesPanel extends StatelessWidget {
+  const ChallengesPanel({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final store = context.watch<ChallengeStore>();
+
+    return Column(
+      children: [
+        const SizedBox(height: 10),
+        const Text('Available'),
+        ...store.available.map(
+          (c) => ListTile(
+            title: Text(c.title),
+            subtitle: Text(
+              '${c.activityKey}: 0/${c.targetCount}  •  +${c.rewardPoints} pts',
+            ),
+            trailing: ElevatedButton(
+              onPressed: () => context.read<ChallengeStore>().joinChallenge(c),
+              child: const Text('Join'),
+            ),
+          ),
+        ),
+        const Divider(),
+        const Text('Achievements'),
+        ...store.achievements.map(
+          (c) => ListTile(
+            title: Text(c.title),
+            subtitle: Text('Completed • +${c.rewardPoints} pts'),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -550,12 +713,7 @@ class _SegmentedRow<T> extends StatelessWidget {
       child: SegmentedButton<T>(
         showSelectedIcon: false,
         segments: items
-            .map(
-              (i) => ButtonSegment<T>(
-                value: i.value,
-                label: Text(i.label),
-              ),
-            )
+            .map((i) => ButtonSegment<T>(value: i.value, label: Text(i.label)))
             .toList(),
         selected: <T>{value},
         onSelectionChanged: (s) => onChanged(s.first),
@@ -580,7 +738,7 @@ class _SegmentedRow<T> extends StatelessWidget {
 
 //Future<List<User>> getLeaderboard() async {
 //   final db = await database;
-//   final List<Map<String, dynamic>> maps = 
+//   final List<Map<String, dynamic>> maps =
 //       await db.query('users', orderBy: 'score DESC', limit: 10);
 //   return List.generate(maps.length, (i) => User(
 //       name: maps[i]['name'], campus: maps[i]['campus'], score: maps[i]['score']));
