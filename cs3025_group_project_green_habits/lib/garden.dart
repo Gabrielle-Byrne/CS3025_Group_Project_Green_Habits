@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'widgets/header.dart';
 import 'widgets/bottomNavigationBar.dart';
+import 'package:provider/provider.dart';
+import 'state/points_store.dart';
 
 class GardenPage extends StatelessWidget {
   const GardenPage({super.key});
@@ -12,6 +14,7 @@ class GardenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final points = context.watch<PointsStore>().points;
     return Scaffold(
       backgroundColor: kBg,
       appBar: const HeaderBar(
