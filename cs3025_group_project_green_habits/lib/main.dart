@@ -1,6 +1,8 @@
 import 'package:cs3025_group_project_green_habits/leaderboard.dart';
 import 'package:cs3025_group_project_green_habits/tips.dart';
 import 'package:cs3025_group_project_green_habits/widgets/theme.dart';
+import 'package:cs3025_group_project_green_habits/databases/preferences.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 import 'home_page.dart';  
 import 'login.dart';  
@@ -10,22 +12,53 @@ import 'activitylog.dart';
 import 'profile.dart';
 import 'widgets/bottomNavigationBar.dart';
 //import 'tips.dart';
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  String lang = await PreferencesService.getLanguage();
+  bool darkMode = await PreferencesService.getDarkMode();
+
+  runApp(MyApp(
+    initialLang: lang,
+    initialDarkMode: darkMode,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String initialLang;
+  final bool initialDarkMode;
 
-  // This widget is the root of your application.
+  const MyApp({super.key, required this.initialLang, required this.initialDarkMode});
+  
+  Future<String> _loadLanguage() async {
+    return await PreferencesService.getLanguage();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return FutureBuilder<String>(
+      future: _loadLanguage(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const SizedBox(); 
+        }
+      return MaterialApp(
+      locale: Locale(snapshot.data!),
       title: 'Green Habits',
       theme: AppTheme.light(),
+      supportedLocales: const [
+        Locale('en'),
+        Locale('fr'),
+      ],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       //darkTheme: AppTheme.dark(),
-      themeMode: ThemeMode.system,
-      initialRoute: '/login', // The page loaded 
+      themeMode: initialDarkMode ? ThemeMode.light : ThemeMode.dark,
+      //themeMode: ThemeMode.system,
+      initialRoute: '/login',
       routes: {
       '/home': (context) => HomePage(),
       '/login': (context) => LoginPage(),
@@ -42,8 +75,10 @@ class MyApp extends StatelessWidget {
       '/tips': (context) => TipsPage(),
     },
     );
+    }
+  );
+      }
   }
-}
 
 
 class MyHomePage extends StatefulWidget {

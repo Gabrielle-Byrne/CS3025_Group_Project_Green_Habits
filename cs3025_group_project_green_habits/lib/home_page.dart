@@ -76,8 +76,10 @@ class _HomeState extends State<HomePage> {
               ),],)
             ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            OverflowBar(
+              spacing: 8,
+              overflowSpacing: 8,
+              overflowAlignment: OverflowBarAlignment.center,
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
@@ -97,7 +99,7 @@ class _HomeState extends State<HomePage> {
                     Text(
                     "1. Billy Green\n2. Alice Brown\n3. Micheal Gray",
                         overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
+                        softWrap: true,
                         style: TextStyle(
                         ),
                       ),
@@ -113,8 +115,8 @@ class _HomeState extends State<HomePage> {
                       ),
                           child: Text(
                             'Learn how to be more eco-friendly',
+                            softWrap: true,
                             overflow: TextOverflow.ellipsis,
-                            maxLines: 3,
                             style: TextStyle(
                             ),
                           ),
@@ -132,7 +134,7 @@ class _HomeState extends State<HomePage> {
                   child: Column(children: [
                     SizedBox(height: 30),
                     SizedBox(
-                    width: 200,
+                    width: 100,
                         child: LinearProgressIndicator(
                           minHeight: 20,
                           backgroundColor: Color.fromARGB(255, 225, 255, 255),
@@ -141,9 +143,9 @@ class _HomeState extends State<HomePage> {
                     ), 
                     SizedBox(height: 10),
                     Text(
-                    "80% of the way to the next reward!",
+                   "80% of the way to the next reward!",
+                        softWrap: true,
                         overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
                         style: TextStyle(
                         ),
                       ),
@@ -160,7 +162,7 @@ class _HomeState extends State<HomePage> {
                           child: Text(
                             'View Your Past Actions',
                             overflow: TextOverflow.ellipsis,
-                            maxLines: 3,
+                            softWrap: true,
                             style: TextStyle(
                             ),
                           ),

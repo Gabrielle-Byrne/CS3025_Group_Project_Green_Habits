@@ -11,32 +11,54 @@ class LeaderboardPage extends StatefulWidget {
   State<LeaderboardPage> createState() => _LeaderboardPageState();
 }
 
+class User {
+  final String name;
+  final int points;
+
+  User(this.name, this.points);
+}
+
+
 class _LeaderboardPageState extends State<LeaderboardPage> {
   final String _username = "Alice Brown"; // TODO: Replace with actual username once database is established
+  final int points = 140;
 
+List<User> users = [
+  User("Andi Green", 1920),
+  User("Peri Winkle", 1490),
+  User("Chase McGee", 1200),
+];
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HeaderBar(
-        title: "Leaderboard",
-        helpText: "This is the leaderboard ",
+        title: "Leaderboard (BETA)",
+        helpText: "This is the leaderboard, where users can compare their scores",
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
+        child: Row(
           mainAxisAlignment: .center,
-          children: [
-             Icon(
-              Icons.leaderboard_outlined,
-              size: 48,
-              color: Theme.of(context).colorScheme.onPrimary,
-            ),
-             Text(
-              '$_username',
-              style: Theme.of(context).textTheme.headlineLarge,
-            ),
+          children: <Widget>[
+            Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  margin: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(10),
+                  child: Column(children: [
+                    Icon(Icons.person_2_outlined, color: Color.fromRGBO(206, 198, 198, 1)),
+                    SizedBox(height: 20),
+                    Text(
+                    "2. $users",
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
           ],
         ),
       ),
@@ -46,13 +68,3 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     );
   }
 }
-
-
-
-//Future<List<User>> getLeaderboard() async {
-//   final db = await database;
-//   final List<Map<String, dynamic>> maps = 
-//       await db.query('users', orderBy: 'score DESC', limit: 10);
-//   return List.generate(maps.length, (i) => User(
-//       name: maps[i]['name'], campus: maps[i]['campus'], score: maps[i]['score']));
-// }

@@ -30,10 +30,10 @@ enum CategoryLabel {
 
   static final List<CategoryEntry> entries = UnmodifiableListView<CategoryEntry>(
     values.map<CategoryEntry>(
-      (CategoryLabel icon) => CategoryEntry(
-        value: icon,
-        label: icon.label,
-        leadingIcon: Icon(icon.icon),
+      (CategoryLabel category) => CategoryEntry(
+        value: category,
+        label: category.label,
+        leadingIcon: Icon(category.icon),
       ),
     ),
   );
@@ -53,6 +53,7 @@ class _TipsState extends State<TipsPage> {
         helpText: "This is the Tips Page, you can learn facts about plants",
       ),
       body: Center(
+        child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: .center,
           children: [
@@ -60,6 +61,7 @@ class _TipsState extends State<TipsPage> {
               '$_title',
               style: Theme.of(context).textTheme.headlineLarge,
             ),
+            SizedBox(height:12),
             // ADD Tips HERE
               DropdownMenu<CategoryLabel>(
                         controller: categoryController,
@@ -99,8 +101,8 @@ class _TipsState extends State<TipsPage> {
                   ),
                 ),
               ),
-          ],
-          
+          ],  
+        ),
         ),
       ),
        bottomNavigationBar: BottomNavigation (

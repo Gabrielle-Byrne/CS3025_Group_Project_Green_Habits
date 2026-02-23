@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'widgets/bottomNavigationBar.dart';
 import 'widgets/header.dart';
-
+import 'package:cs3025_group_project_green_habits/databases/preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -13,29 +13,48 @@ class ProfilePage extends StatefulWidget {
 class _ProfileState extends State<ProfilePage> {
   String _username = "Alice Brown"; // TODO: Replace with actual username once database is established
   String _email = "abrown@unb.ca";
+  //String _password = "abrown@unb.ca";
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
-  int _score = 100;
+  int _points = 100;
   int _coins = 240;
+  String _language = "en"; 
+  bool _darkMode = false;
+  bool _sound = false;
+  bool _sharing = false;
   double _textSizeSlider = 20;
   double textSize = 20;
   final List<bool> _selectedLangauge = [true, false];
   final List<bool> _selectedTheme = [true, false];
   final List<bool> _selectedSound = [true, false];
+  final List<bool> _selectedSharing= [true, false];
+
   
+ @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _usernameController = TextEditingController(text: _username);
-  // }
+  Future<void> _loadUserData() async {
+    String? username = await PreferencesService.getUsername();
+    String? email = await PreferencesService.getEmail();
+    int? coins = await PreferencesService.getCoins();
+    int? points = await PreferencesService.getPoints();
+    bool? sound = await PreferencesService.getSoundEnabled();
+    bool? darkMode = await PreferencesService.getDarkMode();
+    String? language = await PreferencesService.getLanguage();
 
-  // @override
-  // void dispose() {
-  //   _usernameController.dispose();
-  //   super.dispose();
-  // }
-
+    setState(() {
+      _username = username ?? "";
+      _email = email ?? "";
+      _coins = coins;
+      _points = points;
+      _sound = sound;
+      _darkMode = darkMode;
+      _language = language;
+    });
+  }
 
   
   @override
@@ -70,7 +89,7 @@ class _ProfileState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [Text(
-                  '$_score Points',
+                  '$_points Points',
                   style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   SizedBox(width: 20),
@@ -158,7 +177,33 @@ class _ProfileState extends State<ProfilePage> {
                   Text('Enabled'),
                   Text('Disabled')]
             ), 
-
+              //Sound
+            SizedBox(height: 26),
+            Text(
+              'Share score with others on leaderboard?'
+            ),
+            SizedBox(height: 16),
+            ToggleButtons(
+                isSelected: _selectedSharing,
+                selectedColor: Theme.of(context).colorScheme.onSecondary, onPressed: (int index) {
+                  setState(() {
+                    for (int i = 0; i < _selectedSharing.length; i++) {
+                      _selectedSharing[i] = i == index;
+                    }
+                  });
+                },
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                selectedBorderColor: Colors.green[700],
+                fillColor: Colors.green[200],
+                color: Colors.green[400],
+                constraints: const BoxConstraints(
+                  minHeight: 40.0,
+                  minWidth: 80.0,
+                ),
+                children: <Widget>[
+                  Text('Enabled'),
+                  Text('Disabled')]
+            ), 
 
             //Text Size Slider
             SizedBox(height: 26),
