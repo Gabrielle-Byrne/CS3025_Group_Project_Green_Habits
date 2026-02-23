@@ -1,60 +1,23 @@
 import 'package:flutter/material.dart';
 import 'widgets/bottomNavigationBar.dart';
 import 'widgets/header.dart';
-import 'package:cs3025_group_project_green_habits/databases/preferences.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+
+class HistoryPage extends StatefulWidget {
+  const HistoryPage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfileState();
+  State<HistoryPage> createState() => _HistoryState();
 }
 
-class _ProfileState extends State<ProfilePage> {
+class _HistoryState extends State<HistoryPage> {
   String _username = "Alice Brown"; // TODO: Replace with actual username once database is established
-  String _email = "abrown@unb.ca";
-  //String _password = "abrown@unb.ca";
-  final _usernameController = TextEditingController();
-  final _emailController = TextEditingController();
-  int _points = 100;
-  int _coins = 240;
-  String _language = "en"; 
-  bool _darkMode = false;
-  bool _sound = false;
-  bool _sharing = false;
   double _textSizeSlider = 20;
-  double textSize = 20;
   final List<bool> _selectedLangauge = [true, false];
   final List<bool> _selectedTheme = [true, false];
   final List<bool> _selectedSound = [true, false];
-  final List<bool> _selectedSharing= [true, false];
-
-  
- @override
-  void initState() {
-    super.initState();
-    _loadUserData();
-  }
-
-  Future<void> _loadUserData() async {
-    String? username = await PreferencesService.getUsername();
-    String? email = await PreferencesService.getEmail();
-    int? coins = await PreferencesService.getCoins();
-    int? points = await PreferencesService.getPoints();
-    bool? sound = await PreferencesService.getSoundEnabled();
-    bool? darkMode = await PreferencesService.getDarkMode();
-    String? language = await PreferencesService.getLanguage();
-
-    setState(() {
-      _username = username ?? "";
-      _email = email ?? "";
-      _coins = coins;
-      _points = points;
-      _sound = sound;
-      _darkMode = darkMode;
-      _language = language;
-    });
-  }
+  String title = "History";
+  String titleFr = "History";
 
   
   @override
@@ -62,8 +25,8 @@ class _ProfileState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: HeaderBar(
-        title: "Profile",
-        helpText: "This is your profile, you can change your preferences or log out ",
+        title: "History",
+        helpText: "This is your history, it details your past actions ",
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -77,31 +40,17 @@ class _ProfileState extends State<ProfilePage> {
               size: 60,
               color: Theme.of(context).colorScheme.onPrimary,
             ),
-            SizedBox(height: 12),
+            
             // Langauge
+            SizedBox(height: 12),
             Text(
-              '$_username ($_email)',
+              '$_username',
               style: Theme.of(context).textTheme.headlineLarge,
             ),
-            SizedBox(height: 20),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [Text(
-                  '$_points Points',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  SizedBox(width: 20),
-                  Text(
-                  '$_coins Coins',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),],),
             SizedBox(height: 26),
             Text(
               'Language',
             ),
-            SizedBox(height: 16),
             ToggleButtons(
                 isSelected: _selectedLangauge,
                 selectedColor: Theme.of(context).colorScheme.onSecondary, onPressed: (int index) {
@@ -128,7 +77,7 @@ class _ProfileState extends State<ProfilePage> {
             Text(
               'Color Theme'
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 26),
             ToggleButtons(
                 isSelected: _selectedTheme,
                 selectedColor: Theme.of(context).colorScheme.onSecondary, onPressed: (int index) {
@@ -150,45 +99,18 @@ class _ProfileState extends State<ProfilePage> {
                   Text('Light Mode'),
                   Text('Dark Mode')]
             ), 
-             //Sound
+            //Sound
             SizedBox(height: 26),
             Text(
-              'Sound (Currently Inactive)'
+              'Sound'
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 10),
             ToggleButtons(
                 isSelected: _selectedSound,
                 selectedColor: Theme.of(context).colorScheme.onSecondary, onPressed: (int index) {
                   setState(() {
                     for (int i = 0; i < _selectedSound.length; i++) {
                       _selectedSound[i] = i == index;
-                    }
-                  });
-                },
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
-                selectedBorderColor: Colors.green[700],
-                fillColor: Colors.green[200],
-                color: Colors.green[400],
-                constraints: const BoxConstraints(
-                  minHeight: 40.0,
-                  minWidth: 80.0,
-                ),
-                children: <Widget>[
-                  Text('Enabled'),
-                  Text('Disabled')]
-            ), 
-              //Sound
-            SizedBox(height: 26),
-            Text(
-              'Share score with others on leaderboard?'
-            ),
-            SizedBox(height: 16),
-            ToggleButtons(
-                isSelected: _selectedSharing,
-                selectedColor: Theme.of(context).colorScheme.onSecondary, onPressed: (int index) {
-                  setState(() {
-                    for (int i = 0; i < _selectedSharing.length; i++) {
-                      _selectedSharing[i] = i == index;
                     }
                   });
                 },
@@ -222,34 +144,7 @@ class _ProfileState extends State<ProfilePage> {
                 });
               },
             ),
-            // Username Change
-
-            TextField(
-              controller: _usernameController,
-              decoration: InputDecoration(labelText: "Change Username", hintText: _username),
-            ),
-            SizedBox(width: 10, height: 10),
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: "Change Email", hintText: _email),
-            ),
-            SizedBox(width: 10, height: 10),
-            ElevatedButton(
-              onPressed: () {
-                if(_emailController.text.isNotEmpty){
-                  print("username changed");
-                 _email = _emailController.text;
-                }
-              },
-              child: Text('Save Changes'),
-            ),
-          
-
-
-
-
-            // Log out
-              SizedBox(height: 20),
+            //Logout
              SizedBox(
                 width: double.infinity,
                 height: 49,
@@ -269,8 +164,6 @@ class _ProfileState extends State<ProfilePage> {
                   ),
                 ),
               ),
-
-
           ],
 
         ),
@@ -278,7 +171,7 @@ class _ProfileState extends State<ProfilePage> {
       ),
       ),
        bottomNavigationBar: BottomNavigation (
-        currentRoute: "/profile"
+        currentRoute: "/"
       ),
     );
   }

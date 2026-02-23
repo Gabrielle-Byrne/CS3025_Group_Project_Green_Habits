@@ -10,16 +10,18 @@ class SignUpPage extends StatefulWidget {
 
 // _ means this state is private (DO THIS FOR ALL PAGES)
 class _SignUpState extends State<SignUpPage> {
-  final _usernameTextbox = TextEditingController();
-  final _passwordTextbox = TextEditingController();
-  String usernameOrEmail = '';
+  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  String username = '';
+  String email = '';
   String password = '';
   bool _isPasswordVisible = true; 
 
   @override
   void dispose() {
-    _usernameTextbox.dispose();
-    _passwordTextbox.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -43,31 +45,37 @@ class _SignUpState extends State<SignUpPage> {
               Text(
                 'Green Habits',
                 style: TextStyle(
-                  //fontWeight: FontWeight.bold,
-                  //fontSize: 26,
-                  //color: Color(0xFF1C1C1C),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 26,
                 ),
               ),
               SizedBox(height: 6),
               Text(
                 'Login',
                 style: TextStyle(
-                  //fontWeight: FontWeight.normal,
-                  //fontSize: 18,
-                  //color: Color(0xFF1C1C1C),
+                  fontWeight: FontWeight.normal,
+                  fontSize: 18,
                 ),
               ),
               SizedBox(height: 26),
               TextField(
-                controller: _usernameTextbox,
+                controller: _usernameController,
                 decoration: InputDecoration(
-                  labelText: 'Username or Email',
+                  labelText: 'Username',
                   border: OutlineInputBorder(),
                 ),
               ),
               SizedBox(height: 16),
               TextField(
-                controller: _passwordTextbox,
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: _passwordController,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(),
@@ -83,42 +91,30 @@ class _SignUpState extends State<SignUpPage> {
                     // Handle login
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 59, 255, 65),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   child: Text(
-                    'Login',
+                    'Sign Up',
                     style: TextStyle(
-                      //color: Colors.white,
                       //fontSize: 16,
                       //fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 26),
+              SizedBox(height: 20),
               Center(
-                  child: Text(
-                    'Forgot Password?',
+                 child: TextButton(
+                  onPressed: () => {Navigator.pushReplacementNamed(context, '/login')},
+                  child: const Text(
+                    "Return to Login", 
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      //fontSize: 14,
-                      //color: Color(0xFF87879D),
                     ),
-                  ),
-              ),
-              SizedBox(height: 10),
-              Center(
-                child: Text(
-                  "Sign Up",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    //fontSize: 14,
-                    //color: Color(0xFF87879D),
-                  ),
-                ),
+                 ),
+                )
               )
             ],
           ),

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'widgets/theme.dart';
 import 'widgets/bottomNavigationBar.dart';
 import 'widgets/header.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'state/points_store.dart';
+import 'widgets/theme.dart';
 
 class ActivityLogPage extends StatefulWidget {
   const ActivityLogPage({super.key});

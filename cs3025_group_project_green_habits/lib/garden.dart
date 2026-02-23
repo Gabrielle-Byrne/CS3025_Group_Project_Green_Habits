@@ -11,7 +11,7 @@ class GardenPage extends StatefulWidget {
 }
 
 class _GardenPageState extends State<GardenPage> {
-   static const Color kBg = Color(0xFFFBFFFA);
+  static const Color kBg = Color(0xFFFBFFFA);
   static const Color kDarkGreen = Color(0xFF084E18);
   static const Color kGardenFill = Color(0xFFD6E4D6); // light green panel
   static const Color kGardenBorder = Color(0xFFB8C8B8);
@@ -48,7 +48,6 @@ class _GardenPageState extends State<GardenPage> {
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: kGardenBorder, width: 1),
                 ),
-                // Garden Items
                 child: const SizedBox.shrink(),
               ),
             ),

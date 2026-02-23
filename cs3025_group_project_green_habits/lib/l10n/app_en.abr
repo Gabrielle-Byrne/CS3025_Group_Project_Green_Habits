@@ -1,0 +1,12 @@
+{
+    "login": "Login"
+    "signup": "Sign Up"
+    "home": "Homepage"
+    "welcome": "Welcome, @_username!"
+    "logactivity": "Log Activity"
+    "garden": "Garden"
+    "gardenstore": "Plant Store"
+    "leaderboard": "Leaderboard"
+    "tips": "Tips"
+    "history": "History"
+}
