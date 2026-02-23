@@ -1,6 +1,8 @@
 import 'package:cs3025_group_project_green_habits/leaderboard.dart';
+import 'package:cs3025_group_project_green_habits/state/points_store.dart';
 import 'package:cs3025_group_project_green_habits/widgets/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'home_page.dart';  
 import 'login.dart';  
 import 'signup.dart';  
@@ -10,7 +12,12 @@ import 'profile.dart';
 import 'widgets/bottomNavigationBar.dart';
 //import 'tips.dart';
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => PointsStore(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

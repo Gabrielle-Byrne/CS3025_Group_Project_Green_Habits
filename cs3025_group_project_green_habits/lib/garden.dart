@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 //import 'widgets/theme.dart';
 import 'widgets/header.dart';
 import 'widgets/bottomNavigationBar.dart';
-
+import 'package:provider/provider.dart';
+import 'state/points_store.dart';
 
 class GardenPage extends StatefulWidget {
   const GardenPage({super.key});
@@ -17,6 +18,7 @@ class _GardenState extends State<GardenPage> {
   
   @override
   Widget build(BuildContext context) {
+    final points = context.watch<PointsStore>().points;
     return Scaffold(
       appBar: HeaderBar(
         title: "Garden",
@@ -53,6 +55,12 @@ class _GardenState extends State<GardenPage> {
                   ),
                 ),
               ),
+          
+              const SizedBox(height: 22),
+              Center(child: Text("Points: $points")),
+              const SizedBox(height: 10),
+          
+          
           ],
           
         ),

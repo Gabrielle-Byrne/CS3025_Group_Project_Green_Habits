@@ -45,5 +45,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>We need camera access to attach a photo to your activity.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need photo library access to choose an existing image.</string>
 </dict>
 </plist>
