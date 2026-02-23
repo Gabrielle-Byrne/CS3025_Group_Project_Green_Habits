@@ -122,24 +122,30 @@ class ChallengeStore extends ChangeNotifier {
   void onActivityLogged(String activityKey) {
     ensureDailyChallenge();
 
-    bool dailyCompletedNow = false;
+    bool changed = false;
 
+    // --- Daily progress ---
     if (_dailyDef != null &&
         !dailyComplete &&
         _dailyDef!.activityKey == activityKey) {
       _dailyProgress += 1;
-      if (dailyComplete) {
-        dailyCompletedNow = true;
-        _pointsStore?.addPoints(_dailyDef!.rewardPoints);
+      changed = true;
 
+      if (dailyComplete) {
+        _pointsStore?.addPoints(_dailyDef!.rewardPoints);
         _lastCompletionMessage =
             'Daily challenge completed! (+${_dailyDef!.rewardPoints} pts)';
         _completionTick++;
       }
     }
-    if (_joined.isEmpty) return;
 
-    bool changed = false;
+    // ✅ If no joined challenges, still notify so SnackBar + UI update
+    if (_joined.isEmpty) {
+      if (changed) notifyListeners();
+      return;
+    }
+
+    // --- Joined challenges progress ---
     final List<JoinedChallenge> completedNow = [];
 
     for (final j in _joined) {
@@ -147,9 +153,7 @@ class ChallengeStore extends ChangeNotifier {
         j.progress += 1;
         changed = true;
 
-        if (j.isComplete) {
-          completedNow.add(j);
-        }
+        if (j.isComplete) completedNow.add(j);
       }
     }
 
