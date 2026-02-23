@@ -4,14 +4,17 @@ import 'widgets/bottomNavigationBar.dart';
 import 'package:provider/provider.dart';
 import 'state/points_store.dart';
 
-class GardenPage extends StatelessWidget {
+class GardenPage extends StatefulWidget {
   const GardenPage({super.key});
+  @override
+  State<GardenPage> createState() => _GardenPageState();
+}
 
-  static const Color kBg = Color(0xFFFBFFFA);
+class _GardenPageState extends State<GardenPage> {
+   static const Color kBg = Color(0xFFFBFFFA);
   static const Color kDarkGreen = Color(0xFF084E18);
   static const Color kGardenFill = Color(0xFFD6E4D6); // light green panel
   static const Color kGardenBorder = Color(0xFFB8C8B8);
-
   @override
   Widget build(BuildContext context) {
     final points = context.watch<PointsStore>().points;
