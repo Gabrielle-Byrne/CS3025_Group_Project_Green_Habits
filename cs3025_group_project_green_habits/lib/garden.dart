@@ -17,7 +17,7 @@ class _GardenPageState extends State<GardenPage> {
   static const Color kGardenBorder = Color(0xFFB8C8B8);
   @override
   Widget build(BuildContext context) {
-    final points = context.watch<PointsStore>().points;
+    //final points = context.watch<PointsStore>().points;
     return Scaffold(
       backgroundColor: kBg,
       appBar: const HeaderBar(
