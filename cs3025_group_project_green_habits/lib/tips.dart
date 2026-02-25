@@ -13,15 +13,16 @@ class TipsPage extends StatefulWidget {
   State<TipsPage> createState() => _TipsState();
 }
 
+//Create an array of facts with string descriptions and categories
+
 typedef CategoryEntry = DropdownMenuEntry<CategoryLabel>;
 
-// DropdownMenuEntry labels and values for the second dropdown menu.
+// DropdownMenuEntry labels and values for the dropdown menu.
 enum CategoryLabel {
   recycing('Recycling', Icons.recycling),
   transit('Sustainable Transit', Icons.directions_bus),
   energy('Energy', Icons.energy_savings_leaf),
-  // energy('Brush', Icons.brush_outlined),
-  // energy('Brush', Icons.brush_outlined),
+  food('Food', Icons.food_bank),
   general('Other', Icons.public);
 
   const CategoryLabel(this.label, this.icon);
@@ -82,14 +83,18 @@ class _TipsState extends State<TipsPage> {
                       ), 
 
             SizedBox(height: 20),
-            SizedBox(
+            Container(
+            margin: const EdgeInsets.all(16.0), 
+            child: SizedBox(
                 width: double.infinity,
                 height: 30,
+        
                 child: ElevatedButton(
                   onPressed: () {
 
                   },
                   style: ElevatedButton.styleFrom(
+                  
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -101,6 +106,7 @@ class _TipsState extends State<TipsPage> {
                   ),
                 ),
               ),
+            )
           ],  
         ),
         ),

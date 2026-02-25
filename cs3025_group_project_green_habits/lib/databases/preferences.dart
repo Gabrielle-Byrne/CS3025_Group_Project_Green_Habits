@@ -4,11 +4,13 @@ class PreferencesService {
   static const _keyUsername = 'username';
   static const _keyEmail = 'email';
   static const _keyCoins = 'coins';
-  static const _keyPoints = 'coins';
+  static const _keyPoints = 'points';
   static const _keyDarkMode = 'darkMode';
   static const _keyLanguage = 'language';
   static const _keySound = 'soundEnabled';
-  static const _keyLeaderboard = 'leaderboarddEnabled';
+  static const _keyLeaderboard = 'leaderboardEnabled';
+  static const _keyTextSize= "textsize";
+
 
   //static const _keyPlantsOwned = 'plants';
 
@@ -21,7 +23,7 @@ class PreferencesService {
 
   static Future<String?> getUsername() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_keyUsername);
+    return prefs.getString(_keyUsername) ?? "Alice Brown";
   }
 
   // Save Email
@@ -32,7 +34,7 @@ class PreferencesService {
 
   static Future<String?> getEmail() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_keyEmail);
+    return prefs.getString(_keyEmail) ?? "abrown@unb.ca";
   }
 
   // Points
@@ -65,7 +67,7 @@ class PreferencesService {
 
   static Future<bool> getDarkMode() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_keyDarkMode) ?? false; //Default to ight mode
+    return prefs.getBool(_keyDarkMode) ?? false; //Default to light mode
   }
 
   // Language
@@ -76,7 +78,7 @@ class PreferencesService {
 
   static Future<String> getLanguage() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_keyLanguage) ?? 'en';   //Default to english
+    return prefs.getString(_keyLanguage) ?? 'en';   //Default to English
   }
 
   // Sound Enabled or Disabled
@@ -92,13 +94,25 @@ class PreferencesService {
 
   
   // Sharing / leaderboard Enabled or Disabled
-  static Future<void> setSharing(bool value) async {
+  static Future<void> setSharingEnabled(bool value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_keyLeaderboard, value);
   }
 
-  static Future<bool> getSharing() async {
+  static Future<bool> getSharingEnabled() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_keyLeaderboard) ?? false;
+  }
+
+
+    // Dark Mode
+  static Future<void> setTextSize(int value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_keyTextSize, value);
+  }
+
+  static Future<int> getTextSize() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_keyTextSize) ?? 12; //Default to 12pt text size
   }
 }

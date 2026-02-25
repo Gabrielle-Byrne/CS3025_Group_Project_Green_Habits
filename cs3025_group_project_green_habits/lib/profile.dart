@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'widgets/bottomNavigationBar.dart';
 import 'widgets/header.dart';
 import 'package:cs3025_group_project_green_habits/databases/preferences.dart';
@@ -23,7 +24,7 @@ class _ProfileState extends State<ProfilePage> {
   bool _sound = false;
   bool _sharing = false;
   double _textSizeSlider = 20;
-  double textSize = 20;
+  int _textSize = 12;
   final List<bool> _selectedLangauge = [true, false];
   final List<bool> _selectedTheme = [true, false];
   final List<bool> _selectedSound = [true, false];
@@ -36,27 +37,44 @@ class _ProfileState extends State<ProfilePage> {
     _loadUserData();
   }
 
+  //Load Data
   Future<void> _loadUserData() async {
     String? username = await PreferencesService.getUsername();
     String? email = await PreferencesService.getEmail();
     int? coins = await PreferencesService.getCoins();
     int? points = await PreferencesService.getPoints();
-    bool? sound = await PreferencesService.getSoundEnabled();
+    bool? sound = await PreferencesService.getSharingEnabled();
+    bool? sharing = await PreferencesService.getSoundEnabled();
     bool? darkMode = await PreferencesService.getDarkMode();
     String? language = await PreferencesService.getLanguage();
+    int? textSize = await PreferencesService.getTextSize();
 
     setState(() {
-      _username = username ?? "";
-      _email = email ?? "";
-      _coins = coins;
-      _points = points;
-      _sound = sound;
-      _darkMode = darkMode;
-      _language = language;
+      _username = username ?? "A";
+      _email = email ?? "B";
+      _coins = coins ?? 0;
+      _points = points ?? 0;
+      _sound = sound ?? false;
+      _sharing = sharing ?? true;
+      _darkMode = darkMode ?? false;
+      _language = language ?? "en";
+      _textSizeSlider = textSize as double;
     });
   }
 
-  
+  Future<void> _saveProfileData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('name', _usernameController.text);
+    await prefs.setString('email', _emailController.text);
+    await prefs.setBool('darkMode', _darkMode);
+    await prefs.setBool('leaderboardEnabled', _sharing);
+    await prefs.setBool('soundEnabled', _sound);
+    await prefs.setInt('textsize', _textSizeSlider as int);
+    await prefs.setBool('darkMode', _darkMode);
+    await prefs.setString('language', "en");
+     _loadUserData();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -121,7 +139,7 @@ class _ProfileState extends State<ProfilePage> {
                 ),
                 children: <Widget>[
                   Text('English'),
-                  Text('French')]
+                  Text('Français')]
             ), 
             //Color Theme
             SizedBox(height: 26),
@@ -208,7 +226,7 @@ class _ProfileState extends State<ProfilePage> {
             //Text Size Slider
             SizedBox(height: 26),
             Text(
-              'TextSize',
+              'Text Size',
             ),
             Slider(
               value: _textSizeSlider,
@@ -236,10 +254,11 @@ class _ProfileState extends State<ProfilePage> {
             SizedBox(width: 10, height: 10),
             ElevatedButton(
               onPressed: () {
-                if(_emailController.text.isNotEmpty){
-                  print("username changed");
-                 _email = _emailController.text;
-                }
+                _saveProfileData();
+                // if(_emailController.text.isNotEmpty){
+                //   print("username changed");
+                //  _email = _emailController.text;
+                // }
               },
               child: Text('Save Changes'),
             ),

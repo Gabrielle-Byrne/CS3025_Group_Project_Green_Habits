@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'widgets/bottomNavigationBar.dart';
 import 'widgets/header.dart';
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-import 'state/points_store.dart';
-import 'widgets/theme.dart';
+
 
 class ActivityLogPage extends StatefulWidget {
   const ActivityLogPage({super.key});
@@ -15,228 +11,104 @@ class ActivityLogPage extends StatefulWidget {
 }
 
 class _ActivityLogPageState extends State<ActivityLogPage> {
-  final ImagePicker _picker = ImagePicker();
-  XFile? _pickedImage;
-
-  Future<void> _takePhoto() async {
-    final img = await _picker.pickImage(
-      source: ImageSource.camera,
-      imageQuality: 85,
-    );
-    if (img != null) setState(() => _pickedImage = img);
-  }
-
-  Future<void> _chooseFromGallery() async {
-    final img = await _picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 85,
-    );
-    if (img != null) setState(() => _pickedImage = img);
-  }
-
-  String _username =
-      "Alice Brown"; // TODO: Replace with actual username once database is established
-  String? _completedValue;
-
-  Widget _photoBox(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-
-    return Container(
-      height: 140,
-      decoration: BoxDecoration(
-        color: AppTheme.navBg,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: _pickedImage == null
-          ? const SizedBox() // empty placeholder (or put a stock image here)
-          : Image.file(
-              File(_pickedImage!.path),
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: double.infinity,
-            ),
-    );
-  }
-
+  
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-
-    final labelStyle = TextStyle(
-      color: cs.primary,
-      fontWeight: FontWeight.w700,
-      fontSize: 18,
-    );
     return Scaffold(
       appBar: HeaderBar(
         title: "Activity Log",
-        helpText:
-            "This is your activity log, where you can log in the eco-friendy actions you've performed",
+        helpText: "This is your activity log, where you can log in the eco-friendy actions you've performed",
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Center(
-                child: Text(
-                  "Picture of Activity (Optional):",
-                  style: labelStyle,
-                ),
-              ),
-              const SizedBox(height: 10),
-              _photoBox(context),
-              const SizedBox(height: 16),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: .center,
+          children: [
+            Text(
+              'Activity Logger',
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
 
-              // Buttons row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 42,
-                    child: ElevatedButton(
-                      onPressed: _takePhoto,
-                      child: const Text("Take Picture"),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        backgroundColor: AppTheme.ink,
-                        foregroundColor: AppTheme.bg,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  SizedBox(
-                    height: 42,
-                    child: ElevatedButton(
-                      onPressed: _chooseFromGallery,
-                      child: const Text(
-                        "Choose\nfrom Gallery",
-                        textAlign: TextAlign.center,
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        backgroundColor: AppTheme.ink,
-                        foregroundColor: AppTheme.bg,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 22),
+            //Picture
 
-              Row(
-                children: [
-                  Expanded(
-                    child: Text("Activity Completed:", style: labelStyle),
-                  ),
-                  SizedBox(
-                    width: 140,
-                    height: 44,
-                    child: DropdownButtonFormField<String>(
-                      initialValue: _completedValue,
-                      isExpanded: true,
-                      items: const [
-                        DropdownMenuItem(
-                          value: "Recycling",
-                          child: Text("Recycling"),
-                        ),
-                        DropdownMenuItem(
-                          value: "Transit",
-                          child: Text("Transit"),
-                        ), //If value/text of a dropbown is too long the app crashes
-                        DropdownMenuItem(
-                          value: "Energy",
-                          child: Text("Energy"),
-                        ),
-                      ],
-                      onChanged: (v) => setState(() => _completedValue = v),
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: AppTheme.navBg,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 10,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      hint: const Text("Select"),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 22),
 
-              Center(child: Text("Description (Optional):", style: labelStyle)),
-              const SizedBox(height: 10),
-
-              TextField(
-                minLines: 4,
-                maxLines: 6,
-                decoration: InputDecoration(
-                  hintText: "Description",
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.all(12),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 18),
-              const SizedBox(width: 16),
-              SizedBox(
-                height: 42,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                SizedBox(
+                height: 30,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (_completedValue == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Please select an activity.'),
-                          duration: const Duration(seconds: 1),
-                        ),
-                      );
-                      return;
-                    }
-
-                    final store = context.read<PointsStore>();
-                    final earned = store.pointsFor(_completedValue!);
-                    store.logActivity(_completedValue!);
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          '+$earned points! Total: ${store.points}',
-                        ),
-                        duration: const Duration(seconds: 1),
-                      ),
-                    );
                   },
-                  child: const Text(
-                    "Log Activity",
-                    textAlign: TextAlign.center,
-                  ),
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    backgroundColor: AppTheme.ink,
-                    foregroundColor: AppTheme.bg,
+                  ),
+                  child: Text(
+                    'Go to Gallery',
+                    style: TextStyle(
+                    ),
                   ),
                 ),
               ),
-            ],
-          ),
+                SizedBox(
+                height: 30,
+                child: ElevatedButton(
+                  onPressed: () {
+
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    'Take New Photo',
+                    style: TextStyle(
+                    ),
+                  ),
+                ),
+              ),
+              ],
+            ),
+
+            SizedBox(height: 26),
+              TextField(
+                decoration: InputDecoration(
+                  labelText: 'Description',
+                  hintText: 'Describe what exactly you did',
+                  border: OutlineInputBorder(),
+                ),
+               minLines: 1,
+               maxLines: 10,
+              ),
+
+             SizedBox(height: 26),
+             SizedBox(
+                height: 30,
+                child: ElevatedButton(
+                  onPressed: () {
+
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    'Log Action',
+                    style: TextStyle(
+                    ),
+                  ),
+                ),
+              ),
+
+          ],
         ),
       ),
-      bottomNavigationBar: BottomNavigation(currentRoute: "/activity-log"),
+       bottomNavigationBar: BottomNavigation (
+        currentRoute: "/activity-log"
+      ),
     );
   }
 }

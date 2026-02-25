@@ -9,4 +9,29 @@
     "leaderboard": "Leaderboard"
     "tips": "Tips"
     "history": "History"
+    "challenges": "Challenges"
+
+    "username": "Username"
+    "password": "Password"
+    "usernameoremail": "Username or Email"
+    "email": "Email"
+
+    "language": "Language"
+    "english": "English"
+    "French": "English"
+    "colortheme": "Color Theme"
+    "sound": "Sound (currently inactive)"
+    "sharing": "Share your score with others on the leaderboard?" 
+
+    "textsize": "Text Size"
+    "enabled": "Enabled"
+    "disabled": "Disabled"
+
+    "activitypicture": "Picture of Activity (optional)"
+    "takepicture": "Take Picture"
+    "choosepicture" "Choose Picture from Gallery"
+
+    "gloabl": "Global"
+    "available": "Available"
+    "meatlessmonday": "Meatless Monday"
 }
