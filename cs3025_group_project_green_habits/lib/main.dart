@@ -1,4 +1,5 @@
 import 'package:cs3025_group_project_green_habits/leaderboard.dart';
+import 'package:cs3025_group_project_green_habits/state/activity_log_store.dart';
 import 'package:cs3025_group_project_green_habits/state/points_store.dart';
 import 'package:cs3025_group_project_green_habits/tips.dart';
 import 'package:cs3025_group_project_green_habits/widgets/theme.dart';
@@ -25,10 +26,14 @@ void main() async {
   final pointsStore = PointsStore();
   await pointsStore.init();
 
+  final activityLogStore = ActivityLogStore();
+  await activityLogStore.init();
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: pointsStore),
+        ChangeNotifierProvider.value(value: activityLogStore),
         ChangeNotifierProxyProvider<PointsStore, ChallengeStore>(
           create: (_) => ChallengeStore(),
           update: (_, points, challenges) {

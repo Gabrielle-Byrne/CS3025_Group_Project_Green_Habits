@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'state/activity_log_store.dart';
 import 'state/challenge_store.dart';
 import 'state/points_rule.dart';
 import 'widgets/bottomNavigationBar.dart';
@@ -214,6 +215,13 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                       );
                       return;
                     }
+
+                    final desc = _descriptionController.text;
+
+                    await context.read<ActivityLogStore>().addEntry(
+                      activityType: _completedValue!,
+                      description: desc,
+                    );
 
                     final earned = PointsRules.pointsForActivity(_completedValue!);
 
