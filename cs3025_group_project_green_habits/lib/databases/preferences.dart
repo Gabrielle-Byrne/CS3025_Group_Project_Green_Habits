@@ -4,11 +4,17 @@ class PreferencesService {
   static const _keyUsername = 'username';
   static const _keyEmail = 'email';
   static const _keyCoins = 'coins';
-  static const _keyPoints = 'coins';
+  // NOTE: this previously (incorrectly) reused the coins key.
+  static const _keyPoints = 'points';
   static const _keyDarkMode = 'darkMode';
   static const _keyLanguage = 'language';
   static const _keySound = 'soundEnabled';
-  static const _keyLeaderboard = 'leaderboarddEnabled';
+  static const _keyLeaderboard = 'leaderboardEnabled';
+
+  // Profile / settings
+  static const _keyPassword = 'password'; // prototype only (not secure)
+  static const _keyTextScale = 'textScale';
+  static const _keyVibration = 'vibrationEnabled';
 
   //static const _keyPlantsOwned = 'plants';
 
@@ -100,5 +106,38 @@ class PreferencesService {
   static Future<bool> getSharing() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_keyLeaderboard) ?? false;
+  }
+
+  // Password (prototype only)
+  static Future<void> setPassword(String password) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyPassword, password);
+  }
+
+  static Future<String?> getPassword() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_keyPassword);
+  }
+
+  // Text scaling (1.0 = default)
+  static Future<void> setTextScale(double scale) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_keyTextScale, scale);
+  }
+
+  static Future<double> getTextScale() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getDouble(_keyTextScale) ?? 1.0;
+  }
+
+  // Vibration preference
+  static Future<void> setVibrationEnabled(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyVibration, value);
+  }
+
+  static Future<bool> getVibrationEnabled() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_keyVibration) ?? true;
   }
 }

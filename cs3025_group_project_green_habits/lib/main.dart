@@ -1,5 +1,6 @@
 import 'package:cs3025_group_project_green_habits/leaderboard.dart';
 import 'package:cs3025_group_project_green_habits/state/points_store.dart';
+import 'package:cs3025_group_project_green_habits/state/settings_store.dart';
 import 'package:cs3025_group_project_green_habits/tips.dart';
 import 'package:cs3025_group_project_green_habits/widgets/theme.dart';
 import 'package:cs3025_group_project_green_habits/databases/preferences.dart';
@@ -13,19 +14,34 @@ import 'garden.dart';
 import 'activitylog.dart';
 import 'profile.dart';
 import 'plant_store.dart';
+import 'history.dart';
 import 'state/challenge_store.dart';
 import 'widgets/challenge_snackbar_listener.dart';
+import 'state/garden_store.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  String lang = await PreferencesService.getLanguage();
-  bool darkMode = await PreferencesService.getDarkMode();
+  final String lang = await PreferencesService.getLanguage();
+  final bool darkMode = await PreferencesService.getDarkMode();
+  final double textScale = await PreferencesService.getTextScale();
+  final bool soundEnabled = await PreferencesService.getSoundEnabled();
+  final bool vibrationEnabled = await PreferencesService.getVibrationEnabled();
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => PointsStore()),
+        ChangeNotifierProvider(create: (_) => GardenStore()),
+        ChangeNotifierProvider(
+          create: (_) => SettingsStore(
+            initialLocale: Locale(lang),
+            initialThemeMode: darkMode ? ThemeMode.dark : ThemeMode.light,
+            initialTextScale: textScale,
+            initialSound: soundEnabled,
+            initialVibration: vibrationEnabled,
+          ),
+        ),
         ChangeNotifierProxyProvider<PointsStore, ChallengeStore>(
           create: (_) => ChallengeStore(),
           update: (_, points, challenges) {
@@ -34,25 +50,20 @@ void main() async {
           },
         ),
       ],
-      child: MyApp(initialLang: lang, initialDarkMode: darkMode),
+      child: const MyApp(),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  final String initialLang;
-  final bool initialDarkMode;
-
-  const MyApp({
-    super.key,
-    required this.initialLang,
-    required this.initialDarkMode,
-  });
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsStore>();
+
     return MaterialApp(
-      locale: Locale(initialLang),
+      locale: settings.locale,
       title: 'Green Habits',
       theme: AppTheme.light(),
       supportedLocales: const [Locale('en'), Locale('fr')],
@@ -62,8 +73,8 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       initialRoute: '/login',
-      //darkTheme: AppTheme.dark(),
-      themeMode: ThemeMode.system,
+      darkTheme: AppTheme.dark(),
+      themeMode: settings.themeMode,
       routes: {
         '/home': (context) => HomePage(),
         '/login': (context) => LoginPage(),
@@ -74,14 +85,20 @@ class MyApp extends StatelessWidget {
         '/plant_store': (context) => PlantStorePage(),
 
         '/activity-log': (context) => ActivityLogPage(),
-        '/history': (context) => ActivityLogPage(),
+        '/history': (context) => HistoryPage(),
         '/leaderboard': (context) => LeaderboardPage(),
         '/challenges': (context) => ActivityLogPage(),
         '/tips': (context) => TipsPage(),
       },
       builder: (context, child) {
-        return ChallengeSnackBarListener(
-          child: child ?? const SizedBox.shrink(),
+        final mq = MediaQuery.of(context);
+        return MediaQuery(
+          data: mq.copyWith(
+            textScaler: TextScaler.linear(settings.textScale),
+          ),
+          child: ChallengeSnackBarListener(
+            child: child ?? const SizedBox.shrink(),
+          ),
         );
       },
     );

@@ -66,7 +66,8 @@ class BottomNavigation extends StatelessWidget {
     return NavigationBar(
       selectedIndex: _getIndex(),
       onDestinationSelected: (i) => _go(context, i),
-      backgroundColor: AppTheme.navBg,
+      // Use theme container color so dark mode works.
+      backgroundColor: cs.secondaryContainer,
       indicatorColor: cs.secondary,          
       indicatorShape: const StadiumBorder(), 
       destinations: const [
