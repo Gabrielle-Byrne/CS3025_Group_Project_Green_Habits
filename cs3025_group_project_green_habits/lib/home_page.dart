@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'state/points_store.dart';
 import 'widgets/bottomNavigationBar.dart';
 
 class HomePage extends StatefulWidget {
@@ -9,17 +12,37 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const Color kBg = Color(0xFFFBFFFA);
+  // Brand colors for the top header/tips button (matches your mock)
   static const Color kDarkGreen = Color(0xFF084E18);
   static const Color kTipGreen = Color(0xFF1E6B2A);
+
+  // Light-mode panel styling (dark mode uses theme containers)
   static const Color kPanelFill = Color(0xFFD6E4D6);
   static const Color kPanelBorder = Color(0xFFB8C8B8);
   static const Color kNavSelectedPill = Color(0xFFB8C8B8);
 
+  static const int kNextRewardGoal = 200; // prototype milestone
+
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final panelFill = isDark ? cs.secondaryContainer : kPanelFill;
+    final panelBorder = isDark ? cs.outline.withOpacity(0.6) : kPanelBorder;
+    final titleColor = cs.onSurface; // ✅ mint in dark mode
+
+    final pillBg = isDark ? cs.primary.withOpacity(0.22) : kNavSelectedPill;
+    final pillFg = titleColor;
+
+    final points = context.watch<PointsStore>().points;
+    final remaining = (kNextRewardGoal - points).clamp(0, kNextRewardGoal);
+    final progress = (points / kNextRewardGoal).clamp(0.0, 1.0);
+
+    final progressBg = isDark ? titleColor.withOpacity(0.15) : const Color(0xFFCFE0CF);
+
     return Scaffold(
-      backgroundColor: kBg,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(56),
         child: SafeArea(
@@ -30,13 +53,13 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(
               children: [
-                const Icon(Icons.park, color: Colors.white, size: 28),
+                Icon(Icons.park, color: cs.onPrimary, size: 28),
                 const SizedBox(width: 10),
-                const Expanded(
+                Expanded(
                   child: Text(
                     "GREEN HABITS",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: cs.onPrimary,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.6,
                     ),
@@ -72,23 +95,21 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
 
-      // ✅ No scrollview — lets us use Expanded to fill the screen nicely
       body: Padding(
         padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               "Virtual Garden",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: kDarkGreen,
+                color: titleColor,
               ),
             ),
             const SizedBox(height: 8),
 
-            // ✅ This grows to fill leftover space (removes bottom gaps)
             Expanded(
               child: InkWell(
                 onTap: () => Navigator.pushNamed(context, '/garden'),
@@ -96,9 +117,9 @@ class _HomePageState extends State<HomePage> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: kPanelFill,
+                    color: panelFill,
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: kPanelBorder, width: 1),
+                    border: Border.all(color: panelBorder, width: 1),
                   ),
                 ),
               ),
@@ -106,17 +127,16 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 12),
 
-            const Text(
+            Text(
               "Quick-Log Action Bar",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: kDarkGreen,
+                color: titleColor,
               ),
             ),
             const SizedBox(height: 8),
 
-            // ✅ Use Expanded so spacing is even
             Row(
               children: const [
                 Expanded(child: _QuickAction(label: "Quick Action\n1")),
@@ -128,7 +148,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 8),
 
             Row(
-              children: const [
+              children: [
                 Expanded(
                   child: Center(
                     child: Text(
@@ -136,7 +156,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
-                        color: kDarkGreen,
+                        color: titleColor,
                       ),
                     ),
                   ),
@@ -148,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
-                        color: kDarkGreen,
+                        color: titleColor,
                       ),
                     ),
                   ),
@@ -157,7 +177,6 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 6),
 
-            // Bottom cards (fixed height works well now because garden is flexible)
             SizedBox(
               height: 150,
               child: Row(
@@ -167,9 +186,9 @@ class _HomePageState extends State<HomePage> {
                     child: Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: kPanelFill,
+                        color: panelFill,
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: kPanelBorder, width: 1),
+                        border: Border.all(color: panelBorder, width: 1),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,8 +200,8 @@ class _HomePageState extends State<HomePage> {
                               onPressed: () =>
                                   Navigator.pushNamed(context, '/leaderboard'),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: kNavSelectedPill,
-                                foregroundColor: kDarkGreen,
+                                backgroundColor: pillBg,
+                                foregroundColor: pillFg,
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(6),
@@ -198,10 +217,10 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          const Text(
+                          Text(
                             "1.  Tom Smith\n2.  Jane Doe\n3.  Dan Pearce",
                             style: TextStyle(
-                              color: kDarkGreen,
+                              color: titleColor,
                               fontWeight: FontWeight.w600,
                               fontSize: 12,
                               height: 1.5,
@@ -216,33 +235,32 @@ class _HomePageState extends State<HomePage> {
                     child: Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: kPanelFill,
+                        color: panelFill,
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: kPanelBorder, width: 1),
+                        border: Border.all(color: panelBorder, width: 1),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(6),
-                            child: const SizedBox(
+                            child: SizedBox(
                               height: 14,
                               width: double.infinity,
                               child: LinearProgressIndicator(
-                                value: 0.8,
-                                backgroundColor: Color(0xFFCFE0CF),
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(kDarkGreen),
+                                value: progress,
+                                backgroundColor: progressBg,
+                                valueColor: AlwaysStoppedAnimation<Color>(cs.primary),
                               ),
                             ),
                           ),
                           const SizedBox(height: 10),
-                          const Center(
+                          Center(
                             child: Text(
-                              "100 points left to collect\nthis reward",
+                              "$remaining points left to collect\nthis reward",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: kDarkGreen,
+                                color: titleColor,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 12,
                                 height: 1.2,
@@ -257,8 +275,8 @@ class _HomePageState extends State<HomePage> {
                               onPressed: () =>
                                   Navigator.pushNamed(context, '/history'),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: kDarkGreen,
-                                foregroundColor: Colors.white,
+                                backgroundColor: cs.primary,
+                                foregroundColor: cs.onPrimary,
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(6),
@@ -293,18 +311,22 @@ class _QuickAction extends StatelessWidget {
   final String label;
   const _QuickAction({required this.label});
 
-  static const Color kDarkGreen = Color(0xFF084E18);
-  static const Color kCircleFill = Color(0xFFCFE0CF);
+  static const Color kCircleFillLight = Color(0xFFCFE0CF);
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final circleFill = isDark ? cs.secondaryContainer : kCircleFillLight;
+
     return Column(
       children: [
         Container(
           width: 74,
           height: 74,
-          decoration: const BoxDecoration(
-            color: kCircleFill,
+          decoration: BoxDecoration(
+            color: circleFill,
             shape: BoxShape.circle,
           ),
         ),
@@ -312,8 +334,8 @@ class _QuickAction extends StatelessWidget {
         Text(
           label,
           textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: kDarkGreen,
+          style: TextStyle(
+            color: cs.onSurface,
             fontWeight: FontWeight.w700,
             fontSize: 11,
             height: 1.1,

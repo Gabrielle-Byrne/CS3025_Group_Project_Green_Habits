@@ -8,14 +8,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:cs3025_group_project_green_habits/main.dart';
+import '../lib/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp(initialLang: 'en', initialDarkMode: false,));
+    await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
+    // Verify that our counter starts at 0.d
     expect(find.text('0'), findsOneWidget);
     expect(find.text('1'), findsNothing);
 
