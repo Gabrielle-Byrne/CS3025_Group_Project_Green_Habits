@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'state/challenge_store.dart';
+import 'state/points_rule.dart';
 import 'widgets/bottomNavigationBar.dart';
 import 'widgets/header.dart';
 import 'dart:io';
@@ -156,7 +157,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                         DropdownMenuItem(
                           value: "Transit",
                           child: Text("Transit"),
-                        ), //If value/text of a dropbown is too long the app crashes
+                        ), //If value/text of a dropdown is too long the app crashes
                         DropdownMenuItem(
                           value: "Energy",
                           child: Text("Energy"),
@@ -203,7 +204,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
               SizedBox(
                 height: 42,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_completedValue == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -214,9 +215,12 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                       return;
                     }
 
-                    final store = context.read<PointsStore>();
-                    final earned = store.pointsFor(_completedValue!);
-                    store.logActivity(_completedValue!);
+                    final earned = PointsRules.pointsForActivity(_completedValue!);
+
+                    await context.read<PointsStore>().applyTransaction(
+                      source: "activity",
+                      amount: earned,
+                    );
                     context.read<ChallengeStore>().onActivityLogged(
                       _completedValue!,
                     );
@@ -224,7 +228,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                          '+$earned points! Total: ${store.points}',
+                          '+$earned points! Total: ${context.read<PointsStore>().points}',
                         ),
                         duration: const Duration(seconds: 1),
                       ),

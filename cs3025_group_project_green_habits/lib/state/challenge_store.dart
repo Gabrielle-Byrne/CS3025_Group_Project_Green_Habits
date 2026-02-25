@@ -132,14 +132,13 @@ class ChallengeStore extends ChangeNotifier {
       changed = true;
 
       if (dailyComplete) {
-        _pointsStore?.addPoints(_dailyDef!.rewardPoints);
+        _pointsStore?.applyTransaction(source: "daily_challenge", amount: _dailyDef!.rewardPoints);
         _lastCompletionMessage =
             'Daily challenge completed! (+${_dailyDef!.rewardPoints} pts)';
         _completionTick++;
       }
     }
 
-    // ✅ If no joined challenges, still notify so SnackBar + UI update
     if (_joined.isEmpty) {
       if (changed) notifyListeners();
       return;
@@ -162,8 +161,7 @@ class ChallengeStore extends ChangeNotifier {
         _joined.removeWhere((x) => x.def.id == j.def.id);
         _achievements.add(j.def);
 
-        _pointsStore?.addPoints(j.def.rewardPoints);
-
+        _pointsStore?.applyTransaction(source: "challenge", amount: j.def.rewardPoints);
         _lastCompletionMessage =
             'Challenge completed: ${j.def.title} (+${j.def.rewardPoints} pts)';
         _completionTick++;

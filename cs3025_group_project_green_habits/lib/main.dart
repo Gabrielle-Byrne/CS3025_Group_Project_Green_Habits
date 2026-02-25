@@ -22,10 +22,13 @@ void main() async {
   String lang = await PreferencesService.getLanguage();
   bool darkMode = await PreferencesService.getDarkMode();
 
+  final pointsStore = PointsStore();
+  await pointsStore.init();
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => PointsStore()),
+        ChangeNotifierProvider.value(value: pointsStore),
         ChangeNotifierProxyProvider<PointsStore, ChallengeStore>(
           create: (_) => ChallengeStore(),
           update: (_, points, challenges) {

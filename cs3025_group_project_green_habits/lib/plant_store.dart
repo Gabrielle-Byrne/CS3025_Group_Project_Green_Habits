@@ -11,20 +11,38 @@ class PlantStorePage extends StatelessWidget {
   static const Color kCard = Color(0xFFCCDDCF);
   static const Color kSelected = Color(0xFF85A98D);
 
+  Future<void> _buy(BuildContext context, String itemName, int cost) async {
+    final ok = await context.read<PointsStore>().applyTransaction(
+          source: "plant_store",
+          amount: -cost,
+        );
+
+    if (!context.mounted) return;
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          duration: const Duration(milliseconds: 650),
+          content: Text(
+            ok ? "Purchased $itemName (-$cost pts)" : "Not enough points for $itemName",
+          ),
+        ),
+      );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final points = context.watch<PointsStore>().points;
+
     return Scaffold(
       backgroundColor: kBg,
-
-      // Same header style, but with Previous
       appBar: const HeaderBar(
         title: "GREEN HABITS",
         showBack: true,
         backLabel: "Previous",
         helpText: "Use points to buy plants, seed packs, gifts, and power-ups.",
       ),
-
-
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(12, 10, 12, 18),
         child: Column(
@@ -42,19 +60,21 @@ class PlantStorePage extends StatelessWidget {
                     color: kDarkGreen,
                   ),
                 ),
-                _PointsDisplay(points: context.watch<PointsStore>().points),              ],
+                _PointsDisplay(points: points),
+              ],
             ),
             const SizedBox(height: 10),
 
-            // Mystery Seed tile (left aligned)
+            // Mystery Seed tile (clickable)
             Align(
               alignment: Alignment.centerLeft,
               child: SizedBox(
                 width: 110,
                 child: _StoreTile(
                   title: "Mystery Seed",
-                  icon: _DropIcon(),
+                  icon: const _DropIcon(),
                   price: 50,
+                  onTap: () => _buy(context, "Mystery Seed", 50),
                 ),
               ),
             ),
@@ -66,10 +86,21 @@ class PlantStorePage extends StatelessWidget {
             Wrap(
               spacing: 10,
               runSpacing: 10,
-              children: const [
-                _ChipTile(text: "Common Plants"),
-                _ChipTile(text: "Rare Flowers"),
-                _ChipTile(text: "Elm Tree\nLocked", locked: true),
+              children: [
+                _ChipTile(
+                  text: "Common Plants",
+                  price: 30,
+                  onTap: () => _buy(context, "Common Plants", 30),
+                ),
+                _ChipTile(
+                  text: "Rare Flowers",
+                  price: 60,
+                  onTap: () => _buy(context, "Rare Flowers", 60),
+                ),
+                const _ChipTile(
+                  text: "Elm Tree\nLocked",
+                  locked: true,
+                ),
               ],
             ),
 
@@ -77,7 +108,11 @@ class PlantStorePage extends StatelessWidget {
 
             const _SectionTitle("Gift a Friend"),
             const SizedBox(height: 8),
-            const _WideTile(title: "Gift a Plant", price: 50),
+            _WideTile(
+              title: "Gift a Plant",
+              price: 50,
+              onTap: () => _buy(context, "Gift a Plant", 50),
+            ),
 
             const SizedBox(height: 14),
 
@@ -91,36 +126,41 @@ class PlantStorePage extends StatelessWidget {
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
               childAspectRatio: 0.95,
-              children: const [
+              children: [
                 _StoreTile(
                   title: "Self Watering\nPot",
-                  icon: _TripleDropIcon(),
+                  icon: const _TripleDropIcon(),
                   price: 50,
+                  onTap: () => _buy(context, "Self Watering Pot", 50),
                 ),
                 _StoreTile(
                   title: "Extend Garden",
-                  icon: _PotIcon(),
+                  icon: const _PotIcon(),
                   price: 100,
+                  onTap: () => _buy(context, "Extend Garden", 100),
                 ),
                 _StoreTile(
                   title: "Power Up 3",
-                  icon: Icon(Icons.shopping_cart_outlined,
+                  icon: const Icon(Icons.shopping_cart_outlined,
                       size: 30, color: kDarkGreen),
                   price: 150,
+                  onTap: () => _buy(context, "Power Up 3", 150),
                 ),
                 _StoreTile(
                   title: "Power Up 4",
-                  icon: Icon(Icons.shopping_cart_outlined,
+                  icon: const Icon(Icons.shopping_cart_outlined,
                       size: 30, color: kDarkGreen),
                   price: 150,
+                  onTap: () => _buy(context, "Power Up 4", 150),
                 ),
                 _StoreTile(
                   title: "Power Up 5",
-                  icon: Icon(Icons.shopping_cart_outlined,
+                  icon: const Icon(Icons.shopping_cart_outlined,
                       size: 30, color: kDarkGreen),
                   price: 150,
+                  onTap: () => _buy(context, "Power Up 5", 150),
                 ),
-                _LockedTile(
+                const _LockedTile(
                   text: "Locked\nComplete\nChallenge to\nUnlock Power-\nUp",
                 ),
               ],
@@ -179,9 +219,17 @@ class _PointsDisplay extends StatelessWidget {
 }
 
 class _ChipTile extends StatelessWidget {
-  const _ChipTile({required this.text, this.locked = false});
+  const _ChipTile({
+    required this.text,
+    this.locked = false,
+    this.price,
+    this.onTap,
+  });
+
   final String text;
   final bool locked;
+  final int? price;
+  final VoidCallback? onTap;
 
   static const Color kCard = Color(0xFFCCDDCF);
   static const Color kSelected = Color(0xFF85A98D);
@@ -189,19 +237,50 @@ class _ChipTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: locked ? kSelected : kCard,
+    final enabled = !locked && onTap != null;
+
+    return Material(
+      color: locked ? kSelected : kCard,
+      borderRadius: BorderRadius.circular(6),
+      child: InkWell(
+        onTap: enabled ? onTap : null,
         borderRadius: BorderRadius.circular(6),
-      ),
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          color: kDarkGreen,
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                text,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: kDarkGreen,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  height: 1.1,
+                ),
+              ),
+              if (price != null && !locked) ...[
+                const SizedBox(height: 6),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Icon(Icons.circle, size: 7, color: kDarkGreen),
+                    SizedBox(width: 5),
+                  ],
+                ),
+                Text(
+                  "$price",
+                  style: const TextStyle(
+                    color: kDarkGreen,
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w800,
+                    height: 1.0,
+                  ),
+                ),
+              ],
+            ],
+          ),
         ),
       ),
     );
@@ -209,48 +288,57 @@ class _ChipTile extends StatelessWidget {
 }
 
 class _WideTile extends StatelessWidget {
-  const _WideTile({required this.title, required this.price});
+  const _WideTile({
+    required this.title,
+    required this.price,
+    this.onTap,
+  });
+
   final String title;
   final int price;
+  final VoidCallback? onTap;
 
   static const Color kCard = Color(0xFFCCDDCF);
   static const Color kDarkGreen = Color(0xFF084E18);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-      decoration: BoxDecoration(
-        color: kCard,
+    return Material(
+      color: kCard,
+      borderRadius: BorderRadius.circular(6),
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(6),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              color: kDarkGreen,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          Row(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Icon(Icons.circle, size: 8, color: kDarkGreen),
-              const SizedBox(width: 6),
               Text(
-                "$price",
+                title,
                 style: const TextStyle(
                   color: kDarkGreen,
                   fontSize: 12,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w700,
                 ),
+              ),
+              Row(
+                children: [
+                  const Icon(Icons.circle, size: 8, color: kDarkGreen),
+                  const SizedBox(width: 6),
+                  Text(
+                    "$price",
+                    style: const TextStyle(
+                      color: kDarkGreen,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -261,52 +349,59 @@ class _StoreTile extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.price,
+    this.onTap,
   });
 
   final String title;
   final Widget icon;
   final int price;
+  final VoidCallback? onTap;
 
   static const Color kCard = Color(0xFFCCDDCF);
   static const Color kDarkGreen = Color(0xFF084E18);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-      decoration: BoxDecoration(
-        color: kCard,
+    return Material(
+      color: kCard,
+      borderRadius: BorderRadius.circular(6),
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(6),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: kDarkGreen,
-              fontSize: 11.5,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          icon,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Icon(Icons.circle, size: 8, color: kDarkGreen),
-              const SizedBox(width: 6),
               Text(
-                "$price",
+                title,
+                textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: kDarkGreen,
-                  fontSize: 12,
+                  fontSize: 11.5,
                   fontWeight: FontWeight.w800,
+                  height: 1.1,
                 ),
+              ),
+              icon,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.circle, size: 8, color: kDarkGreen),
+                  const SizedBox(width: 6),
+                  Text(
+                    "$price",
+                    style: const TextStyle(
+                      color: kDarkGreen,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
