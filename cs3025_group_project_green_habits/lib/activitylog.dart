@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'state/challenge_store.dart';
 import 'widgets/bottomNavigationBar.dart';
 import 'widgets/header.dart';
 import 'dart:io';
@@ -15,6 +16,14 @@ class ActivityLogPage extends StatefulWidget {
 }
 
 class _ActivityLogPageState extends State<ActivityLogPage> {
+  final TextEditingController _descriptionController = TextEditingController();
+
+  @override
+  void dispose() {
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
   final ImagePicker _picker = ImagePicker();
   XFile? _pickedImage;
 
@@ -34,8 +43,6 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
     if (img != null) setState(() => _pickedImage = img);
   }
 
-  String _username =
-      "Alice Brown"; // TODO: Replace with actual username once database is established
   String? _completedValue;
 
   Widget _photoBox(BuildContext context) {
@@ -49,7 +56,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
       ),
       clipBehavior: Clip.antiAlias,
       child: _pickedImage == null
-          ? const SizedBox() // empty placeholder (or put a stock image here)
+          ? const SizedBox()
           : Image.file(
               File(_pickedImage!.path),
               fit: BoxFit.cover,
@@ -178,6 +185,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
               const SizedBox(height: 10),
 
               TextField(
+                controller: _descriptionController,
                 minLines: 4,
                 maxLines: 6,
                 decoration: InputDecoration(
@@ -209,6 +217,9 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                     final store = context.read<PointsStore>();
                     final earned = store.pointsFor(_completedValue!);
                     store.logActivity(_completedValue!);
+                    context.read<ChallengeStore>().onActivityLogged(
+                      _completedValue!,
+                    );
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -218,6 +229,12 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                         duration: const Duration(seconds: 1),
                       ),
                     );
+                    
+                    setState(() {
+                      _completedValue = null;
+                      _pickedImage = null;
+                    });
+                    _descriptionController.clear();
                   },
                   child: const Text(
                     "Log Activity",

@@ -18,4 +18,9 @@ class PointsStore extends ChangeNotifier {
     _points += earned;
     notifyListeners();
   }
+
+  void addPoints(int amount) {
+    _points += amount;
+    notifyListeners();
+  }
 }

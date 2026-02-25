@@ -13,6 +13,8 @@ import 'garden.dart';
 import 'activitylog.dart';
 import 'profile.dart';
 import 'plant_store.dart';
+import 'state/challenge_store.dart';
+import 'widgets/challenge_snackbar_listener.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,8 +23,17 @@ void main() async {
   bool darkMode = await PreferencesService.getDarkMode();
 
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => PointsStore(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => PointsStore()),
+        ChangeNotifierProxyProvider<PointsStore, ChallengeStore>(
+          create: (_) => ChallengeStore(),
+          update: (_, points, challenges) {
+            challenges!.attachPointsStore(points);
+            return challenges;
+          },
+        ),
+      ],
       child: MyApp(initialLang: lang, initialDarkMode: darkMode),
     ),
   );
@@ -67,6 +78,11 @@ class MyApp extends StatelessWidget {
         '/leaderboard': (context) => LeaderboardPage(),
         '/challenges': (context) => ActivityLogPage(),
         '/tips': (context) => TipsPage(),
+      },
+      builder: (context, child) {
+        return ChallengeSnackBarListener(
+          child: child ?? const SizedBox.shrink(),
+        );
       },
     );
   }
