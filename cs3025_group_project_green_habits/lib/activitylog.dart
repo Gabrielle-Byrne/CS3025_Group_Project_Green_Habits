@@ -73,7 +73,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
     final cs = Theme.of(context).colorScheme;
 
     final labelStyle = TextStyle(
-      color: cs.primary,
+      color: cs.onSurface,
       fontWeight: FontWeight.w700,
       fontSize: 18,
     );

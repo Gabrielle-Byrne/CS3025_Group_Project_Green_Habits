@@ -43,7 +43,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
               child: Text(
                 "Leaderboards & Challenges",
                 style: TextStyle(
-                  color: cs.primary,
+                  color: cs.onSurface,
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                 ),
@@ -52,10 +52,10 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
             // Top tabs: Leaderboard / Challenges
             Container(
-              color: AppTheme.navBg,
+              color: cs.secondaryContainer,
               child: TabBar(
-                labelColor: cs.primary,
-                unselectedLabelColor: cs.primary.withOpacity(0.75),
+                labelColor: cs.onSurface,
+                unselectedLabelColor: cs.onSurface.withOpacity(0.75),
                 indicatorColor: cs.primary,
                 indicatorWeight: 3,
                 tabs: const [
@@ -144,7 +144,7 @@ class _LeaderboardTab extends StatelessWidget {
             child: Text(
               "Faculty of Computer Science",
               style: TextStyle(
-                color: cs.primary,
+                color: cs.onSurface,
                 fontWeight: FontWeight.w800,
                 fontSize: 16,
               ),
@@ -175,7 +175,7 @@ class _LeaderboardTab extends StatelessWidget {
           Text(
             "Top contributors",
             style: TextStyle(
-              color: cs.primary,
+              color: cs.onSurface,
               fontWeight: FontWeight.w800,
               fontSize: 16,
             ),
@@ -186,7 +186,7 @@ class _LeaderboardTab extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             decoration: BoxDecoration(
-              color: AppTheme.navBg,
+              color: cs.secondaryContainer,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -226,7 +226,7 @@ class _PodiumPerson extends StatelessWidget {
           name,
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: cs.primary,
+            color: cs.onSurface,
             fontWeight: FontWeight.w700,
             fontSize: 12,
           ),
@@ -235,7 +235,7 @@ class _PodiumPerson extends StatelessWidget {
         Container(
           height: barHeight,
           decoration: BoxDecoration(
-            color: AppTheme.navBg,
+            color: cs.secondaryContainer,
             borderRadius: BorderRadius.circular(6),
           ),
         ),
@@ -243,7 +243,7 @@ class _PodiumPerson extends StatelessWidget {
         Text(
           "$rank",
           style: TextStyle(
-            color: cs.primary,
+            color: cs.onSurface,
             fontWeight: FontWeight.w800,
             fontSize: 16,
           ),
@@ -269,7 +269,7 @@ class _ListColumn extends StatelessWidget {
               child: Text(
                 t,
                 style: TextStyle(
-                  color: cs.primary,
+                  color: cs.onSurface,
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
                 ),
@@ -341,14 +341,14 @@ class _ChallengesTab extends StatelessWidget {
           if (scope == ChallengeScope.available) ...[
             Text(
               "Joined",
-              style: TextStyle(color: cs.primary, fontWeight: FontWeight.w800),
+              style: TextStyle(color: cs.onSurface, fontWeight: FontWeight.w800),
             ),
             const SizedBox(height: 8),
 
             if (joined.isEmpty)
               Text(
                 "No joined challenges yet.",
-                style: TextStyle(color: cs.primary),
+                style: TextStyle(color: cs.onSurface),
               ),
             ...joined.map((j) => _JoinedChallengeCard(j)).toList(),
 
@@ -356,7 +356,7 @@ class _ChallengesTab extends StatelessWidget {
 
             Text(
               "Available",
-              style: TextStyle(color: cs.primary, fontWeight: FontWeight.w800),
+              style: TextStyle(color: cs.onSurface, fontWeight: FontWeight.w800),
             ),
             const SizedBox(height: 8),
 
@@ -364,12 +364,12 @@ class _ChallengesTab extends StatelessWidget {
           ] else ...[
             Text(
               "Achievements",
-              style: TextStyle(color: cs.primary, fontWeight: FontWeight.w800),
+              style: TextStyle(color: cs.onSurface, fontWeight: FontWeight.w800),
             ),
             const SizedBox(height: 8),
 
             if (achievements.isEmpty)
-              Text("No achievements yet.", style: TextStyle(color: cs.primary)),
+              Text("No achievements yet.", style: TextStyle(color: cs.onSurface)),
             ...achievements.map((c) => _AchievementCard(c)).toList(),
           ],
         ],
@@ -391,7 +391,7 @@ class _JoinedChallengeCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
       decoration: BoxDecoration(
-        color: AppTheme.navBg,
+        color: cs.secondaryContainer,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -399,12 +399,12 @@ class _JoinedChallengeCard extends StatelessWidget {
         children: [
           Text(
             j.def.title,
-            style: TextStyle(color: cs.primary, fontWeight: FontWeight.w800),
+            style: TextStyle(color: cs.onSurface, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 6),
           Text(
             "${j.def.activityKey}: ${j.progress}/${j.def.targetCount}  •  +${j.def.rewardPoints} pts",
-            style: TextStyle(color: cs.primary),
+            style: TextStyle(color: cs.onSurface),
           ),
           const SizedBox(height: 8),
           ClipRRect(
@@ -434,7 +434,7 @@ class _AvailableChallengeCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
       decoration: BoxDecoration(
-        color: AppTheme.navBg,
+        color: cs.secondaryContainer,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -442,7 +442,7 @@ class _AvailableChallengeCard extends StatelessWidget {
           Expanded(
             child: Text(
               "${def.title}\n${def.activityKey}: 0/${def.targetCount}  •  +${def.rewardPoints} pts",
-              style: TextStyle(color: cs.primary, fontWeight: FontWeight.w700),
+              style: TextStyle(color: cs.onSurface, fontWeight: FontWeight.w700),
             ),
           ),
           const SizedBox(width: 10),
@@ -479,12 +479,12 @@ class _AchievementCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
       decoration: BoxDecoration(
-        color: AppTheme.navBg,
+        color: cs.secondaryContainer,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Text(
         "${def.title}\nCompleted • +${def.rewardPoints} pts",
-        style: TextStyle(color: cs.primary, fontWeight: FontWeight.w800),
+        style: TextStyle(color: cs.onSurface, fontWeight: FontWeight.w800),
       ),
     );
   }
@@ -512,7 +512,7 @@ class _DailyChallengeCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
       decoration: BoxDecoration(
-        color: AppTheme.navBg,
+        color: cs.secondaryContainer,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -525,7 +525,7 @@ class _DailyChallengeCard extends StatelessWidget {
                 child: Text(
                   "$title\n$subtitle",
                   style: TextStyle(
-                    color: cs.primary,
+                    color: cs.onSurface,
                     fontWeight: FontWeight.w800,
                     fontSize: 12.5,
                     height: 1.15,
@@ -535,7 +535,7 @@ class _DailyChallengeCard extends StatelessWidget {
               Text(
                 pointsText,
                 style: TextStyle(
-                  color: cs.primary,
+                  color: cs.onSurface,
                   fontWeight: FontWeight.w800,
                   fontSize: 12,
                 ),
@@ -557,7 +557,7 @@ class _DailyChallengeCard extends StatelessWidget {
             child: Text(
               progressText,
               style: TextStyle(
-                color: cs.primary,
+                color: cs.onSurface,
                 fontWeight: FontWeight.w700,
                 fontSize: 11,
               ),
@@ -589,7 +589,7 @@ class _ChallengeTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
       decoration: BoxDecoration(
-        color: AppTheme.navBg,
+        color: cs.secondaryContainer,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -601,7 +601,7 @@ class _ChallengeTile extends StatelessWidget {
                 child: Text(
                   title,
                   style: TextStyle(
-                    color: cs.primary,
+                    color: cs.onSurface,
                     fontWeight: FontWeight.w800,
                     fontSize: 12,
                   ),
@@ -610,7 +610,7 @@ class _ChallengeTile extends StatelessWidget {
               Text(
                 daysLeftText,
                 style: TextStyle(
-                  color: cs.primary,
+                  color: cs.onSurface,
                   fontWeight: FontWeight.w700,
                   fontSize: 11.5,
                 ),
@@ -719,11 +719,11 @@ class _SegmentedRow<T> extends StatelessWidget {
         onSelectionChanged: (s) => onChanged(s.first),
         style: ButtonStyle(
           backgroundColor: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.selected)) return AppTheme.navBg;
+            if (states.contains(WidgetState.selected)) return cs.secondaryContainer;
             return cs.surfaceVariant;
           }),
-          foregroundColor: WidgetStatePropertyAll(cs.primary),
-          side: WidgetStatePropertyAll(BorderSide(color: cs.primary, width: 1)),
+          foregroundColor: WidgetStatePropertyAll(cs.onSurface),
+          side: WidgetStatePropertyAll(BorderSide(color: cs.onSurface, width: 1)),
           textStyle: const WidgetStatePropertyAll(
             TextStyle(fontWeight: FontWeight.w800, fontSize: 12),
           ),
