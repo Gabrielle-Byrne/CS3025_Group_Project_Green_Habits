@@ -19,6 +19,9 @@ import 'history.dart';
 import 'state/challenge_store.dart';
 import 'widgets/challenge_snackbar_listener.dart';
 import 'state/garden_store.dart';
+import 'package:provider/provider.dart';
+import 'state/auth_store.dart';
+import 'widgets/require_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +43,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider.value(value: pointsStore),
         ChangeNotifierProvider.value(value: activityLogStore),
+        ChangeNotifierProvider(create: (_) => AuthStore()),
         ChangeNotifierProvider(create: (_) => GardenStore()),
         ChangeNotifierProvider(
           create: (_) => SettingsStore(
@@ -84,26 +88,27 @@ class MyApp extends StatelessWidget {
       darkTheme: AppTheme.dark(),
       themeMode: settings.themeMode,
       routes: {
-        '/home': (context) => HomePage(),
-        '/login': (context) => LoginPage(),
-        '/signup': (context) => SignUpPage(),
-        '/profile': (context) => ProfilePage(),
+        '/login': (context) => const LoginPage(),
+        '/signup': (context) => const SignUpPage(),
 
-        '/garden': (context) => GardenPage(),
-        '/plant_store': (context) => PlantStorePage(),
+        '/home': (context) => const RequireAuth(child: HomePage()),
+        '/profile': (context) => const RequireAuth(child: ProfilePage()),
 
-        '/activity-log': (context) => ActivityLogPage(),
-        '/history': (context) => HistoryPage(),
-        '/leaderboard': (context) => LeaderboardPage(),
-        '/challenges': (context) => ActivityLogPage(),
-        '/tips': (context) => TipsPage(),
+        '/garden': (context) => const RequireAuth(child: GardenPage()),
+        '/plant_store': (context) => const RequireAuth(child: PlantStorePage()),
+
+        '/activity-log': (context) =>
+            const RequireAuth(child: ActivityLogPage()),
+        '/history': (context) => const RequireAuth(child: HistoryPage()),
+        '/leaderboard': (context) =>
+            const RequireAuth(child: LeaderboardPage()),
+        '/challenges': (context) => const RequireAuth(child: ActivityLogPage()),
+        '/tips': (context) => const RequireAuth(child: TipsPage()),
       },
       builder: (context, child) {
         final mq = MediaQuery.of(context);
         return MediaQuery(
-          data: mq.copyWith(
-            textScaler: TextScaler.linear(settings.textScale),
-          ),
+          data: mq.copyWith(textScaler: TextScaler.linear(settings.textScale)),
           child: ChallengeSnackBarListener(
             child: child ?? const SizedBox.shrink(),
           ),

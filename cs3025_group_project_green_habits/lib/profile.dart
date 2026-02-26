@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'databases/preferences.dart';
 import 'state/settings_store.dart';
 import 'widgets/bottomNavigationBar.dart';
+import 'state/auth_store.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -25,14 +26,21 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _loadProfile() async {
-    final u = await PreferencesService.getUsername();
-    final e = await PreferencesService.getEmail();
-    final p = await PreferencesService.getPassword();
+    final auth = context.read<AuthStore>();
+
+    final record = await auth.getCurrentUserRecord();
+    if (!mounted) return;
 
     setState(() {
-      _username = (u == null || u.trim().isEmpty) ? 'User' : u.trim();
-      _email = (e == null || e.trim().isEmpty) ? 'user@email.com' : e.trim();
-      _password = (p == null || p.isEmpty) ? 'password' : p;
+      // Username/email comes from JSON "username" field
+      final jsonUsername = (record?['username'] ?? '').toString().trim();
+      _username = jsonUsername.isEmpty ? 'User' : jsonUsername;
+      _email =
+          _username; // if your login identifier is email, this is the email
+
+      // Password also comes from JSON (prototype only)
+      final jsonPass = (record?['password'] ?? '').toString();
+      _password = jsonPass.isEmpty ? 'password' : jsonPass;
     });
   }
 
@@ -73,9 +81,7 @@ class _ProfilePageState extends State<ProfilePage> {
             controller: controller,
             obscureText: obscure,
             keyboardType: keyboardType,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-            ),
+            decoration: const InputDecoration(border: OutlineInputBorder()),
           ),
           actions: [
             TextButton(
@@ -286,71 +292,76 @@ class _ProfilePageState extends State<ProfilePage> {
                         padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                         child: Column(
                           children: [
-                          _PrefButton(
-                            text: 'Change Username',
-                            onTap: () => _promptAndSave(
-                              title: 'Change Username',
-                              initial: _username,
-                              onSave: (v) async {
-                                await PreferencesService.setUsername(v);
-                                setState(() => _username = v);
-                              },
+                            _PrefButton(
+                              text: 'Change Username',
+                              onTap: () => _promptAndSave(
+                                title: 'Change Username',
+                                initial: _username,
+                                onSave: (v) async {
+                                  await PreferencesService.setUsername(v);
+                                  setState(() => _username = v);
+                                },
+                              ),
                             ),
-                          ),
-                          _PrefButton(
-                            text: 'Change Email',
-                            onTap: () => _promptAndSave(
-                              title: 'Change Email',
-                              initial: _email,
-                              keyboardType: TextInputType.emailAddress,
-                              onSave: (v) async {
-                                await PreferencesService.setEmail(v);
-                                setState(() => _email = v);
-                              },
+                            _PrefButton(
+                              text: 'Change Email',
+                              onTap: () => _promptAndSave(
+                                title: 'Change Email',
+                                initial: _email,
+                                keyboardType: TextInputType.emailAddress,
+                                onSave: (v) async {
+                                  // Optional: keep your PreferencesService if you want UI persistence
+                                  await PreferencesService.setEmail(v);
+                                  context
+                                      .read<AuthStore>()
+                                      .updateEmailForCurrentUser(v);
+
+                                  setState(() => _email = v);
+                                },
+                              ),
                             ),
-                          ),
-                          _PrefButton(
-                            text: 'Change Password',
-                            onTap: () => _promptAndSave(
-                              title: 'Change Password',
-                              initial: '',
-                              obscure: true,
-                              onSave: (v) async {
-                                await PreferencesService.setPassword(v);
-                                setState(() => _password = v);
-                              },
+                            _PrefButton(
+                              text: 'Change Password',
+                              onTap: () => _promptAndSave(
+                                title: 'Change Password',
+                                initial: '',
+                                obscure: true,
+                                onSave: (v) async {
+                                  await PreferencesService.setPassword(v);
+                                  context
+                                      .read<AuthStore>()
+                                      .updatePasswordForCurrentUser(v);
+
+                                  setState(() => _password = v);
+                                },
+                              ),
                             ),
-                          ),
-                          _PrefButton(
-                            text: 'Adjust Text Size',
-                            onTap: () => _openTextSizeSheet(settings),
-                          ),
-                          _PrefButton(
-                            text: 'Switch Light/Dark\nMode',
-                            onTap: () => settings.toggleThemeMode(),
-                          ),
-                          _PrefButton(
-                            text: 'Change Language',
-                            onTap: () => _openLanguageSheet(settings),
-                          ),
-                          _PrefButton(
-                            text: 'Vibrations',
-                            onTap: () => settings.toggleVibration(),
-                          ),
-                          _PrefButton(
-                            text: 'Sounds',
-                            onTap: () => settings.toggleSound(),
-                          ),
+                            _PrefButton(
+                              text: 'Adjust Text Size',
+                              onTap: () => _openTextSizeSheet(settings),
+                            ),
+                            _PrefButton(
+                              text: 'Switch Light/Dark\nMode',
+                              onTap: () => settings.toggleThemeMode(),
+                            ),
+                            _PrefButton(
+                              text: 'Change Language',
+                              onTap: () => _openLanguageSheet(settings),
+                            ),
+                            _PrefButton(
+                              text: 'Vibrations',
+                              onTap: () => settings.toggleVibration(),
+                            ),
+                            _PrefButton(
+                              text: 'Sounds',
+                              onTap: () => settings.toggleSound(),
+                            ),
                           ],
                         ),
                       ),
                     ),
 
-                    VerticalDivider(
-                      width: 2,
-                      thickness: 2,
-                      color: cs.primary,
-                    ),
+                    VerticalDivider(width: 2, thickness: 2, color: cs.primary),
 
                     // Right: values
                     Expanded(
@@ -365,9 +376,13 @@ class _ProfilePageState extends State<ProfilePage> {
                             _ValueText(settings.themeLabel),
                             _ValueText(settings.languageLabel),
                             _ValueText(
-                              settings.vibrationEnabled ? 'Enabled' : 'Disabled',
+                              settings.vibrationEnabled
+                                  ? 'Enabled'
+                                  : 'Disabled',
                             ),
-                            _ValueText(settings.soundEnabled ? 'Enabled' : 'Disabled'),
+                            _ValueText(
+                              settings.soundEnabled ? 'Enabled' : 'Disabled',
+                            ),
                           ],
                         ),
                       ),

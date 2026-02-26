@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'state/auth_store.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,6 +14,7 @@ class _LoginState extends State<LoginPage> {
   final _passwordController = TextEditingController();
 
   bool _passwordVisible = false;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -31,7 +34,7 @@ class _LoginState extends State<LoginPage> {
         title: const Text('Login'),
         content: const Text(
           "Enter your university email/username and password. "
-          "In this prototype, Login will navigate to Home.",
+          "This prototype checks credentials from a local JSON file (via AuthStore).",
         ),
         actions: [
           TextButton(
@@ -41,6 +44,40 @@ class _LoginState extends State<LoginPage> {
         ],
       ),
     );
+  }
+
+  Future<void> _handleLoginWithAuthStore() async {
+    final username = _usernameController.text;
+    final password = _passwordController.text;
+
+    if (username.trim().isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter username and password.')),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      final ok = await context.read<AuthStore>().login(username, password);
+      if (!mounted) return;
+
+      if (ok) {
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Invalid username or password.')),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login error: $e')),
+      );
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 
   @override
@@ -115,22 +152,27 @@ class _LoginState extends State<LoginPage> {
                 width: double.infinity,
                 height: 49,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/home');
-                  },
+                  onPressed: _isLoading ? null : _handleLoginWithAuthStore,
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text('Login'),
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text('Login'),
                 ),
               ),
 
               const SizedBox(height: 18),
 
               TextButton(
-                onPressed: () => Navigator.pushReplacementNamed(context, '/signup'),
+                onPressed: () =>
+                    Navigator.pushReplacementNamed(context, '/signup'),
                 child: const Text('Don\'t have an account? Sign Up'),
               ),
             ],
