@@ -50,6 +50,7 @@ class _TipsState extends State<TipsPage> {
     return Scaffold(
       appBar: HeaderBar(
         title: "Tips",
+        showTipsButton: false,
         helpText: "This is the Tips Page, you can learn facts about plants",
       ),
       body: Center(

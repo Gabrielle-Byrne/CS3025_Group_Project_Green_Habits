@@ -8,7 +8,6 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'state/points_store.dart';
-import 'widgets/theme.dart';
 
 class ActivityLogPage extends StatefulWidget {
   const ActivityLogPage({super.key});
@@ -53,7 +52,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
     return Container(
       height: 140,
       decoration: BoxDecoration(
-        color: AppTheme.navBg,
+        color: cs.surfaceVariant,
         borderRadius: BorderRadius.circular(8),
       ),
       clipBehavior: Clip.antiAlias,
@@ -112,8 +111,8 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        backgroundColor: AppTheme.ink,
-                        foregroundColor: AppTheme.bg,
+                        backgroundColor: cs.primary,
+                        foregroundColor: cs.onPrimary,
                       ),
                     ),
                   ),
@@ -130,8 +129,8 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        backgroundColor: AppTheme.ink,
-                        foregroundColor: AppTheme.bg,
+                        backgroundColor: cs.primary,
+                        foregroundColor: cs.onPrimary,
                       ),
                     ),
                   ),
@@ -167,7 +166,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                       onChanged: (v) => setState(() => _completedValue = v),
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: AppTheme.navBg,
+                        fillColor: cs.surfaceVariant,
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 10,
@@ -193,7 +192,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                 decoration: InputDecoration(
                   hintText: "Description",
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: cs.surfaceVariant,
                   contentPadding: const EdgeInsets.all(12),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -256,8 +255,8 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    backgroundColor: AppTheme.ink,
-                    foregroundColor: AppTheme.bg,
+                    backgroundColor: cs.primary,
+                    foregroundColor: cs.onPrimary,
                   ),
                 ),
               ),

@@ -38,7 +38,7 @@ class _HistoryState extends State<HistoryPage> {
              Icon(
               Icons.person_2_outlined,
               size: 60,
-              color: Theme.of(context).colorScheme.onPrimary,
+              color: Theme.of(context).colorScheme.primary,
             ),
             
             // Langauge
@@ -53,7 +53,7 @@ class _HistoryState extends State<HistoryPage> {
             ),
             ToggleButtons(
                 isSelected: _selectedLangauge,
-                selectedColor: Theme.of(context).colorScheme.onSecondary, onPressed: (int index) {
+                selectedColor: Theme.of(context).colorScheme.onPrimaryContainer, onPressed: (int index) {
                   setState(() {
                     for (int i = 0; i < _selectedLangauge.length; i++) {
                       _selectedLangauge[i] = i == index;
@@ -61,9 +61,9 @@ class _HistoryState extends State<HistoryPage> {
                   });
                 },
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
-                selectedBorderColor: Colors.green[700],
-                fillColor: Colors.green[200],
-                color: Colors.green[400],
+                selectedBorderColor: Theme.of(context).colorScheme.primary,
+                fillColor: Theme.of(context).colorScheme.primaryContainer,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
                 constraints: const BoxConstraints(
                   minHeight: 40.0,
                   minWidth: 80.0,
@@ -80,7 +80,7 @@ class _HistoryState extends State<HistoryPage> {
             SizedBox(height: 26),
             ToggleButtons(
                 isSelected: _selectedTheme,
-                selectedColor: Theme.of(context).colorScheme.onSecondary, onPressed: (int index) {
+                selectedColor: Theme.of(context).colorScheme.onPrimaryContainer, onPressed: (int index) {
                   setState(() {
                     for (int i = 0; i < _selectedTheme.length; i++) {
                       _selectedTheme[i] = i == index;
@@ -88,9 +88,9 @@ class _HistoryState extends State<HistoryPage> {
                   });
                 },
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
-                selectedBorderColor: Colors.green[700],
-                fillColor: Colors.green[200],
-                color: Colors.green[400],
+                selectedBorderColor: Theme.of(context).colorScheme.primary,
+                fillColor: Theme.of(context).colorScheme.primaryContainer,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
                 constraints: const BoxConstraints(
                   minHeight: 40.0,
                   minWidth: 80.0,
@@ -107,7 +107,7 @@ class _HistoryState extends State<HistoryPage> {
             SizedBox(height: 10),
             ToggleButtons(
                 isSelected: _selectedSound,
-                selectedColor: Theme.of(context).colorScheme.onSecondary, onPressed: (int index) {
+                selectedColor: Theme.of(context).colorScheme.onPrimaryContainer, onPressed: (int index) {
                   setState(() {
                     for (int i = 0; i < _selectedSound.length; i++) {
                       _selectedSound[i] = i == index;
@@ -115,9 +115,9 @@ class _HistoryState extends State<HistoryPage> {
                   });
                 },
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
-                selectedBorderColor: Colors.green[700],
-                fillColor: Colors.green[200],
-                color: Colors.green[400],
+                selectedBorderColor: Theme.of(context).colorScheme.primary,
+                fillColor: Theme.of(context).colorScheme.primaryContainer,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
                 constraints: const BoxConstraints(
                   minHeight: 40.0,
                   minWidth: 80.0,

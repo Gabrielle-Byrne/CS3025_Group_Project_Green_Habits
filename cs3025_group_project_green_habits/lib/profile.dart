@@ -14,13 +14,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  // Match the home/profile mock styling
-  static const Color kBg = Color(0xFFFBFFFA);
-  static const Color kDarkGreen = Color(0xFF084E18);
-  static const Color kTipGreen = Color(0xFF1E6B2A);
-  static const Color kPanelFill = Color(0xFFD6E4D6);
-  static const Color kPanelBorder = Color(0xFFB8C8B8);
-
   String _username = 'User';
   String _email = 'user@email.com';
   String _password = 'password';
@@ -190,8 +183,10 @@ class _ProfilePageState extends State<ProfilePage> {
     final settings = context.watch<SettingsStore>();
     final cs = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final panelFill = isDark ? cs.secondaryContainer : kPanelFill;
-    final panelBorder = isDark ? cs.primary.withOpacity(0.35) : kPanelBorder;
+    final panelFill = cs.surfaceVariant;
+    final panelBorder = isDark
+        ? cs.outlineVariant.withOpacity(0.65)
+        : cs.outlineVariant.withOpacity(0.45);
 
     return Scaffold(
       // Let the active theme control the background (so dark mode works).
@@ -202,17 +197,17 @@ class _ProfilePageState extends State<ProfilePage> {
           bottom: false,
           child: Container(
             height: 56,
-            color: kDarkGreen,
+            color: cs.primary,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(
               children: [
-                const Icon(Icons.park, color: Colors.white, size: 28),
+                Icon(Icons.park, color: cs.onPrimary, size: 28),
                 const SizedBox(width: 10),
-                const Expanded(
+                Expanded(
                   child: Text(
                     'GREEN HABITS',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: cs.onPrimary,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.6,
                     ),
@@ -223,8 +218,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: ElevatedButton(
                     onPressed: () => Navigator.pushNamed(context, '/tips'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: kTipGreen,
-                      foregroundColor: Colors.white,
+                      backgroundColor: cs.tertiary,
+                      foregroundColor: cs.onTertiary,
                       elevation: 0,
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       shape: RoundedRectangleBorder(
@@ -257,7 +252,7 @@ class _ProfilePageState extends State<ProfilePage> {
               width: 90,
               height: 90,
               decoration: BoxDecoration(
-                color: const Color(0xFFCFE0CF),
+                color: cs.primaryContainer,
                 shape: BoxShape.circle,
                 border: Border.all(color: panelBorder, width: 1),
               ),
@@ -393,12 +388,13 @@ class _ProfilePageState extends State<ProfilePage> {
 class _PrefButton extends StatelessWidget {
   const _PrefButton({required this.text, required this.onTap});
 
-  static const Color kDarkGreen = Color(0xFF084E18);
   final String text;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: SizedBox(
@@ -407,8 +403,8 @@ class _PrefButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: onTap,
           style: ElevatedButton.styleFrom(
-            backgroundColor: kDarkGreen,
-            foregroundColor: Colors.white,
+            backgroundColor: cs.primary,
+            foregroundColor: cs.onPrimary,
             elevation: 0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(6),

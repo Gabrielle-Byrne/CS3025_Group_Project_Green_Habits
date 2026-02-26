@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'widgets/theme.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -8,12 +7,10 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginState();
 }
 
-// _ means this state is private (DO THIS FOR ALL PAGES)
 class _LoginState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  String username_or_email = '';
-  //String _password = '';
+
   bool _passwordVisible = false;
 
   @override
@@ -24,102 +21,119 @@ class _LoginState extends State<LoginPage> {
   }
 
   void _togglePasswordVisibility() {
-    setState(() {
-      _passwordVisible = !_passwordVisible;
-    });
+    setState(() => _passwordVisible = !_passwordVisible);
+  }
+
+  void _openHelp(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Login'),
+        content: const Text(
+          "Enter your university email/username and password. "
+          "In this prototype, Login will navigate to Home.",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppTheme.ink,
-        titleTextStyle: TextStyle(color: AppTheme.bg),
-        iconTheme: IconThemeData(color: AppTheme.bg),
         title: const Text('Green Habits'),
         leading: const Icon(Icons.grass),
+        actions: [
+          IconButton(
+            tooltip: 'Help',
+            icon: const Icon(Icons.help_outline),
+            onPressed: () => _openHelp(context),
+          ),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Green Habits',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
-                ),
-                SizedBox(height: 6),
-                Text(
-                  'Login',
-                  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 18),
-                ),
-                SizedBox(height: 26),
-                TextField(
-                  controller: _usernameController,
-                  decoration: InputDecoration(labelText: 'Username or Email'),
-                ),
-                SizedBox(height: 16),
-                TextField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
+          padding: const EdgeInsets.all(30.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'Welcome to Green Habits!',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w800,
+                      color: cs.onSurface,
+                    ),
+              ),
+              const SizedBox(height: 22),
 
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _passwordVisible
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                      ),
-                      onPressed: _togglePasswordVisibility,
-                    ),
-                  ),
-                  obscureText: _passwordVisible,
-                ),
-                SizedBox(height: 26),
-                SizedBox(
-                  width: double.infinity,
-                  height: 49,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/home');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      backgroundColor: AppTheme.ink,
-                      foregroundColor: AppTheme.bg,
-                    ),
-                    child: Text('Login', style: TextStyle()),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Please log in:',
+                  style: TextStyle(
+                    color: cs.onSurface,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-                // SizedBox(height: 26),
-                // Center(
-                //     child: Text(
-                //       'Forgot Password?',
-                //       textAlign: TextAlign.center,
-                //       style: TextStyle(
-                //       ),
-                //     ),
-                // ),
-                SizedBox(height: 20),
-                Center(
-                  child: TextButton(
-                    onPressed: () => {
-                      Navigator.pushReplacementNamed(context, '/signup'),
-                    },
-                    child: const Text(
-                      "Sign Up",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(),
+              ),
+              const SizedBox(height: 10),
+
+              TextField(
+                controller: _usernameController,
+                decoration: const InputDecoration(
+                  labelText: 'University Email',
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              TextField(
+                controller: _passwordController,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _passwordVisible ? Icons.visibility_off : Icons.visibility,
                     ),
+                    onPressed: _togglePasswordVisibility,
                   ),
                 ),
-              ],
-            ),
+                obscureText: !_passwordVisible,
+              ),
+
+              const SizedBox(height: 22),
+
+              SizedBox(
+                width: double.infinity,
+                height: 49,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, '/home');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text('Login'),
+                ),
+              ),
+
+              const SizedBox(height: 18),
+
+              TextButton(
+                onPressed: () => Navigator.pushReplacementNamed(context, '/signup'),
+                child: const Text('Don\'t have an account? Sign Up'),
+              ),
+            ],
           ),
         ),
       ),

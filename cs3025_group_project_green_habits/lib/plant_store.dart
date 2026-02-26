@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'state/points_store.dart';
 import 'widgets/header.dart';
+import 'state/points_store.dart';
 import 'state/garden_store.dart';
 
 class PlantStorePage extends StatelessWidget {
   const PlantStorePage({super.key});
+
   static const String kMysterySeedAsset = 'assets/vectors/planted_seed.svg';
 
-  Future<void> _buy(BuildContext context, String itemName, int cost) async {
+  Future<void> _purchase(
+    BuildContext context, {
+    required String itemName,
+    required int cost,
+    VoidCallback? afterSuccess,
+  }) async {
     final ok = await context.read<PointsStore>().applyTransaction(
           source: "plant_store",
           amount: -cost,
@@ -17,36 +22,53 @@ class PlantStorePage extends StatelessWidget {
 
     if (!context.mounted) return;
 
+    if (!ok) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            duration: const Duration(milliseconds: 650),
+            content: Text("Not enough points for $itemName"),
+          ),
+        );
+      return;
+    }
+
+    afterSuccess?.call();
+
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
           duration: const Duration(milliseconds: 650),
-          content: Text(
-            ok ? "Purchased $itemName (-$cost pts)" : "Not enough points for $itemName",
-          ),
+          content: Text("Purchased $itemName (-$cost pts)"),
         ),
       );
   }
 
   @override
   Widget build(BuildContext context) {
+    final points = context.watch<PointsStore>().points;
+    final cs = Theme.of(context).colorScheme;
+
+    final cardBg = cs.surfaceVariant;
+    final lockedBg = cs.surfaceVariant.withOpacity(0.6);
+    final fg = cs.primary;
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-
       appBar: const HeaderBar(
-        title: "GREEN HABITS",
+        title: "Plant Store",
         showBack: true,
         backLabel: "Previous",
         helpText: "Use points to buy plants, seed packs, gifts, and power-ups.",
       ),
-
-
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(12, 10, 12, 18),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Header row
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -55,7 +77,7 @@ class PlantStorePage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
-                    color: ink,
+                    color: fg,
                   ),
                 ),
                 _PointsDisplay(points: points),
@@ -63,45 +85,34 @@ class PlantStorePage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
 
-            // Mystery Seed tile (left aligned)
             Align(
               alignment: Alignment.centerLeft,
               child: SizedBox(
-                width: 110,
+                width: 120,
                 child: _StoreTile(
                   title: "Mystery Seed",
-                  icon: Icon(Icons.water_drop_outlined, size: 30, color: ink),
+                  icon: Icon(Icons.water_drop_outlined, size: 30, color: fg),
                   price: 50,
-                  onTap: () => _buy(context, "Mystery Seed", 50),
                   bg: cardBg,
-                  onTap: () {
-                    final pointsStore = context.read<PointsStore>();
-                    const price = 50;
+                  fg: fg,
+                  onTap: () async {
+                    await _purchase(
+                      context,
+                      itemName: "Mystery Seed",
+                      cost: 50,
+                      afterSuccess: () {
+                        context.read<GardenStore>().queueSeed(kMysterySeedAsset);
+                        Navigator.pushReplacementNamed(context, '/garden');
 
-                    if (pointsStore.points < price) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Not enough points to buy this."),
-                        ),
-                      );
-                      return;
-                    }
-
-                    // Spend points
-                    pointsStore.addPoints(-price);
-
-                    // Queue seed to be planted in garden
-                    context.read<GardenStore>().queueSeed(kMysterySeedAsset);
-
-                    // Take user to garden to choose plot
-                    Navigator.pushReplacementNamed(context, '/garden');
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          "Seed purchased! Tap a plot to plant it.",
-                        ),
-                      ),
+                        ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(
+                            const SnackBar(
+                              duration: Duration(milliseconds: 750),
+                              content: Text("Seed purchased! Tap a plot to plant it."),
+                            ),
+                          );
+                      },
                     );
                   },
                 ),
@@ -119,21 +130,23 @@ class PlantStorePage extends StatelessWidget {
                 _ChipTile(
                   text: "Common Plants",
                   price: 30,
-                  onTap: () => _buy(context, "Common Plants", 30),
+                  bg: Theme.of(context).colorScheme.secondaryContainer,
+                  fg: fg,
+                  onTap: () => _purchase(context, itemName: "Common Plants", cost: 30),
                 ),
                 _ChipTile(
                   text: "Rare Flowers",
                   price: 60,
-                  onTap: () => _buy(context, "Rare Flowers", 60),
+                  bg: Theme.of(context).colorScheme.secondaryContainer,
+                  fg: fg,
+                  onTap: () => _purchase(context, itemName: "Rare Flowers", cost: 60),
                 ),
-                const _ChipTile(
+                _ChipTile(
                   text: "Elm Tree\nLocked",
                   locked: true,
+                  bg: lockedBg,
+                  fg: fg,
                 ),
-              children: [
-                _ChipTile(text: "Common Plants", bg: cardBg),
-                _ChipTile(text: "Rare Flowers", bg: cardBg),
-                _ChipTile(text: "Elm Tree\nLocked", bg: lockedBg, locked: true),
               ],
             ),
 
@@ -144,9 +157,10 @@ class PlantStorePage extends StatelessWidget {
             _WideTile(
               title: "Gift a Plant",
               price: 50,
-              onTap: () => _buy(context, "Gift a Plant", 50),
+              bg: cardBg,
+              fg: fg,
+              onTap: () => _purchase(context, itemName: "Gift a Plant", cost: 50),
             ),
-            _WideTile(title: "Gift a Plant", price: 50, bg: cardBg),
 
             const SizedBox(height: 14),
 
@@ -161,55 +175,47 @@ class PlantStorePage extends StatelessWidget {
               mainAxisSpacing: 10,
               childAspectRatio: 0.95,
               children: [
-              children: [
                 _StoreTile(
                   title: "Self Watering\nPot",
-                  icon: _TripleDropIcon(color: ink),
+                  icon: _TripleDropIcon(color: fg),
                   price: 50,
-                  onTap: () => _buy(context, "Self Watering Pot", 50),
                   bg: cardBg,
+                  fg: fg,
+                  onTap: () => _purchase(context, itemName: "Self Watering Pot", cost: 50),
                 ),
                 _StoreTile(
                   title: "Extend Garden",
-                  icon: Icon(Icons.inventory_2_outlined, size: 30, color: ink),
+                  icon: Icon(Icons.inventory_2_outlined, size: 30, color: fg),
                   price: 100,
-                  onTap: () => _buy(context, "Extend Garden", 100),
                   bg: cardBg,
+                  fg: fg,
+                  onTap: () => _purchase(context, itemName: "Extend Garden", cost: 100),
                 ),
                 _StoreTile(
                   title: "Power Up 3",
-                  icon: Icon(
-                    Icons.shopping_cart_outlined,
-                    size: 30,
-                    color: ink,
-                  ),
+                  icon: Icon(Icons.shopping_cart_outlined, size: 30, color: fg),
                   price: 150,
-                  onTap: () => _buy(context, "Power Up 3", 150),
                   bg: cardBg,
+                  fg: fg,
+                  onTap: () => _purchase(context, itemName: "Power Up 3", cost: 150),
                 ),
                 _StoreTile(
                   title: "Power Up 4",
-                  icon: Icon(
-                    Icons.shopping_cart_outlined,
-                    size: 30,
-                    color: ink,
-                  ),
+                  icon: Icon(Icons.shopping_cart_outlined, size: 30, color: fg),
                   price: 150,
-                  onTap: () => _buy(context, "Power Up 4", 150),
                   bg: cardBg,
+                  fg: fg,
+                  onTap: () => _purchase(context, itemName: "Power Up 4", cost: 150),
                 ),
                 _StoreTile(
                   title: "Power Up 5",
-                  icon: Icon(
-                    Icons.shopping_cart_outlined,
-                    size: 30,
-                    color: ink,
-                  ),
+                  icon: Icon(Icons.shopping_cart_outlined, size: 30, color: fg),
                   price: 150,
-                  onTap: () => _buy(context, "Power Up 5", 150),
                   bg: cardBg,
+                  fg: fg,
+                  onTap: () => _purchase(context, itemName: "Power Up 5", cost: 150),
                 ),
-                const _LockedTile(bg: lockedBg),
+                _LockedTile(bg: lockedBg, fg: fg),
               ],
             ),
           ],
@@ -233,7 +239,7 @@ class _SectionTitle extends StatelessWidget {
       style: TextStyle(
         fontSize: 12.5,
         fontWeight: FontWeight.w800,
-        color: cs.onSurface,
+        color: Theme.of(context).colorScheme.primary,
       ),
     );
   }
@@ -248,14 +254,14 @@ class _PointsDisplay extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
     return Row(
       children: [
-        Icon(Icons.circle, size: 8, color: cs.onSurface),
+        Icon(Icons.circle, size: 8, color: cs.primary),
         const SizedBox(width: 6),
         Text(
           "$points",
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w800,
-            color: cs.onSurface,
+            color: cs.primary,
           ),
         ),
       ],
@@ -266,20 +272,22 @@ class _PointsDisplay extends StatelessWidget {
 class _ChipTile extends StatelessWidget {
   const _ChipTile({
     required this.text,
-    required this.bg, this.locked = false,
+    required this.bg,
+    required this.fg,
+    this.locked = false,
     this.price,
     this.onTap,
   });
 
   final String text;
   final Color bg;
+  final Color fg;
   final bool locked;
   final int? price;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
     final enabled = !locked && onTap != null;
 
     return Material(
@@ -297,29 +305,28 @@ class _ChipTile extends StatelessWidget {
                 text,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: cs.onSurface,
+                  color: fg,
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                   height: 1.1,
                 ),
               ),
-              if (price != null && !locked) ...[
+              if (!locked && price != null) ...[
                 const SizedBox(height: 6),
                 Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Icon(Icons.circle, size: 7, color: kDarkGreen),
-                    SizedBox(width: 5),
+                  children: [
+                    Icon(Icons.circle, size: 7, color: fg),
+                    const SizedBox(width: 5),
+                    Text(
+                      "$price",
+                      style: TextStyle(
+                        color: fg,
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
                   ],
-                ),
-                Text(
-                  "$price",
-                  style: const TextStyle(
-                    color: kDarkGreen,
-                    fontSize: 11.5,
-                    fontWeight: FontWeight.w800,
-                    height: 1.0,
-                  ),
                 ),
               ],
             ],
@@ -334,17 +341,19 @@ class _WideTile extends StatelessWidget {
   const _WideTile({
     required this.title,
     required this.price,
+    required this.bg,
+    required this.fg,
     this.onTap,
-  , required this.bg});
+  });
 
   final String title;
   final int price;
-  final VoidCallback? onTap;
   final Color bg;
+  final Color fg;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
     return Material(
       color: bg,
       borderRadius: BorderRadius.circular(6),
@@ -359,19 +368,19 @@ class _WideTile extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  color: cs.onSurface,
+                  color: fg,
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               Row(
                 children: [
-                  Icon(Icons.circle, size: 8, color: cs.onSurface),
+                  Icon(Icons.circle, size: 8, color: fg),
                   const SizedBox(width: 6),
                   Text(
                     "$price",
                     style: TextStyle(
-                      color: cs.onSurface,
+                      color: fg,
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
                     ),
@@ -391,22 +400,22 @@ class _StoreTile extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.price,
-    this.onTap,
     required this.bg,
+    required this.fg,
     this.onTap,
   });
 
   final String title;
   final Widget icon;
   final int price;
-  final VoidCallback? onTap;
   final Color bg;
+  final Color fg;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: kCard,
+      color: bg,
       borderRadius: BorderRadius.circular(6),
       child: InkWell(
         onTap: onTap,
@@ -419,8 +428,8 @@ class _StoreTile extends StatelessWidget {
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: kDarkGreen,
+                style: TextStyle(
+                  color: fg,
                   fontSize: 11.5,
                   fontWeight: FontWeight.w800,
                   height: 1.1,
@@ -430,56 +439,12 @@ class _StoreTile extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.circle, size: 8, color: kDarkGreen),
-                  const SizedBox(width: 6),
-                  Text(
-                    "$price",
-                    style: const TextStyle(
-                      color: kDarkGreen,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-    final cs = Theme.of(context).colorScheme;
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(6),
-        child: Ink(
-          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-          decoration: BoxDecoration(
-            color: bg,
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: cs.onSurface,
-                  fontSize: 11.5,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              icon,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.circle, size: 8, color: cs.onSurface),
+                  Icon(Icons.circle, size: 8, color: fg),
                   const SizedBox(width: 6),
                   Text(
                     "$price",
                     style: TextStyle(
-                      color: cs.onSurface,
+                      color: fg,
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
                     ),
@@ -495,12 +460,12 @@ class _StoreTile extends StatelessWidget {
 }
 
 class _LockedTile extends StatelessWidget {
-  const _LockedTile({required this.bg});
+  const _LockedTile({required this.bg, required this.fg});
   final Color bg;
+  final Color fg;
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       decoration: BoxDecoration(
@@ -510,16 +475,15 @@ class _LockedTile extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.lock_outline, size: 28, color: cs.onSurface),
+          Icon(Icons.lock_outline, size: 28, color: fg),
           const SizedBox(height: 8),
-          const SizedBox(height: 2),
           Expanded(
             child: Center(
               child: Text(
                 "Locked\nComplete\nChallenge to\nUnlock Power-\nUp",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: cs.onSurface,
+                  color: fg,
                   fontSize: 10.5,
                   fontWeight: FontWeight.w800,
                   height: 1.15,
