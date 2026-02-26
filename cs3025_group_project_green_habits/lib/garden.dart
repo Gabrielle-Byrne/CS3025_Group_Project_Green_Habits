@@ -18,17 +18,17 @@ class _GardenPageState extends State<GardenPage> {
     final cs = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final panelFill = cs.secondaryContainer;
+    final panelFill = cs.surfaceVariant;
     final panelBorder = isDark
-        ? cs.outline.withOpacity(0.6)
-        : cs.outline.withOpacity(0.35);
+        ? cs.outlineVariant.withOpacity(0.65)
+        : cs.outlineVariant.withOpacity(0.45);
 
     final garden = context.watch<GardenStore>();
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: const HeaderBar(
-        title: "GREEN HABITS",
+        title: "Virtual Garden",
         helpText:
             "This is your garden. You can use points earned from your actions to purchase virtual plants.",
       ),
@@ -206,7 +206,7 @@ class _PlotTile extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
 
     final soil = cs.surface.withOpacity(0.35);
-    final border = highlightEmpty ? cs.primary : cs.outline.withOpacity(0.35);
+    final border = highlightEmpty ? cs.primary : cs.outlineVariant.withOpacity(0.45);
 
     return Material(
       color: Colors.transparent,

@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'state/challenge_store.dart';
 import 'widgets/bottomNavigationBar.dart';
 import 'widgets/header.dart';
-import 'widgets/theme.dart';
 
 class LeaderboardPage extends StatefulWidget {
   const LeaderboardPage({super.key});
@@ -31,7 +30,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
       length: 2,
       child: Scaffold(
         appBar: HeaderBar(
-          title: "GREEN HABITS",
+          title: "Leaderboards",
           helpText: "Leaderboards and challenges",
         ),
         body: Column(
@@ -455,8 +454,8 @@ class _AvailableChallengeCard extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                backgroundColor: AppTheme.ink,
-                foregroundColor: AppTheme.bg,
+                backgroundColor: cs.primary,
+                foregroundColor: cs.onPrimary,
               ),
               child: const Text("Join"),
             ),
@@ -625,8 +624,8 @@ class _ChallengeTile extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      backgroundColor: AppTheme.ink,
-                      foregroundColor: AppTheme.bg,
+                      backgroundColor: cs.primary,
+                      foregroundColor: cs.onPrimary,
                     ),
                     child: const Text("Join"),
                   ),
@@ -719,7 +718,7 @@ class _SegmentedRow<T> extends StatelessWidget {
         onSelectionChanged: (s) => onChanged(s.first),
         style: ButtonStyle(
           backgroundColor: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.selected)) return cs.secondaryContainer;
+            if (states.contains(WidgetState.selected)) return cs.secondary;
             return cs.surfaceVariant;
           }),
           foregroundColor: WidgetStatePropertyAll(cs.onSurface),
@@ -735,11 +734,3 @@ class _SegmentedRow<T> extends StatelessWidget {
     );
   }
 }
-
-//Future<List<User>> getLeaderboard() async {
-//   final db = await database;
-//   final List<Map<String, dynamic>> maps =
-//       await db.query('users', orderBy: 'score DESC', limit: 10);
-//   return List.generate(maps.length, (i) => User(
-//       name: maps[i]['name'], campus: maps[i]['campus'], score: maps[i]['score']));
-// }

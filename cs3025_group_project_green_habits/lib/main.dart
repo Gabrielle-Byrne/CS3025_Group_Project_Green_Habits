@@ -1,4 +1,5 @@
 import 'package:cs3025_group_project_green_habits/leaderboard.dart';
+import 'package:cs3025_group_project_green_habits/state/activity_log_store.dart';
 import 'package:cs3025_group_project_green_habits/state/points_store.dart';
 import 'package:cs3025_group_project_green_habits/state/settings_store.dart';
 import 'package:cs3025_group_project_green_habits/tips.dart';
@@ -24,6 +25,12 @@ void main() async {
 
   final String lang = await PreferencesService.getLanguage();
   final bool darkMode = await PreferencesService.getDarkMode();
+
+  final pointsStore = PointsStore();
+  await pointsStore.init();
+
+  final activityLogStore = ActivityLogStore();
+  await activityLogStore.init();
   final double textScale = await PreferencesService.getTextScale();
   final bool soundEnabled = await PreferencesService.getSoundEnabled();
   final bool vibrationEnabled = await PreferencesService.getVibrationEnabled();
@@ -31,7 +38,8 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => PointsStore()),
+        ChangeNotifierProvider.value(value: pointsStore),
+        ChangeNotifierProvider.value(value: activityLogStore),
         ChangeNotifierProvider(create: (_) => GardenStore()),
         ChangeNotifierProvider(
           create: (_) => SettingsStore(

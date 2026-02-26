@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'state/activity_log_store.dart';
 import 'state/challenge_store.dart';
+import 'state/points_rule.dart';
 import 'widgets/bottomNavigationBar.dart';
 import 'widgets/header.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'state/points_store.dart';
-import 'widgets/theme.dart';
 
 class ActivityLogPage extends StatefulWidget {
   const ActivityLogPage({super.key});
@@ -51,7 +52,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
     return Container(
       height: 140,
       decoration: BoxDecoration(
-        color: AppTheme.navBg,
+        color: cs.surfaceVariant,
         borderRadius: BorderRadius.circular(8),
       ),
       clipBehavior: Clip.antiAlias,
@@ -110,8 +111,8 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        backgroundColor: AppTheme.ink,
-                        foregroundColor: AppTheme.bg,
+                        backgroundColor: cs.primary,
+                        foregroundColor: cs.onPrimary,
                       ),
                     ),
                   ),
@@ -128,8 +129,8 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        backgroundColor: AppTheme.ink,
-                        foregroundColor: AppTheme.bg,
+                        backgroundColor: cs.primary,
+                        foregroundColor: cs.onPrimary,
                       ),
                     ),
                   ),
@@ -156,7 +157,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                         DropdownMenuItem(
                           value: "Transit",
                           child: Text("Transit"),
-                        ), //If value/text of a dropbown is too long the app crashes
+                        ), //If value/text of a dropdown is too long the app crashes
                         DropdownMenuItem(
                           value: "Energy",
                           child: Text("Energy"),
@@ -165,7 +166,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                       onChanged: (v) => setState(() => _completedValue = v),
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: AppTheme.navBg,
+                        fillColor: cs.surfaceVariant,
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 10,
@@ -191,7 +192,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                 decoration: InputDecoration(
                   hintText: "Description",
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: cs.surfaceVariant,
                   contentPadding: const EdgeInsets.all(12),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -203,7 +204,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
               SizedBox(
                 height: 42,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_completedValue == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -214,9 +215,19 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                       return;
                     }
 
-                    final store = context.read<PointsStore>();
-                    final earned = store.pointsFor(_completedValue!);
-                    store.logActivity(_completedValue!);
+                    final desc = _descriptionController.text;
+
+                    await context.read<ActivityLogStore>().addEntry(
+                      activityType: _completedValue!,
+                      description: desc,
+                    );
+
+                    final earned = PointsRules.pointsForActivity(_completedValue!);
+
+                    await context.read<PointsStore>().applyTransaction(
+                      source: "activity",
+                      amount: earned,
+                    );
                     context.read<ChallengeStore>().onActivityLogged(
                       _completedValue!,
                     );
@@ -224,7 +235,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                          '+$earned points! Total: ${store.points}',
+                          '+$earned points! Total: ${context.read<PointsStore>().points}',
                         ),
                         duration: const Duration(seconds: 1),
                       ),
@@ -244,8 +255,8 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    backgroundColor: AppTheme.ink,
-                    foregroundColor: AppTheme.bg,
+                    backgroundColor: cs.primary,
+                    foregroundColor: cs.onPrimary,
                   ),
                 ),
               ),

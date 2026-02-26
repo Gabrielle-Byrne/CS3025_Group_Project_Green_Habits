@@ -12,15 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // Brand colors for the top header/tips button (matches your mock)
-  static const Color kDarkGreen = Color(0xFF084E18);
-  static const Color kTipGreen = Color(0xFF1E6B2A);
-
-  // Light-mode panel styling (dark mode uses theme containers)
-  static const Color kPanelFill = Color(0xFFD6E4D6);
-  static const Color kPanelBorder = Color(0xFFB8C8B8);
-  static const Color kNavSelectedPill = Color(0xFFB8C8B8);
-
   static const int kNextRewardGoal = 200; // prototype milestone
 
   @override
@@ -28,18 +19,19 @@ class _HomePageState extends State<HomePage> {
     final cs = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final panelFill = isDark ? cs.secondaryContainer : kPanelFill;
-    final panelBorder = isDark ? cs.outline.withOpacity(0.6) : kPanelBorder;
-    final titleColor = cs.onSurface; // ✅ mint in dark mode
+    final panelFill = cs.surfaceVariant;
+    final panelBorder = isDark
+        ? cs.outlineVariant.withOpacity(0.65)
+        : cs.outlineVariant.withOpacity(0.45);
+    final titleColor = cs.onSurface;
 
-    final pillBg = isDark ? cs.primary.withOpacity(0.22) : kNavSelectedPill;
-    final pillFg = titleColor;
-
+    final pillBg = cs.primaryContainer;
+    final pillFg = cs.onPrimaryContainer;
     final points = context.watch<PointsStore>().points;
     final remaining = (kNextRewardGoal - points).clamp(0, kNextRewardGoal);
     final progress = (points / kNextRewardGoal).clamp(0.0, 1.0);
 
-    final progressBg = isDark ? titleColor.withOpacity(0.15) : const Color(0xFFCFE0CF);
+    final progressBg = cs.primaryContainer;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -49,7 +41,7 @@ class _HomePageState extends State<HomePage> {
           bottom: false,
           child: Container(
             height: 56,
-            color: kDarkGreen,
+            color: cs.primary,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(
               children: [
@@ -70,8 +62,8 @@ class _HomePageState extends State<HomePage> {
                   child: ElevatedButton(
                     onPressed: () => Navigator.pushNamed(context, '/tips'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: kTipGreen,
-                      foregroundColor: Colors.white,
+                      backgroundColor: cs.tertiary,
+                      foregroundColor: cs.onTertiary,
                       elevation: 0,
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       shape: RoundedRectangleBorder(
@@ -311,14 +303,10 @@ class _QuickAction extends StatelessWidget {
   final String label;
   const _QuickAction({required this.label});
 
-  static const Color kCircleFillLight = Color(0xFFCFE0CF);
-
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    final circleFill = isDark ? cs.secondaryContainer : kCircleFillLight;
+    final circleFill = cs.surfaceVariant;
 
     return Column(
       children: [

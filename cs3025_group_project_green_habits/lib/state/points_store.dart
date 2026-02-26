@@ -1,26 +1,46 @@
 import 'package:flutter/foundation.dart';
+import 'package:uuid/uuid.dart';
+import 'points_ledger.dart';
+import 'points_ledger_storage.dart';
 
-//Only keeps points while app is running
 class PointsStore extends ChangeNotifier {
-  int _points = 0;
-  int get points => _points;
+  final _storage = PointsLedgerStorage();
+  final _uuid = const Uuid();
 
-  final Map<String, int> _activityPoints = const {
-    'Recycling': 10,
-    'Transit': 15,
-    'Energy': 5,
-  };
+  PointsLedger _ledger = PointsLedger.empty();
 
-  int pointsFor(String activity) => _activityPoints[activity] ?? 0;
+  int get points => _ledger.total;
+  List<PointsTransaction> get transactions => List.unmodifiable(_ledger.transactions);
 
-  void logActivity(String activity) {
-    final earned = pointsFor(activity);
-    _points += earned;
+  Future<void> init() async {
+    _ledger = await _storage.load();
     notifyListeners();
   }
 
-  void addPoints(int amount) {
-    _points += amount;
+  Future<void> _persist() async {
+    await _storage.save(_ledger);
+  }
+
+  //Adds a transaction (positive = gain, negative = spend)
+  Future<bool> applyTransaction({
+    required String source,
+    required int amount,
+  }) async {
+    if (amount == 0) return false;
+
+    if (_ledger.total + amount < 0) return false;
+
+    _ledger.total += amount;
+    _ledger.transactions.add(
+      PointsTransaction(
+        id: _uuid.v4(),
+        source: source,
+        amount: amount,
+      ),
+    );
+
     notifyListeners();
+    await _persist();
+    return true;
   }
 }
