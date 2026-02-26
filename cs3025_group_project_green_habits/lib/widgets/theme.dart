@@ -29,7 +29,7 @@ class AppTheme {
   /// Selected highlight (nav indicator, pills)
   static const Color selected = Color(0xFF7CA384);
 
-  /* ---------- Dark palette (tunable later) ---------- */
+  /* ---------- Dark palette ---------- */
 
   static const Color darkBg = Color(0xFF0E1410);
   static const Color darkSurface = Color(0xFF121B15);

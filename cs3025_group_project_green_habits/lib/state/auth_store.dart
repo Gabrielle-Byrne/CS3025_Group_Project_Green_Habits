@@ -84,10 +84,10 @@ class AuthStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// For showing in Profile (masked), if you want.
+  /// For showing in Profile (masked)
   String? get displayEmail {
     if (_username == null) return null;
-    // If you used updateEmailForCurrentUser, _username already updated.
+    // If used updateEmailForCurrentUser, _username already updated.
     return _username;
   }
 

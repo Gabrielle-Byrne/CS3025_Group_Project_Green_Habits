@@ -11,7 +11,7 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryState extends State<HistoryPage> {
-  String _username = "Alice Brown"; // TODO: Replace with actual username once database is established
+  String _username = "Alice Brown";
   double _textSizeSlider = 20;
   final List<bool> _selectedLangauge = [true, false];
   final List<bool> _selectedTheme = [true, false];

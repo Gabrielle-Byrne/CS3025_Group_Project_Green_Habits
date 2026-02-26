@@ -167,10 +167,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: cs.surfaceVariant,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 10,
-                        ),
+                        contentPadding: const EdgeInsets.all(8),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -193,7 +190,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                   hintText: "Description",
                   filled: true,
                   fillColor: cs.surfaceVariant,
-                  contentPadding: const EdgeInsets.all(12),
+                  contentPadding: const EdgeInsets.all(8),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),

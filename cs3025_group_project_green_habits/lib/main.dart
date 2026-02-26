@@ -19,7 +19,6 @@ import 'history.dart';
 import 'state/challenge_store.dart';
 import 'widgets/challenge_snackbar_listener.dart';
 import 'state/garden_store.dart';
-import 'package:provider/provider.dart';
 import 'state/auth_store.dart';
 import 'widgets/require_auth.dart';
 

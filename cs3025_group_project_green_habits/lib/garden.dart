@@ -77,7 +77,7 @@ class _GardenPageState extends State<GardenPage> {
                     final crossAxisCount = constraints.maxWidth < 360 ? 3 : 4;
 
                     return GridView.builder(
-                      itemCount: garden.plotCount, // ✅ 12
+                      itemCount: garden.plotCount,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: crossAxisCount,
                         crossAxisSpacing: 10,
@@ -231,8 +231,8 @@ class _PlotTile extends StatelessWidget {
                 : Padding(
                     padding: const EdgeInsets.all(8),
                     child: FractionallySizedBox(
-                      widthFactor: 0.75, // ✅ 75% of plot width
-                      heightFactor: 0.75, // ✅ 75% of plot height
+                      widthFactor: 0.75,
+                      heightFactor: 0.75,
                       child: SvgPicture.asset(
                         planted!.assetPath,
                         fit: BoxFit.contain,

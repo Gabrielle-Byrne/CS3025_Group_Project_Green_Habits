@@ -15,7 +15,7 @@ class PlantedItem {
 }
 
 class GardenStore extends ChangeNotifier {
-  // ✅ 12 plots by default: 3 rows x 4 cols
+  // 12 plots by default: 3 rows x 4 cols
   final int rows;
   final int cols;
 
