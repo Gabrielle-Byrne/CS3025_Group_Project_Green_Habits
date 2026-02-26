@@ -6,10 +6,7 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBack;
   final String backLabel;
 
-  /// Show the "Need Tips?" button (routes to /tips).
-  final bool showTipsButton;
-
-  /// Show a small (?) icon that opens a help dialog using [helpText].
+  /// Show a small help icon that opens a dialog using [helpText].
   final bool showHelpButton;
 
   const HeaderBar({
@@ -18,7 +15,6 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
     required this.helpText,
     this.showBack = false,
     this.backLabel = "Previous",
-    this.showTipsButton = true,
     this.showHelpButton = true,
   });
 
@@ -73,34 +69,6 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
             tooltip: "Help",
             icon: Icon(Icons.help_outline, color: cs.onPrimary),
             onPressed: () => _openHelp(context),
-          ),
-        if (showTipsButton)
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: SizedBox(
-              height: 38,
-              child: ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, '/tips'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: cs.tertiary,
-                  foregroundColor: cs.onTertiary,
-                  elevation: 0,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: const Text(
-                  "Need\nTips?",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800,
-                    height: 1.05,
-                  ),
-                ),
-              ),
-            ),
           ),
       ],
     );

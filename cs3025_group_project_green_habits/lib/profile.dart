@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
+import 'widgets/header.dart';
 import 'databases/preferences.dart';
 import 'state/settings_store.dart';
 import 'widgets/bottomNavigationBar.dart';
@@ -36,7 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
       final jsonUsername = (record?['username'] ?? '').toString().trim();
       _username = jsonUsername.isEmpty ? 'User' : jsonUsername;
       _email =
-          _username; // if your login identifier is email, this is the email
+          _username; // if login identifier is email, this is the email
 
       // Password also comes from JSON (prototype only)
       final jsonPass = (record?['password'] ?? '').toString();
@@ -197,56 +197,10 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       // Let the active theme control the background (so dark mode works).
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(56),
-        child: SafeArea(
-          bottom: false,
-          child: Container(
-            height: 56,
-            color: cs.primary,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
-              children: [
-                Icon(Icons.park, color: cs.onPrimary, size: 28),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    'GREEN HABITS',
-                    style: TextStyle(
-                      color: cs.onPrimary,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.6,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 38,
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pushNamed(context, '/tips'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: cs.tertiary,
-                      foregroundColor: cs.onTertiary,
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      'Need\nTips?',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        height: 1.05,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+      appBar: const HeaderBar(
+        title: "Profile",
+        helpText:
+            "View and update your profile info and app settings like theme, text size, language, sound, and vibration.",
       ),
 
       body: SingleChildScrollView(
@@ -310,7 +264,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 initial: _email,
                                 keyboardType: TextInputType.emailAddress,
                                 onSave: (v) async {
-                                  // Optional: keep your PreferencesService if you want UI persistence
+                                  // Keep PreferencesService if UI persistence is wanted
                                   await PreferencesService.setEmail(v);
                                   context
                                       .read<AuthStore>()

@@ -41,7 +41,7 @@ enum CategoryLabel {
 
 
 class _TipsState extends State<TipsPage> {
-  String _title = "Tips"; // TODO: Replace with actual username once database is established
+  String _title = "Tips";
   final TextEditingController categoryController = TextEditingController();
   CategoryLabel? selectedCategory;
   
@@ -50,7 +50,7 @@ class _TipsState extends State<TipsPage> {
     return Scaffold(
       appBar: HeaderBar(
         title: "Tips",
-        showTipsButton: false,
+        //showTipsButton: false,
         helpText: "This is the Tips Page, you can learn facts about plants",
       ),
       body: Center(

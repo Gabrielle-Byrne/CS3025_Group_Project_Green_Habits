@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'widgets/header.dart';
 import 'state/points_store.dart';
 import 'widgets/bottomNavigationBar.dart';
 
@@ -31,60 +31,14 @@ class _HomePageState extends State<HomePage> {
     final remaining = (kNextRewardGoal - points).clamp(0, kNextRewardGoal);
     final progress = (points / kNextRewardGoal).clamp(0.0, 1.0);
 
-    final progressBg = cs.primaryContainer;
+    final progressBg = cs.onSurface.withOpacity(0.18);
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(56),
-        child: SafeArea(
-          bottom: false,
-          child: Container(
-            height: 56,
-            color: cs.primary,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
-              children: [
-                Icon(Icons.park, color: cs.onPrimary, size: 28),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    "GREEN HABITS",
-                    style: TextStyle(
-                      color: cs.onPrimary,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.6,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 38,
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pushNamed(context, '/tips'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: cs.tertiary,
-                      foregroundColor: cs.onTertiary,
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      "Need\nTips?",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        height: 1.05,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+      appBar: const HeaderBar(
+        title: "Home",
+        helpText:
+            "This is the home screen. Log sustainable actions to earn points, then spend them in the Virtual Garden.",
       ),
 
       body: Padding(
@@ -176,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: panelFill,
                         borderRadius: BorderRadius.circular(8),
@@ -225,7 +179,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: panelFill,
                         borderRadius: BorderRadius.circular(8),
@@ -242,7 +196,9 @@ class _HomePageState extends State<HomePage> {
                               child: LinearProgressIndicator(
                                 value: progress,
                                 backgroundColor: progressBg,
-                                valueColor: AlwaysStoppedAnimation<Color>(cs.primary),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  cs.primary,
+                                ),
                               ),
                             ),
                           ),
@@ -264,8 +220,7 @@ class _HomePageState extends State<HomePage> {
                             height: 34,
                             width: double.infinity,
                             child: ElevatedButton(
-                              onPressed: () =>
-                                  Navigator.pushNamed(context, '/history'),
+                              onPressed: () {},
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: cs.primary,
                                 foregroundColor: cs.onPrimary,
@@ -313,10 +268,7 @@ class _QuickAction extends StatelessWidget {
         Container(
           width: 74,
           height: 74,
-          decoration: BoxDecoration(
-            color: circleFill,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: circleFill, shape: BoxShape.circle),
         ),
         const SizedBox(height: 6),
         Text(

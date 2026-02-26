@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'state/auth_store.dart';
+import 'widgets/header.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -27,7 +28,7 @@ class _LoginState extends State<LoginPage> {
     setState(() => _passwordVisible = !_passwordVisible);
   }
 
-  void _openHelp(BuildContext context) {
+  /*void _openHelp(BuildContext context) {
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -44,7 +45,7 @@ class _LoginState extends State<LoginPage> {
         ],
       ),
     );
-  }
+  }*/
 
   Future<void> _handleLoginWithAuthStore() async {
     final username = _usernameController.text;
@@ -72,9 +73,9 @@ class _LoginState extends State<LoginPage> {
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login error: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Login error: $e')));
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -85,16 +86,10 @@ class _LoginState extends State<LoginPage> {
     final cs = Theme.of(context).colorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Green Habits'),
-        leading: const Icon(Icons.grass),
-        actions: [
-          IconButton(
-            tooltip: 'Help',
-            icon: const Icon(Icons.help_outline),
-            onPressed: () => _openHelp(context),
-          ),
-        ],
+      appBar: const HeaderBar(
+        title: "Login",
+        helpText:
+            "Enter your university email/username and password.",
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -106,9 +101,9 @@ class _LoginState extends State<LoginPage> {
                 'Welcome to Green Habits!',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.w800,
-                      color: cs.onSurface,
-                    ),
+                  fontWeight: FontWeight.w800,
+                  color: cs.onSurface,
+                ),
               ),
               const SizedBox(height: 22),
 
@@ -138,7 +133,9 @@ class _LoginState extends State<LoginPage> {
                   labelText: 'Password',
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _passwordVisible ? Icons.visibility_off : Icons.visibility,
+                      _passwordVisible
+                          ? Icons.visibility_off
+                          : Icons.visibility,
                     ),
                     onPressed: _togglePasswordVisibility,
                   ),
