@@ -16,9 +16,9 @@ class PlantStorePage extends StatelessWidget {
     VoidCallback? afterSuccess,
   }) async {
     final ok = await context.read<PointsStore>().applyTransaction(
-          source: "plant_store",
-          amount: -cost,
-        );
+      source: "plant_store",
+      amount: -cost,
+    );
 
     if (!context.mounted) return;
 
@@ -101,7 +101,9 @@ class PlantStorePage extends StatelessWidget {
                       itemName: "Mystery Seed",
                       cost: 50,
                       afterSuccess: () {
-                        context.read<GardenStore>().queueSeed(kMysterySeedAsset);
+                        context.read<GardenStore>().queueSeed(
+                          kMysterySeedAsset,
+                        );
                         Navigator.pushReplacementNamed(context, '/garden');
 
                         ScaffoldMessenger.of(context)
@@ -109,7 +111,9 @@ class PlantStorePage extends StatelessWidget {
                           ..showSnackBar(
                             const SnackBar(
                               duration: Duration(milliseconds: 750),
-                              content: Text("Seed purchased! Tap a plot to plant it."),
+                              content: Text(
+                                "Seed purchased! Tap a plot to plant it.",
+                              ),
                             ),
                           );
                       },
@@ -132,14 +136,16 @@ class PlantStorePage extends StatelessWidget {
                   price: 30,
                   bg: Theme.of(context).colorScheme.secondaryContainer,
                   fg: fg,
-                  onTap: () => _purchase(context, itemName: "Common Plants", cost: 30),
+                  onTap: () =>
+                      _purchase(context, itemName: "Common Plants", cost: 30),
                 ),
                 _ChipTile(
                   text: "Rare Flowers",
                   price: 60,
                   bg: Theme.of(context).colorScheme.secondaryContainer,
                   fg: fg,
-                  onTap: () => _purchase(context, itemName: "Rare Flowers", cost: 60),
+                  onTap: () =>
+                      _purchase(context, itemName: "Rare Flowers", cost: 60),
                 ),
                 _ChipTile(
                   text: "Elm Tree\nLocked",
@@ -159,7 +165,8 @@ class PlantStorePage extends StatelessWidget {
               price: 50,
               bg: cardBg,
               fg: fg,
-              onTap: () => _purchase(context, itemName: "Gift a Plant", cost: 50),
+              onTap: () =>
+                  _purchase(context, itemName: "Gift a Plant", cost: 50),
             ),
 
             const SizedBox(height: 14),
@@ -181,15 +188,58 @@ class PlantStorePage extends StatelessWidget {
                   price: 50,
                   bg: cardBg,
                   fg: fg,
-                  onTap: () => _purchase(context, itemName: "Self Watering Pot", cost: 50),
+                  onTap: () => _purchase(
+                    context,
+                    itemName: "Self Watering Pot",
+                    cost: 50,
+                  ),
                 ),
                 _StoreTile(
-                  title: "Extend Garden",
+                  title: "Extend Garden\n+12 Plots",
                   icon: Icon(Icons.inventory_2_outlined, size: 30, color: fg),
                   price: 100,
                   bg: cardBg,
                   fg: fg,
-                  onTap: () => _purchase(context, itemName: "Extend Garden", cost: 100),
+                  onTap: () async {
+                    final garden = context.read<GardenStore>();
+
+                    if (!garden.allPlotsFilled) {
+                      ScaffoldMessenger.of(context)
+                        ..hideCurrentSnackBar()
+                        ..showSnackBar(
+                          const SnackBar(
+                            duration: Duration(milliseconds: 900),
+                            content: Text(
+                              "Use all current plots before extending your garden.",
+                            ),
+                          ),
+                        );
+                      return;
+                    }
+
+                    await _purchase(
+                      context,
+                      itemName: "Extend Garden",
+                      cost: 100,
+                      afterSuccess: () {
+                        context.read<GardenStore>().extendGarden(
+                          additionalPlots: 12,
+                        );
+                        Navigator.pushReplacementNamed(context, '/garden');
+
+                        ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(
+                            const SnackBar(
+                              duration: Duration(milliseconds: 900),
+                              content: Text(
+                                "Garden extended! 12 new plots added.",
+                              ),
+                            ),
+                          );
+                      },
+                    );
+                  },
                 ),
                 _StoreTile(
                   title: "Power Up 3",
@@ -197,7 +247,8 @@ class PlantStorePage extends StatelessWidget {
                   price: 150,
                   bg: cardBg,
                   fg: fg,
-                  onTap: () => _purchase(context, itemName: "Power Up 3", cost: 150),
+                  onTap: () =>
+                      _purchase(context, itemName: "Power Up 3", cost: 150),
                 ),
                 _StoreTile(
                   title: "Power Up 4",
@@ -205,7 +256,8 @@ class PlantStorePage extends StatelessWidget {
                   price: 150,
                   bg: cardBg,
                   fg: fg,
-                  onTap: () => _purchase(context, itemName: "Power Up 4", cost: 150),
+                  onTap: () =>
+                      _purchase(context, itemName: "Power Up 4", cost: 150),
                 ),
                 _StoreTile(
                   title: "Power Up 5",
@@ -213,7 +265,8 @@ class PlantStorePage extends StatelessWidget {
                   price: 150,
                   bg: cardBg,
                   fg: fg,
-                  onTap: () => _purchase(context, itemName: "Power Up 5", cost: 150),
+                  onTap: () =>
+                      _purchase(context, itemName: "Power Up 5", cost: 150),
                 ),
                 _LockedTile(bg: lockedBg, fg: fg),
               ],
