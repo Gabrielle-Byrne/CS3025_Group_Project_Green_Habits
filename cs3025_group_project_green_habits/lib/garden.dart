@@ -74,7 +74,7 @@ class _GardenPageState extends State<GardenPage> {
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     // For 12 plots, this looks best as 4 columns on most phones.
-                    final crossAxisCount = constraints.maxWidth < 360 ? 3 : 4;
+                    final crossAxisCount = garden.cols;
 
                     return GridView.builder(
                       itemCount: garden.plotCount,

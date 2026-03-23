@@ -18,6 +18,20 @@ class ActivityLogPage extends StatefulWidget {
 
 class _ActivityLogPageState extends State<ActivityLogPage> {
   final TextEditingController _descriptionController = TextEditingController();
+  bool _loadedInitialRouteValue = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_loadedInitialRouteValue) return;
+    _loadedInitialRouteValue = true;
+
+    final routeValue = ModalRoute.of(context)?.settings.arguments as String?;
+    if (routeValue != null) {
+      _completedValue = routeValue;
+    }
+  }
 
   @override
   void dispose() {
@@ -219,7 +233,9 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                       description: desc,
                     );
 
-                    final earned = PointsRules.pointsForActivity(_completedValue!);
+                    final earned = PointsRules.pointsForActivity(
+                      _completedValue!,
+                    );
 
                     await context.read<PointsStore>().applyTransaction(
                       source: "activity",
@@ -237,7 +253,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                         duration: const Duration(seconds: 1),
                       ),
                     );
-                    
+
                     setState(() {
                       _completedValue = null;
                       _pickedImage = null;

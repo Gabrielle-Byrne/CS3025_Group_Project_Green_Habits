@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'widgets/header.dart';
+
+import 'state/activity_log_store.dart';
+import 'state/garden_store.dart';
 import 'state/points_store.dart';
 import 'widgets/bottomNavigationBar.dart';
+import 'widgets/header.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,7 +16,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const int kNextRewardGoal = 200; // prototype milestone
+  static const int kNextRewardGoal = 200;
+  static const List<String> _availableActivities = [
+    'Recycling',
+    'Transit',
+    'Energy',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -30,24 +39,26 @@ class _HomePageState extends State<HomePage> {
     final points = context.watch<PointsStore>().points;
     final remaining = (kNextRewardGoal - points).clamp(0, kNextRewardGoal);
     final progress = (points / kNextRewardGoal).clamp(0.0, 1.0);
-
     final progressBg = cs.onSurface.withOpacity(0.18);
+
+    final garden = context.watch<GardenStore>();
+    final activityLog = context.watch<ActivityLogStore>();
+    final quickActions = _rankQuickActions(activityLog);
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: const HeaderBar(
-        title: "Home",
+        title: 'Home',
         helpText:
-            "This is the home screen. Log sustainable actions to earn points, then spend them in the Virtual Garden.",
+            'This is the home screen. Log sustainable actions to earn points, then spend them in the Virtual Garden.',
       ),
-
       body: Padding(
         padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Virtual Garden",
+              'Virtual Garden',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
@@ -55,7 +66,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 8),
-
             Expanded(
               child: InkWell(
                 onTap: () => Navigator.pushNamed(context, '/garden'),
@@ -67,14 +77,18 @@ class _HomePageState extends State<HomePage> {
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: panelBorder, width: 1),
                   ),
+                  padding: const EdgeInsets.all(12),
+                  child: _GardenOverview(
+                    garden: garden,
+                    titleColor: titleColor,
+                    panelBorder: panelBorder,
+                  ),
                 ),
               ),
             ),
-
             const SizedBox(height: 12),
-
             Text(
-              "Quick-Log Action Bar",
+              'Quick-Log Action Bar',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
@@ -82,23 +96,33 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 8),
-
             Row(
-              children: const [
-                Expanded(child: _QuickAction(label: "Quick Action\n1")),
-                Expanded(child: _QuickAction(label: "Quick Action\n2")),
-                Expanded(child: _QuickAction(label: "Quick Action\n3")),
-              ],
+              children: quickActions
+                  .map(
+                    (action) => Expanded(
+                      child: _QuickAction(
+                        label: action.label,
+                        icon: action.icon,
+                        count: action.count,
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/activity-log',
+                            arguments: action.label,
+                          );
+                        },
+                      ),
+                    ),
+                  )
+                  .toList(),
             ),
-
             const SizedBox(height: 8),
-
             Row(
               children: [
                 Expanded(
                   child: Center(
                     child: Text(
-                      "Community",
+                      'Community',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
@@ -110,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                   child: Center(
                     child: Text(
-                      "Rewards",
+                      'Rewards',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
@@ -122,7 +146,6 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             const SizedBox(height: 6),
-
             SizedBox(
               height: 150,
               child: Row(
@@ -154,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               child: const Text(
-                                "Leaderboard",
+                                'Leaderboard',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w800,
                                   fontSize: 12,
@@ -164,7 +187,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            "1.  Tom Smith\n2.  Jane Doe\n3.  Dan Pearce",
+                            '1.  Tom Smith\n2.  Jane Doe\n3.  Dan Pearce',
                             style: TextStyle(
                               color: titleColor,
                               fontWeight: FontWeight.w600,
@@ -205,7 +228,7 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(height: 10),
                           Center(
                             child: Text(
-                              "$remaining points left to collect\nthis reward",
+                              '$remaining points left to collect\nthis reward',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: titleColor,
@@ -220,7 +243,8 @@ class _HomePageState extends State<HomePage> {
                             height: 34,
                             width: double.infinity,
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () =>
+                                  Navigator.pushNamed(context, '/history'),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: cs.primary,
                                 foregroundColor: cs.onPrimary,
@@ -230,7 +254,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               child: const Text(
-                                "View Past Actions",
+                                'View Past Actions',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 12,
@@ -248,15 +272,265 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      bottomNavigationBar: const BottomNavigation(currentRoute: '/home'),
+    );
+  }
 
-      bottomNavigationBar: const BottomNavigation(currentRoute: "/home"),
+  List<_QuickActionData> _rankQuickActions(ActivityLogStore store) {
+    final counts = <String, int>{
+      for (final activity in _availableActivities) activity: 0,
+    };
+
+    final lastSeenIndex = <String, int>{
+      for (final activity in _availableActivities) activity: 1 << 30,
+    };
+
+    for (var i = 0; i < store.entries.length; i++) {
+      final type = store.entries[i].activityType;
+      if (!counts.containsKey(type)) continue;
+
+      counts[type] = counts[type]! + 1;
+      lastSeenIndex[type] = i;
+    }
+
+    final sorted = _availableActivities.toList()
+      ..sort((a, b) {
+        final countCompare = counts[b]!.compareTo(counts[a]!);
+        if (countCompare != 0) return countCompare;
+
+        final recencyCompare = lastSeenIndex[a]!.compareTo(lastSeenIndex[b]!);
+        if (recencyCompare != 0) return recencyCompare;
+
+        return _availableActivities
+            .indexOf(a)
+            .compareTo(_availableActivities.indexOf(b));
+      });
+
+    return sorted
+        .map(
+          (activity) => _QuickActionData(
+            label: activity,
+            count: counts[activity]!,
+            icon: _iconForActivity(activity),
+          ),
+        )
+        .toList();
+  }
+
+  IconData _iconForActivity(String activity) {
+    switch (activity) {
+      case 'Recycling':
+        return Icons.recycling;
+      case 'Transit':
+        return Icons.directions_bus;
+      case 'Energy':
+        return Icons.bolt;
+      default:
+        return Icons.eco;
+    }
+  }
+}
+
+class _GardenOverview extends StatelessWidget {
+  const _GardenOverview({
+    required this.garden,
+    required this.titleColor,
+    required this.panelBorder,
+  });
+  
+
+  final GardenStore garden;
+  final Color titleColor;
+  final Color panelBorder;
+  
+  
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
+    final plantedCount = List.generate(
+      garden.plotCount,
+      (index) => garden.plotAt(index),
+    ).whereType<PlantedItem>().length;
+    final previewCount = garden.plotCount >= 12 ? 12 : garden.plotCount;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                '$plantedCount/${garden.plotCount} plots planted',
+                style: TextStyle(
+                  color: titleColor,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+            Text(
+              garden.pendingSeeds == 1
+                  ? '1 seed waiting'
+                  : '${garden.pendingSeeds} seeds waiting',
+              style: TextStyle(
+                color: cs.primary,
+                fontWeight: FontWeight.w700,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Expanded(
+          child: GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: previewCount,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: garden.cols,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+              childAspectRatio: 1,
+            ),
+            itemBuilder: (context, index) {
+              final planted = garden.plotAt(index);
+
+              return Container(
+                decoration: BoxDecoration(
+                  color: cs.surface.withOpacity(0.35),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: panelBorder, width: 1),
+                ),
+                child: Center(
+                  child: planted == null
+                      ? Icon(
+                          Icons.add,
+                          size: 18,
+                          color: cs.onSurface.withOpacity(0.25),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: FractionallySizedBox(
+                            widthFactor: 0.9,
+                            heightFactor: 0.9,
+                            child: SvgPicture.asset(
+                              planted.assetPath,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 8),
+        Center(
+          child: Text(
+            'Tap to open full garden',
+            style: TextStyle(
+              color: cs.onSurface.withOpacity(0.7),
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
 
+// class _QuickAction extends StatelessWidget {
+//   const _QuickAction({
+//     required this.label,
+//     required this.icon,
+//     required this.count,
+//     required this.onTap,
+//   });
+
+//   final String label;
+//   final IconData icon;
+//   final int count;
+//   final VoidCallback onTap;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final cs = Theme.of(context).colorScheme;
+//     final circleFill = cs.surfaceVariant;
+
+//     return Column(
+//       children: [
+//         Material(
+//           color: Colors.transparent,
+//           child: InkWell(
+//             onTap: onTap,
+//             borderRadius: BorderRadius.circular(50),
+//             child: Container(
+//               width: 74,
+//               height: 74,
+//               decoration: BoxDecoration(
+//                 color: circleFill,
+//                 shape: BoxShape.circle,
+//               ),
+//               child: Stack(
+//                 alignment: Alignment.center,
+//                 children: [
+//                   Icon(icon, color: cs.primary, size: 30),
+//                   if (count > 0)
+//                     Positioned(
+//                       right: 6,
+//                       top: 6,
+//                       child: Container(
+//                         padding: const EdgeInsets.symmetric(
+//                           horizontal: 6,
+//                           vertical: 2,
+//                         ),
+//                         decoration: BoxDecoration(
+//                           color: cs.primary,
+//                           borderRadius: BorderRadius.circular(20),
+//                         ),
+//                         child: Text(
+//                           '$count',
+//                           style: TextStyle(
+//                             color: cs.onPrimary,
+//                             fontSize: 10,
+//                             fontWeight: FontWeight.w700,
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ),
+//         const SizedBox(height: 6),
+//         Text(
+//           label,
+//           textAlign: TextAlign.center,
+//           style: TextStyle(
+//             color: cs.onSurface,
+//             fontWeight: FontWeight.w700,
+//             fontSize: 11,
+//             height: 1.1,
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
 class _QuickAction extends StatelessWidget {
+  const _QuickAction({
+    required this.label,
+    required this.icon,
+    required this.count,
+    required this.onTap,
+  });
+
   final String label;
-  const _QuickAction({required this.label});
+  final IconData icon;
+  final int count;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -265,10 +539,27 @@ class _QuickAction extends StatelessWidget {
 
     return Column(
       children: [
-        Container(
-          width: 74,
-          height: 74,
-          decoration: BoxDecoration(color: circleFill, shape: BoxShape.circle),
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(50),
+            child: Container(
+              width: 74,
+              height: 74,
+              decoration: BoxDecoration(
+                color: circleFill,
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Icon(
+                  icon,
+                  color: cs.primary,
+                  size: 30,
+                ),
+              ),
+            ),
+          ),
         ),
         const SizedBox(height: 6),
         Text(
@@ -284,4 +575,16 @@ class _QuickAction extends StatelessWidget {
       ],
     );
   }
+}
+
+class _QuickActionData {
+  const _QuickActionData({
+    required this.label,
+    required this.icon,
+    required this.count,
+  });
+
+  final String label;
+  final IconData icon;
+  final int count;
 }
