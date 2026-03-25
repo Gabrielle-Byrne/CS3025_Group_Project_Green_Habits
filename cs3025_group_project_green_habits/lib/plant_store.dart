@@ -61,7 +61,7 @@ class PlantStorePage extends StatelessWidget {
         title: "Plant Store",
         showBack: true,
         backLabel: "Previous",
-        helpText: "Use points to buy plants, seed packs, gifts, and power-ups.",
+        helpText: "This is the plant store page, where you can use points gained from logging activities to purchase seeds and power-ups for your virtual garden.",
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(12, 10, 12, 18),

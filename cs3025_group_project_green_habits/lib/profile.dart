@@ -200,7 +200,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: const HeaderBar(
         title: "Profile",
         helpText:
-            "View and update your profile info and app settings like theme, text size, language, sound, and vibration.",
+            "This is the profile page, where you can view and update your account information and adjust app settings like text size, theme, and language.",
       ),
 
       body: SingleChildScrollView(

@@ -31,7 +31,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
       child: Scaffold(
         appBar: HeaderBar(
           title: "Leaderboards",
-          helpText: "Leaderboards and challenges",
+          helpText: "This is the leaderboards and challenges page, where you can view your ranking on the leaderboard and view available challenges to join. You can also view completed challenges through the achievements tab.",
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -284,19 +284,32 @@ class _ListColumn extends StatelessWidget {
 
 enum ChallengeScope { available, achievements }
 
-class _ChallengesTab extends StatelessWidget {
+class _ChallengesTab extends StatefulWidget {
   const _ChallengesTab({required this.scope, required this.onScopeChanged});
 
   final ChallengeScope scope;
   final ValueChanged<ChallengeScope> onScopeChanged;
 
   @override
+  State<_ChallengesTab> createState() => _ChallengesTabState();
+}
+
+class _ChallengesTabState extends State<_ChallengesTab> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<ChallengeStore>().ensureDailyChallenge();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
 
     final store = context.watch<ChallengeStore>();
-    store.ensureDailyChallenge();
-
     final daily = store.dailyDef;
     final dailyProgress = store.dailyProgress;
     final dailyPct = (daily == null)
@@ -324,8 +337,8 @@ class _ChallengesTab extends StatelessWidget {
           const SizedBox(height: 14),
 
           _SegmentedRow<ChallengeScope>(
-            value: scope,
-            onChanged: onScopeChanged,
+            value: widget.scope,
+            onChanged: widget.onScopeChanged,
             items: const [
               _SegItem(value: ChallengeScope.available, label: "Available"),
               _SegItem(
@@ -337,7 +350,7 @@ class _ChallengesTab extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          if (scope == ChallengeScope.available) ...[
+          if (widget.scope == ChallengeScope.available) ...[
             Text(
               "Joined",
               style: TextStyle(color: cs.onSurface, fontWeight: FontWeight.w800),

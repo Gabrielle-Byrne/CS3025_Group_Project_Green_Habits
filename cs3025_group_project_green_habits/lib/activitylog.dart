@@ -66,12 +66,18 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
     return Container(
       height: 140,
       decoration: BoxDecoration(
-        color: cs.surfaceVariant,
+        color: cs.primaryContainer,
         borderRadius: BorderRadius.circular(8),
       ),
       clipBehavior: Clip.antiAlias,
       child: _pickedImage == null
-          ? const SizedBox()
+          ? Center(
+              child: Icon(
+                Icons.camera_alt_outlined,
+                size: 40,
+                color: cs.onSurfaceVariant,
+              ),
+            )
           : Image.file(
               File(_pickedImage!.path),
               fit: BoxFit.cover,
@@ -94,7 +100,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
       appBar: HeaderBar(
         title: "Activity Log",
         helpText:
-            "This is your activity log, where you can log in the eco-friendy actions you've performed",
+            "This is the activity log page, where you can log new eco-friendly activities you've completed and earn points.",
       ),
       body: SingleChildScrollView(
         child: Padding(
