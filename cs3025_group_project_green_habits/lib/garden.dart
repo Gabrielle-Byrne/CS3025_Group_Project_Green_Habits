@@ -30,7 +30,7 @@ class _GardenPageState extends State<GardenPage> {
       appBar: const HeaderBar(
         title: "Virtual Garden",
         helpText:
-            "This is your garden. You can use points earned from your actions to purchase virtual plants.",
+            "This is the virtual garden page, where you can plant and grow virtual plants using seeds purchased from the plant store.",
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),

@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
       appBar: const HeaderBar(
         title: 'Home',
         helpText:
-            'This is the home screen. Log sustainable actions to earn points, then spend them in the Virtual Garden.',
+            'This is the home screen where you can see an overview of your virtual garden, quickly log new activities, and access community features.',
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
@@ -244,7 +244,7 @@ class _HomePageState extends State<HomePage> {
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: () =>
-                                  Navigator.pushNamed(context, '/history'),
+                                  (),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: cs.primary,
                                 foregroundColor: cs.onPrimary,
