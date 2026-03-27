@@ -254,7 +254,8 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               child: const Text(
-                                'View Past Actions',
+                                'View Leaderboard and Challenges',
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 12,

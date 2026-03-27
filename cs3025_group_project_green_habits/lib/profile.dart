@@ -127,8 +127,8 @@ class _ProfilePageState extends State<ProfilePage> {
               Text('Current: ${settings.textSizeLabel}'),
               Slider(
                 value: temp,
-                min: 0.85,
-                max: 1.35,
+                min: 0.80,
+                max: 1.50,
                 divisions: 10,
                 label: temp.toStringAsFixed(2),
                 onChanged: (v) {
@@ -167,7 +167,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 },
               ),
               ListTile(
-                title: const Text('French'),
+                title: const Text('Français'),
                 trailing: settings.locale.languageCode == 'fr'
                     ? const Icon(Icons.check)
                     : null,
@@ -197,11 +197,13 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       // Let the active theme control the background (so dark mode works).
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: const HeaderBar(
-        title: "Profile",
+      appBar: HeaderBar(
+        title: settings.locale.languageCode == "en" ? "Profile" : "Profil",
         helpText:
-            "This is the profile page, where you can view and update your account information and adjust app settings like text size, theme, and language.",
-      ),
+            settings.locale.languageCode == "en" ?
+     
+            "View and update your profile info and app settings like theme, text size, language, sound, and vibration."
+            : "Consultez et mettez à jour les informations de votre profil et les paramètres de l'application, tels que le thème, la taille du texte, la langue, le son et les vibrations. "),
 
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
@@ -220,7 +222,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 10),
             Text(
-              'Hello, $_username!',
+              settings.locale.languageCode == "en" ? 'Hello, $_username!' : 'Bonjour, $_username!',
               style: TextStyle(
                 color: cs.onSurface,
                 fontSize: 18,
@@ -247,7 +249,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Column(
                           children: [
                             _PrefButton(
-                              text: 'Change Username',
+                              text: settings.locale.languageCode == "en" ? 'Change Username' : 'Changer le nom d\'utilisateur',
                               onTap: () => _promptAndSave(
                                 title: 'Change Username',
                                 initial: _username,
@@ -258,7 +260,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             _PrefButton(
-                              text: 'Change Email',
+                              text: settings.locale.languageCode == "en" ? 'Change Email' : 'Changer l\'e-mail',
                               onTap: () => _promptAndSave(
                                 title: 'Change Email',
                                 initial: _email,
@@ -275,7 +277,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             _PrefButton(
-                              text: 'Change Password',
+                              text: settings.locale.languageCode == "en" ? 'Change Password' : 'Changer le mot de passe',
                               onTap: () => _promptAndSave(
                                 title: 'Change Password',
                                 initial: '',
@@ -291,15 +293,15 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             _PrefButton(
-                              text: 'Adjust Text Size',
+                              text: settings.locale.languageCode == "en" ? 'Adjust Text Size' : 'Ajuster la taille du texte',
                               onTap: () => _openTextSizeSheet(settings),
                             ),
                             _PrefButton(
-                              text: 'Switch Light/Dark\nMode',
+                              text: settings.locale.languageCode == "en" ? 'Switch Light/Dark Mode' : 'Basculer en mode clair/sombre',
                               onTap: () => settings.toggleThemeMode(),
                             ),
                             _PrefButton(
-                              text: 'Change Language',
+                              text: settings.locale.languageCode == "en" ? 'Change Language' : 'Changer de langue',
                               onTap: () => _openLanguageSheet(settings),
                             ),
                             _PrefButton(
@@ -307,7 +309,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               onTap: () => settings.toggleVibration(),
                             ),
                             _PrefButton(
-                              text: 'Sounds',
+                              text: settings.locale.languageCode == "en" ? 'Sounds' : 'Sons',
                               onTap: () => settings.toggleSound(),
                             ),
                           ],
@@ -328,7 +330,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             _ValueText(_maskPassword(_password)),
                             _ValueText(settings.textSizeLabel),
                             _ValueText(settings.themeLabel),
-                            _ValueText(settings.languageLabel),
+                            _ValueText(settings.languageLabel == 'English' ? 'English' : 'Français'),
                             _ValueText(
                               settings.vibrationEnabled
                                   ? 'Enabled'

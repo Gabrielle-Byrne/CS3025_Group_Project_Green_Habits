@@ -3,6 +3,8 @@ class PointsRules {
     "Recycling": 15,
     "Transit": 10,
     "Energy": 5,
+    "Compost": 10,
+    "Waste Pick-Up": 20
   };
 
   static int pointsForActivity(String activityKey) {

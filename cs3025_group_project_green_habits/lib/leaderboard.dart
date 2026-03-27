@@ -101,26 +101,71 @@ class _LeaderboardTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
 
-    // Dummy names for UI
-    const top1 = "Tom Smith";
-    const top2 = "Jane Doe";
-    const top3 = "Dan Pearce";
+    // Dummy names for UI (Global)
+    const top1 = "Tom Smith (10 800)";
+    const top2 = "Jane Doe (10 200)";
+    const top3 = "Dan Pearce (9990)";
 
     final contributorsLeft = const [
-      "1. Tom Smith",
-      "2. Jane Doe",
-      "3. Dan Pearce",
-      "4. Tracy Kate",
-      "5. Jayda Rolle",
+      "1. Tom Smith (10 800)",
+      "2. Jane Doe (10 200)",
+      "3. Dan Pearce (9990)",
+      "4. Tracy Kate (9870)",
+      "5. Jayda Rolle (9600)",
     ];
 
     final contributorsRight = const [
-      "6. John Leary",
-      "7. John Doe",
-      "8. Mason Kay",
-      "9. Don Knuth",
-      "10. Alan Turing",
+      "6. Yohanne Leary (9520)",
+      "7. John Doe (9440)",
+      "8. Maria Kay (9230)",
+      "9. Don Knuth (9010)",
+      "10. Alan Turing (8940)",
     ];
+
+
+     // Dummy names for UI (Faculty)
+    const top1Faculty = "Dan Pearce (9990)";
+    const top2Faculty = "Maria Kay (9230)";
+    const top3Faculty = "Alice Kearley (9000)";
+
+    final contributorsLeftFaculty = const [
+      "1. Dan Pearce (9990)",
+      "2. Maria Kay (9230)",
+      "3. Alice Kearley (9000)",
+      "4. James Kearley (8920)",
+      "5. Pearl Smith (8780)",
+    ];
+
+    final contributorsRightFaculty = const [
+      "6. Kevin Reed (8550)",
+      "7. Donna Brown (8320)",
+      "8. Mason Diamond (7440)",
+      "9. Holly Leary (6770)",
+      "10. Paulina Green (6500)",
+    ];
+
+     // Dummy names for UI (Friends)
+    const top1Friends = "Tom Smith (10 800)";
+    const top2Friends = "Tracy Kate (9110)";
+    const top3Friends = "Monica James (8800)";
+
+    final contributorsLeftFriends = const [
+      "1. Tom Smith (10 800)",
+      "2. Tracy Kate (9110)",
+      "3. Monica James (8800)",
+      "4. Krystal Blue (7480)",
+      "5. Carl Byrne (7350)",
+    ];
+
+    final contributorsRightFriends = const [
+      "6. Holly Leary (6770)",
+      "7. Paulina Green (6500)",
+      "8. Marcel Williams (1220)",
+      "9. ",
+      "10. ",
+    ];
+
+
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 18),
@@ -141,7 +186,7 @@ class _LeaderboardTab extends StatelessWidget {
 
           Center(
             child: Text(
-              "Faculty of Computer Science",
+              scope == LeaderboardScope.friends ? 'Friends' : (scope == LeaderboardScope.faculty ? 'Faculty' : 'Global'),
               style: TextStyle(
                 color: cs.onSurface,
                 fontWeight: FontWeight.w800,
@@ -156,15 +201,15 @@ class _LeaderboardTab extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(
-                child: _PodiumPerson(name: top2, rank: 2, barHeight: 95),
+                child: _PodiumPerson(name: scope == LeaderboardScope.friends ? top2Friends : (scope == LeaderboardScope.faculty ? top2Faculty : top2), rank: 2, barHeight: 95),
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: _PodiumPerson(name: top1, rank: 1, barHeight: 130),
+                child: _PodiumPerson(name: scope == LeaderboardScope.friends ? top1Friends : (scope == LeaderboardScope.faculty ? top1Faculty : top1), rank: 1, barHeight: 130),
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: _PodiumPerson(name: top3, rank: 3, barHeight: 70),
+                child: _PodiumPerson(name: scope == LeaderboardScope.friends ? top3Friends : (scope == LeaderboardScope.faculty ? top3Faculty : top3), rank: 3, barHeight: 70),
               ),
             ],
           ),
@@ -172,7 +217,7 @@ class _LeaderboardTab extends StatelessWidget {
           const SizedBox(height: 16),
 
           Text(
-            "Top contributors",
+            "Top Contributors",
             style: TextStyle(
               color: cs.onSurface,
               fontWeight: FontWeight.w800,
@@ -191,9 +236,9 @@ class _LeaderboardTab extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(child: _ListColumn(items: contributorsLeft)),
+                Expanded(child: _ListColumn(items: scope == LeaderboardScope.friends ? contributorsLeftFriends : (scope == LeaderboardScope.faculty ? contributorsLeftFaculty : contributorsLeft))),
                 const SizedBox(width: 12),
-                Expanded(child: _ListColumn(items: contributorsRight)),
+                Expanded(child: _ListColumn(items: scope == LeaderboardScope.friends ? contributorsRightFriends : (scope == LeaderboardScope.faculty ? contributorsRightFaculty : contributorsRight))),
               ],
             ),
           ),

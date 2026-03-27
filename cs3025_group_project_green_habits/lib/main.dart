@@ -98,7 +98,7 @@ class MyApp extends StatelessWidget {
 
         '/activity-log': (context) =>
             const RequireAuth(child: ActivityLogPage()),
-        '/history': (context) => const RequireAuth(child: HistoryPage()),
+        '/history': (context) => const RequireAuth(child: LeaderboardPage()),
         '/leaderboard': (context) =>
             const RequireAuth(child: LeaderboardPage()),
         '/challenges': (context) => const RequireAuth(child: ActivityLogPage()),

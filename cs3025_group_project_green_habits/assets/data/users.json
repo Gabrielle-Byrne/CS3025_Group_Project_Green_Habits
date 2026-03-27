@@ -1,3 +1,5 @@
 [
-  { "username": "user@unb.ca", "password": "password123" }
+  { "username": "user@unb.ca", "password": "password123" },
+   { "username": "1", "password": "1" },
+     { "username": "test@unb.ca", "password": "123" }
 ]

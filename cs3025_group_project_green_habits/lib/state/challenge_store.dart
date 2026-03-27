@@ -75,6 +75,13 @@ class ChallengeStore extends ChangeNotifier {
       targetCount: 3,
       rewardPoints: 40,
     ),
+    // ChallengeDefinition(
+    //   id: 'compost',
+    //   title: 'Pick Up Litter Challenge ',
+    //   activityKey: 'Compost',
+    //   targetCount: 2,
+    //   rewardPoints: 35,
+    // ),
     ChallengeDefinition(
       id: 'bike_challenge',
       title: 'Academic Bike Challenge',

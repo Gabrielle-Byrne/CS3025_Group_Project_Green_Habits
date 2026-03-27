@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'state/activity_log_store.dart';
 import 'state/challenge_store.dart';
@@ -16,22 +18,35 @@ class ActivityLogPage extends StatefulWidget {
   State<ActivityLogPage> createState() => _ActivityLogPageState();
 }
 
+typedef CategoryEntry = DropdownMenuEntry<CategoryLabel>;
+
+// DropdownMenuEntry labels and values for the second dropdown menu.
+enum CategoryLabel {
+  recycing('Recycling', Icons.recycling),
+  transit('Sustainable Transit', Icons.directions_bus),
+  energy('Energy', Icons.energy_savings_leaf),
+  compost('Compost', Icons.food_bank),
+  waste('Waste Pick-Up', Icons.delete);
+
+  const CategoryLabel(this.label, this.icon);
+  final String label;
+  final IconData icon;
+
+  static final List<CategoryEntry> entries = UnmodifiableListView<CategoryEntry>(
+    values.map<CategoryEntry>(
+      (CategoryLabel category) => CategoryEntry(
+        value: category,
+        label: category.label,
+        leadingIcon: Icon(category.icon),
+      ),
+    ),
+  );
+}
+
 class _ActivityLogPageState extends State<ActivityLogPage> {
   final TextEditingController _descriptionController = TextEditingController();
-  bool _loadedInitialRouteValue = false;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    if (_loadedInitialRouteValue) return;
-    _loadedInitialRouteValue = true;
-
-    final routeValue = ModalRoute.of(context)?.settings.arguments as String?;
-    if (routeValue != null) {
-      _completedValue = routeValue;
-    }
-  }
+  final TextEditingController _categoryController = TextEditingController();
+  CategoryLabel? selectedCategory;
 
   @override
   void dispose() {
@@ -59,6 +74,8 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
   }
 
   String? _completedValue;
+  CategoryEntry? _cv;
+  String? _selectedType;
 
   Widget _photoBox(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
@@ -110,7 +127,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
             children: [
               Center(
                 child: Text(
-                  "Picture of Activity (Optional):",
+                  "Picture of Activity:",
                   style: labelStyle,
                 ),
               ),
@@ -123,7 +140,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: 42,
+                    height: 50,
                     child: ElevatedButton(
                       onPressed: _takePhoto,
                       child: const Text("Take Picture"),
@@ -138,7 +155,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                   ),
                   const SizedBox(width: 16),
                   SizedBox(
-                    height: 42,
+                    height: 50,
                     child: ElevatedButton(
                       onPressed: _chooseFromGallery,
                       child: const Text(
@@ -199,6 +216,28 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
               ),
               const SizedBox(height: 22),
 
+
+
+              // DropdownMenu<CategoryLabel>(
+              //           //controller: _categoryController,
+              //           //enableFilter: false,
+              //           requestFocusOnTap: true,
+              //           label: const Text('Category'),
+              //           inputDecorationTheme: const InputDecorationTheme(
+              //             filled: true,
+              //             contentPadding: EdgeInsets.symmetric(vertical: 5.0),
+              //           ),
+              //           onSelected: (CategoryLabel? icon) {
+              //             setState(() {
+              //               selectedCategory = icon;
+              //             });
+              //           },
+              //           dropdownMenuEntries: CategoryLabel.entries,
+              //         ), 
+
+
+              const SizedBox(height: 22),
+
               Center(child: Text("Description (Optional):", style: labelStyle)),
               const SizedBox(height: 10),
 
@@ -239,9 +278,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                       description: desc,
                     );
 
-                    final earned = PointsRules.pointsForActivity(
-                      _completedValue!,
-                    );
+                    final earned = PointsRules.pointsForActivity(_completedValue!);
 
                     await context.read<PointsStore>().applyTransaction(
                       source: "activity",
@@ -259,7 +296,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                         duration: const Duration(seconds: 1),
                       ),
                     );
-
+                    
                     setState(() {
                       _completedValue = null;
                       _pickedImage = null;

@@ -27,7 +27,7 @@ class PlantStorePage extends StatelessWidget {
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
-            duration: const Duration(milliseconds: 650),
+            duration: const Duration(milliseconds: 1000),
             content: Text("Not enough points for $itemName"),
           ),
         );
@@ -40,7 +40,7 @@ class PlantStorePage extends StatelessWidget {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
-          duration: const Duration(milliseconds: 650),
+          duration: const Duration(milliseconds: 1000),
           content: Text("Purchased $itemName (-$cost pts)"),
         ),
       );
@@ -60,8 +60,8 @@ class PlantStorePage extends StatelessWidget {
       appBar: const HeaderBar(
         title: "Plant Store",
         showBack: true,
-        backLabel: "Previous",
-        helpText: "This is the plant store page, where you can use points gained from logging activities to purchase seeds and power-ups for your virtual garden.",
+        backLabel: "Back to Garden",
+        helpText: "Use points to buy plants, seed packs, gifts, and power-ups.",
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(12, 10, 12, 18),
@@ -75,7 +75,7 @@ class PlantStorePage extends StatelessWidget {
                 Text(
                   "Plant Store",
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 32,
                     fontWeight: FontWeight.w800,
                     color: fg,
                   ),
@@ -110,7 +110,7 @@ class PlantStorePage extends StatelessWidget {
                           ..hideCurrentSnackBar()
                           ..showSnackBar(
                             const SnackBar(
-                              duration: Duration(milliseconds: 750),
+                              duration: Duration(milliseconds: 1000),
                               content: Text(
                                 "Seed purchased! Tap a plot to plant it.",
                               ),
@@ -208,7 +208,7 @@ class PlantStorePage extends StatelessWidget {
                         ..hideCurrentSnackBar()
                         ..showSnackBar(
                           const SnackBar(
-                            duration: Duration(milliseconds: 900),
+                            duration: Duration(milliseconds: 1000),
                             content: Text(
                               "Use all current plots before extending your garden.",
                             ),
@@ -231,7 +231,7 @@ class PlantStorePage extends StatelessWidget {
                           ..hideCurrentSnackBar()
                           ..showSnackBar(
                             const SnackBar(
-                              duration: Duration(milliseconds: 900),
+                              duration: Duration(milliseconds: 1000),
                               content: Text(
                                 "Garden extended! 12 new plots added.",
                               ),
