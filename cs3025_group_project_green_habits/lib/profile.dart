@@ -411,7 +411,7 @@ class _ValueText extends StatelessWidget {
             text,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).brightness == Brightness.light ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onPrimary,
               fontSize: 12,
               fontWeight: FontWeight.w700,
             ),
