@@ -2,8 +2,8 @@ class PointsRules {
   static const Map<String, int> activityPoints = {
     "Recycling": 15,
     "Transit": 10,
-    "Energy": 5,
-    "Compost": 10,
+    "Energy": 10,
+    "Food Waste": 10,
     "Waste Pick-Up": 20
   };
 

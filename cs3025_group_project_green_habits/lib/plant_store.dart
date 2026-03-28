@@ -53,7 +53,7 @@ class PlantStorePage extends StatelessWidget {
 
     final cardBg = cs.surfaceVariant;
     final lockedBg = cs.surfaceVariant.withOpacity(0.6);
-    final fg = cs.primary;
+    final fg = Theme.of(context).brightness == Brightness.light ? cs.primary : cs.onPrimary;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -69,7 +69,7 @@ class PlantStorePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header row
-            Row(
+            Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
@@ -161,7 +161,7 @@ class PlantStorePage extends StatelessWidget {
             const _SectionTitle("Gift a Friend"),
             const SizedBox(height: 8),
             _WideTile(
-              title: "Gift a Plant",
+              title: "Gift a Plant to a Friend",
               price: 50,
               bg: cardBg,
               fg: fg,
@@ -307,14 +307,14 @@ class _PointsDisplay extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
     return Row(
       children: [
-        Icon(Icons.circle, size: 8, color: cs.primary),
+        Icon(Icons.circle, size: 8, color: Theme.of(context).brightness == Brightness.light ? cs.primary : cs.onPrimary),
         const SizedBox(width: 6),
         Text(
-          "$points",
+          "Current Points: $points",
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 20,
             fontWeight: FontWeight.w800,
-            color: cs.primary,
+            color: Theme.of(context).brightness == Brightness.light ? cs.primary : cs.onPrimary,
           ),
         ),
       ],

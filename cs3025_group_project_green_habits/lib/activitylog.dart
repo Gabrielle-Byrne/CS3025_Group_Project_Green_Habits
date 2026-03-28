@@ -18,35 +18,9 @@ class ActivityLogPage extends StatefulWidget {
   State<ActivityLogPage> createState() => _ActivityLogPageState();
 }
 
-typedef CategoryEntry = DropdownMenuEntry<CategoryLabel>;
-
-// DropdownMenuEntry labels and values for the second dropdown menu.
-enum CategoryLabel {
-  recycing('Recycling', Icons.recycling),
-  transit('Sustainable Transit', Icons.directions_bus),
-  energy('Energy', Icons.energy_savings_leaf),
-  compost('Compost', Icons.food_bank),
-  waste('Waste Pick-Up', Icons.delete);
-
-  const CategoryLabel(this.label, this.icon);
-  final String label;
-  final IconData icon;
-
-  static final List<CategoryEntry> entries = UnmodifiableListView<CategoryEntry>(
-    values.map<CategoryEntry>(
-      (CategoryLabel category) => CategoryEntry(
-        value: category,
-        label: category.label,
-        leadingIcon: Icon(category.icon),
-      ),
-    ),
-  );
-}
 
 class _ActivityLogPageState extends State<ActivityLogPage> {
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _categoryController = TextEditingController();
-  CategoryLabel? selectedCategory;
 
   @override
   void dispose() {
@@ -74,8 +48,6 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
   }
 
   String? _completedValue;
-  CategoryEntry? _cv;
-  String? _selectedType;
 
   Widget _photoBox(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
@@ -181,7 +153,7 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                     child: Text("Activity Completed:", style: labelStyle),
                   ),
                   SizedBox(
-                    width: 140,
+                    width: 200,
                     height: 44,
                     child: DropdownButtonFormField<String>(
                       initialValue: _completedValue,
@@ -189,15 +161,58 @@ class _ActivityLogPageState extends State<ActivityLogPage> {
                       items: const [
                         DropdownMenuItem(
                           value: "Recycling",
-                          child: Text("Recycling"),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.recycling, color: Colors.green),
+                              SizedBox(width: 10),
+                              Text("Recycling")
+                            ],
+                          ),
                         ),
                         DropdownMenuItem(
                           value: "Transit",
-                          child: Text("Transit"),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.directions_bus, color: Colors.green),
+                              SizedBox(width: 10),
+                              Text("Transit")
+                            ],
+                          ),
                         ), //If value/text of a dropdown is too long the app crashes
                         DropdownMenuItem(
                           value: "Energy",
-                          child: Text("Energy"),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.lightbulb, color: Colors.green),
+                              SizedBox(width: 10),
+                              Text("Energy")
+                            ],
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: "Food Waste",
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.food_bank, color: Colors.green),
+                              SizedBox(width: 10),
+                              Text("Food Waste")
+                            ],
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: "Waste Pick-up",
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.food_bank, color: Colors.green),
+                              SizedBox(width: 10),
+                              Text("Waste Pick-up")
+                            ],
+                          ),
                         ),
                       ],
                       onChanged: (v) => setState(() => _completedValue = v),
