@@ -186,7 +186,7 @@ class _LeaderboardTab extends StatelessWidget {
 
           Center(
             child: Text(
-              scope == LeaderboardScope.friends ? 'Friends' : (scope == LeaderboardScope.faculty ? 'Faculty' : 'Global'),
+              scope == LeaderboardScope.friends ? 'Friends' : (scope == LeaderboardScope.faculty ? 'Faculty of Computer Science' : 'Global'),
               style: TextStyle(
                 color: cs.onSurface,
                 fontWeight: FontWeight.w800,
@@ -279,7 +279,13 @@ class _PodiumPerson extends StatelessWidget {
         Container(
           height: barHeight,
           decoration: BoxDecoration(
+            border: Border.all(
+              color: cs.secondaryContainer,
+              width: 10.0,
+              style: BorderStyle.solid,
+            ),
             color: cs.secondaryContainer,
+            //rank == 1 ? Color.fromARGB(255, 219, 219, 21) : (rank == 2 ? Color.fromARGB(255, 143, 143, 142) : Color.fromARGB(255, 185, 81, 29)),
             borderRadius: BorderRadius.circular(6),
           ),
         ),

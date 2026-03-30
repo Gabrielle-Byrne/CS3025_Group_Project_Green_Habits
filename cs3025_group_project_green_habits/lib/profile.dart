@@ -333,11 +333,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             _ValueText(settings.languageLabel == 'English' ? 'English' : 'Français'),
                             _ValueText(
                               settings.vibrationEnabled
-                                  ? 'Enabled'
-                                  : 'Disabled',
+                                  ? (settings.languageLabel == 'English' ? 'Enabled' : 'Activé')
+                                  : (settings.languageLabel == 'English' ? 'Disabled' : 'Désactivé'),
                             ),
                             _ValueText(
-                              settings.soundEnabled ? 'Enabled' : 'Disabled',
+                              settings.soundEnabled ? (settings.languageLabel == 'English' ? 'Enabled' : 'Activé') : (settings.languageLabel == 'English' ? 'Disabled' : 'Désactivé'),
                             ),
                           ],
                         ),

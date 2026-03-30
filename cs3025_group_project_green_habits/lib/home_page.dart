@@ -244,7 +244,7 @@ class _HomePageState extends State<HomePage> {
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: () =>
-                                  (),
+                                  Navigator.pushNamed(context, '/leaderboard'),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: cs.primary,
                                 foregroundColor: cs.onPrimary,
@@ -254,8 +254,9 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               child: const Text(
-                                'View Leaderboard and Challenges',
+                                'View Challenges',
                                 textAlign: TextAlign.center,
+                              
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 12,

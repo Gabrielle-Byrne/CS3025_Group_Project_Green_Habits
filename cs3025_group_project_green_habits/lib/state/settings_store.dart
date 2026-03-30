@@ -35,14 +35,19 @@ class SettingsStore extends ChangeNotifier {
 
   String get languageLabel => _locale.languageCode == 'fr' ? 'French' : 'English';
   String get themeLabel {
-    if (_themeMode == ThemeMode.dark) return 'Dark';
+    if (_themeMode == ThemeMode.dark && _locale.languageCode == 'fr') return 'Sombre';
+    if (_themeMode == ThemeMode.light && _locale.languageCode == 'fr') return 'Lumière';
+    if (_themeMode == ThemeMode.dark && _locale.languageCode == 'en') return 'Dark';
     return 'Light';
   }
 
   String get textSizeLabel {
     // Keep it simple / UI-friendly.
+    if (_textScale < 0.95 && _locale.languageCode == 'fr') return 'Petit';
     if (_textScale < 0.95) return 'Small';
+    if (_textScale > 1.15 && _locale.languageCode == 'fr') return 'Grand';
     if (_textScale > 1.15) return 'Large';
+    if (_locale.languageCode == 'fr') return 'Moyen';
     return 'Medium';
   }
 

@@ -127,6 +127,7 @@ class PlantStorePage extends StatelessWidget {
 
             const _SectionTitle("Seed Packs"),
             const SizedBox(height: 8),
+            
             Wrap(
               spacing: 10,
               runSpacing: 10,
@@ -292,7 +293,7 @@ class _SectionTitle extends StatelessWidget {
       style: TextStyle(
         fontSize: 12.5,
         fontWeight: FontWeight.w800,
-        color: Theme.of(context).colorScheme.primary,
+        color: Theme.of(context).brightness == Brightness.light ? cs.primary : cs.onPrimary,
       ),
     );
   }

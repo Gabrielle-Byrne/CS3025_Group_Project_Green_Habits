@@ -53,7 +53,7 @@ class _GardenPageState extends State<GardenPage> {
               child: Text(
                 garden.pendingSeeds > 0
                     ? "Seeds to plant: ${garden.pendingSeeds} (tap an empty plot)"
-                    : "Buy a Mystery Seed, then tap a plot to plant it.",
+                    : "Buy a Mystery Seed, then tap a plot to plant it. Currently, you have no seeds, go to the Garden Store below.",
                 style: TextStyle(
                   color: cs.onSurface.withOpacity(0.85),
                   fontWeight: FontWeight.w600,

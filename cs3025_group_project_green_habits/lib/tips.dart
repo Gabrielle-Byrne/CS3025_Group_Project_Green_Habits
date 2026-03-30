@@ -20,8 +20,6 @@ enum CategoryLabel {
   recycing('Recycling', Icons.recycling),
   transit('Sustainable Transit', Icons.directions_bus),
   energy('Energy', Icons.energy_savings_leaf),
-  // energy('Brush', Icons.brush_outlined),
-  // energy('Brush', Icons.brush_outlined),
   general('Other', Icons.public);
 
   const CategoryLabel(this.label, this.icon);
